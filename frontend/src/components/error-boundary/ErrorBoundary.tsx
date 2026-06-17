@@ -1,0 +1,85 @@
+import { Component, type ErrorInfo, type ReactNode } from "react";
+import { reportError } from "../../services/error-reporter";
+import "./ErrorBoundary.css";
+
+interface ErrorBoundaryProps {
+    children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+    hasError: boolean;
+    errorId: string | null;
+    detail: string | null;
+}
+
+// Catches render-time crashes anywhere below it, shows a friendly fallback
+// (instead of a blank white screen), and auto-reports the technical details.
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+    public state: ErrorBoundaryState = { hasError: false, errorId: null, detail: null };
+
+    public static getDerivedStateFromError(): Partial<ErrorBoundaryState> {
+        return { hasError: true };
+    }
+
+    public componentDidCatch(error: Error, info: ErrorInfo): void {
+        const stack = `${error.stack ?? ""}\n--- component stack ---${info.componentStack ?? ""}`;
+        // Fire-and-forget; update the fallback with the id once we have it.
+        void reportError({
+            source: "boundary",
+            message: error.message,
+            stack,
+            componentOrScreen: "ErrorBoundary",
+            route: window.location.pathname,
+        }).then((errorId) => {
+            this.setState({ errorId, detail: error.message });
+        });
+    }
+
+    private handleTryAgain = (): void => {
+        this.setState({ hasError: false, errorId: null, detail: null });
+    };
+
+    private handleReload = (): void => {
+        window.location.reload();
+    };
+
+    public render(): ReactNode {
+        if (!this.state.hasError) return this.props.children;
+
+        return (
+            <div className="eb">
+                <div className="eb-card">
+                    <div className="eb-emoji" aria-hidden="true">😕</div>
+                    <h1 className="eb-title">Something went wrong</h1>
+                    <p className="eb-text">
+                        This has been reported automatically. You can try again, or reload the app.
+                    </p>
+
+                    {this.state.errorId && (
+                        <p className="eb-id">
+                            Reference: <span>#{this.state.errorId}</span>
+                        </p>
+                    )}
+
+                    <div className="eb-actions">
+                        <button type="button" className="eb-btn eb-btn-primary" onClick={this.handleTryAgain}>
+                            Try again
+                        </button>
+                        <button type="button" className="eb-btn" onClick={this.handleReload}>
+                            Reload app
+                        </button>
+                    </div>
+
+                    {this.state.detail && (
+                        <details className="eb-details">
+                            <summary>Technical details</summary>
+                            <pre className="eb-pre">{this.state.detail}</pre>
+                        </details>
+                    )}
+                </div>
+            </div>
+        );
+    }
+}
+
+export default ErrorBoundary;

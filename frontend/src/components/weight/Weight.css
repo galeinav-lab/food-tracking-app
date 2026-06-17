@@ -1,0 +1,113 @@
+.weight-title {
+    margin: 0 0 18px;
+    font-size: 1.3rem;
+}
+
+.weight-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.weight-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.weight-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.weight-btn {
+    padding: 10px 18px;
+    background: var(--accent);
+    color: var(--on-accent);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.weight-btn:disabled {
+    background: var(--accent-disabled);
+    cursor: default;
+}
+
+.weight-hint {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.weight-error {
+    color: var(--error);
+    font-size: 0.9rem;
+    margin: 6px 0 0;
+}
+
+.weight-chart {
+    margin: 20px 0 10px;
+}
+
+.weight-summary {
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 0 0 20px;
+}
+
+.weight-list-title {
+    font-size: 1rem;
+    margin: 0 0 12px;
+}
+
+.weight-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.weight-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: var(--card-bg);
+    font-size: 0.9rem;
+}
+
+.weight-row-date {
+    flex: 1;
+    color: var(--muted);
+}
+
+.weight-row-kg {
+    font-weight: 600;
+}
+
+.weight-remove {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.weight-remove:hover {
+    border-color: var(--error);
+    color: var(--error);
+}

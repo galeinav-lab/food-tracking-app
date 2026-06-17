@@ -1,0 +1,36 @@
+.weekly-title {
+    margin: 0 0 18px;
+    font-size: 1.3rem;
+}
+
+.weekly-hint {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.weekly-error {
+    color: var(--error);
+    font-size: 0.9rem;
+}
+
+.weekly-chart {
+    margin: 0 0 16px;
+}
+
+.weekly-summary {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    padding: 14px 16px;
+}
+
+.weekly-line {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+}
+
+.weekly-explainer {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+}

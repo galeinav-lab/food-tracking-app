@@ -1,0 +1,80 @@
+.auth-container {
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: var(--shadow-card);
+}
+
+.form-title {
+    margin: 0 0 20px;
+    font-size: 1.4rem;
+}
+
+.form-field {
+    margin-bottom: 16px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.form-field input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.btn {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--accent);
+    color: var(--on-accent);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.btn:disabled {
+    background: var(--accent-disabled);
+    cursor: default;
+}
+
+.error-text {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin: 0 0 14px;
+}
+
+.switch-text {
+    margin: 16px 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+.switch-text .link {
+    color: var(--accent);
+}

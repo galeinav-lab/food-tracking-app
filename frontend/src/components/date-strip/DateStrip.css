@@ -1,0 +1,79 @@
+.datestrip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px;
+    scrollbar-width: none;
+}
+
+.datestrip::-webkit-scrollbar {
+    display: none;
+}
+
+.ds-day {
+    flex: 1 0 auto;
+    min-width: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color 150ms ease, color 150ms ease;
+}
+
+.ds-day:hover {
+    border-color: var(--border-strong);
+}
+
+.ds-dow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.ds-num {
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.ds-day {
+    position: relative;
+}
+
+.ds-active {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.ds-active .ds-dow,
+.ds-active .ds-num {
+    color: var(--on-accent);
+}
+
+/* Today gets an accent dot (so it's findable even when another day is selected). */
+.ds-dot {
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+/* On the selected (accent-filled) day, flip the dot so it stays visible. */
+.ds-active .ds-dot {
+    background: var(--on-accent);
+}
+
+/* Today, when NOT selected, gets a subtle accent outline. */
+.ds-today:not(.ds-active) {
+    border-color: var(--accent);
+}

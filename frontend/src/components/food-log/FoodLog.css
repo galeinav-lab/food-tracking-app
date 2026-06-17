@@ -1,0 +1,53 @@
+.food-log-title {
+    margin: 0 0 16px;
+    font-size: 1.3rem;
+}
+
+.food-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.food-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.food-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.food-btn {
+    align-self: flex-start;
+    padding: 10px 18px;
+    background: var(--accent);
+    color: var(--on-accent);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.food-btn:disabled {
+    background: var(--accent-disabled);
+    cursor: default;
+}
+
+.hint {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 16px 0 0;
+}
+
+.food-error {
+    color: var(--error);
+    font-size: 0.9rem;
+    margin: 16px 0 0;
+}

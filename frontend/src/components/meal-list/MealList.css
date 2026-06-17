@@ -1,0 +1,14 @@
+.meal-list-title {
+    margin: 0 0 14px;
+    font-size: 1.1rem;
+}
+
+.meal-list-hint {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.meal-list-error {
+    color: var(--error);
+    font-size: 0.9rem;
+}

@@ -1,0 +1,63 @@
+.ring {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-bg);
+    padding: 16px;
+}
+
+.ring-title {
+    margin: 0 0 8px;
+    font-size: 1rem;
+}
+
+.ring-hint {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.ring-error {
+    color: var(--error);
+    font-size: 0.85rem;
+}
+
+.ring-wrap {
+    position: relative;
+}
+
+.ring-center {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    text-align: center;
+}
+
+.ring-num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.05;
+}
+
+.ring-sub {
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
+.ring-kg {
+    font-size: 0.8rem;
+    margin-top: 4px;
+    color: var(--text);
+}
+
+.ring-foot {
+    margin: 8px 0 0;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+}

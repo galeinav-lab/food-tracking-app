@@ -1,0 +1,107 @@
+.eb {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--bg, #0f172a);
+}
+
+.eb-card {
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    background: var(--card-bg, #172132);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 22px;
+    box-shadow: var(--shadow-card, 0 8px 24px rgba(0, 0, 0, 0.35));
+}
+
+.eb-emoji {
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+}
+
+.eb-title {
+    margin: 0 0 8px;
+    font-family: var(--font-head, inherit);
+    font-size: 1.3rem;
+    color: var(--text);
+}
+
+.eb-text {
+    margin: 0 0 16px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+.eb-id {
+    margin: 0 0 16px;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.eb-id span {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.eb-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.eb-btn {
+    padding: 11px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface-2, #1e2a3d);
+    color: var(--text);
+    font-size: 0.92rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.eb-btn:hover {
+    border-color: var(--accent);
+}
+
+.eb-btn-primary {
+    background: var(--accent, #3b82f6);
+    border-color: var(--accent, #3b82f6);
+    color: var(--on-accent);
+}
+
+.eb-btn-primary:hover {
+    opacity: 0.92;
+}
+
+.eb-details {
+    margin-top: 18px;
+    text-align: left;
+}
+
+.eb-details summary {
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.eb-pre {
+    margin-top: 8px;
+    padding: 10px;
+    background: var(--surface-3, rgba(0, 0, 0, 0.25));
+    border-radius: 8px;
+    font-size: 0.72rem;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 200px;
+    overflow: auto;
+}

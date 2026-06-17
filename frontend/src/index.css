@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600&display=swap');
+
+/* ============================================================
+   NutriTrack design tokens — Dark Blue (see design-system/nutritrack/MASTER.md)
+   Single source of truth. Components reference var(--token) only.
+   Legacy token names (--card-bg, --muted, ...) are kept and re-valued so
+   existing screens go dark instead of breaking before their restyle pass.
+   ============================================================ */
+:root {
+    /* Render native form controls, scrollbars and spinners in dark mode so their
+       default text/background stay readable on the dark theme. */
+    color-scheme: dark;
+
+    /* Surfaces */
+    --bg: #0F172A;
+    --surface: #172132;
+    --card-bg: #172132; /* legacy alias of --surface */
+    --surface-2: #1E2A40;
+    --surface-3: #273550;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.16);
+
+    /* Text */
+    --text: #F1F5F9;
+    --muted: #94A3B8;
+    --text-muted: #94A3B8; /* alias */
+    --text-dim: #64748B;
+
+    /* Accent */
+    --accent: #3B82F6;
+    --accent-cta: #2563EB;
+    --accent-press: #1D4ED8;
+    --accent-disabled: #2A4068;
+    --on-accent: #FFFFFF;
+
+    /* Macros */
+    --macro-protein: #F87171;
+    --macro-carbs: #FBBF24;
+    --macro-fat: #34D399;
+
+    /* Functional */
+    --success: #34D399;
+    --error: #F87171;
+    --danger: #F87171;
+    --warning: #FBBF24;
+    --water: #38BDF8;
+    --ring-track: rgba(255, 255, 255, 0.08);
+
+    /* Typography */
+    --font-head: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+
+    /* Radii */
+    --r-sm: 12px;
+    --r-md: 16px;
+    --r-lg: 20px;
+    --r-xl: 28px;
+    --r-pill: 999px;
+
+    /* Elevation */
+    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+    --shadow-nav: 0 -6px 24px rgba(0, 0, 0, 0.5);
+    --glow-accent: 0 8px 26px rgba(59, 130, 246, 0.45);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-head);
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+/* Baseline readable inputs for the dark theme. Components may override radius/
+   padding, but text/background/placeholder are guaranteed legible everywhere
+   (prevents UA defaults like dark-text-on-dark or a white box on navy). */
+input,
+textarea,
+select {
+    color: var(--text);
+    background-color: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px; /* matches the app's form-control radius (see component CSS) */
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-dim);
+    opacity: 1; /* Firefox dims placeholders by default */
+}
+
+/* Chrome/Safari autofill ignores background-color — paint it via inset shadow so
+   autofilled fields (e.g. login email) stay light-on-dark, not dark-on-yellow. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text);
+    caret-color: var(--text);
+    -webkit-box-shadow: 0 0 0 1000px var(--surface-2) inset;
+    box-shadow: 0 0 0 1000px var(--surface-2) inset;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Subtle dark scrollbars */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface-3) transparent;
+}
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+    background: var(--surface-3);
+    border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}

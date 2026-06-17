@@ -1,0 +1,95 @@
+.water {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-bg);
+    padding: 16px;
+}
+
+.water-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.water-title {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.water-amount {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.water-bar {
+    height: 10px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.water-fill {
+    height: 100%;
+    background: var(--water);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.water-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.water-btn {
+    padding: 8px 12px;
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.water-btn:hover:not(:disabled) {
+    border-color: var(--water);
+    color: var(--water);
+}
+
+.water-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.water-undo {
+    color: var(--muted);
+}
+
+.water-custom {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+}
+
+.water-input {
+    width: 80px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-family: inherit;
+}
+
+.water-input:focus {
+    outline: none;
+    border-color: var(--water);
+}
+
+.water-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin: 10px 0 0;
+}

@@ -1,0 +1,21 @@
+# Root .gitignore for the monorepo (safety net for backend/ and frontend/).
+
+# Dependencies
+node_modules/
+
+# Environment files / secrets — NEVER commit these.
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+
+# Logs & OS cruft
+*.log
+npm-debug.log*
+.DS_Store
+
+# Claude Code local config / memory (not part of the app)
+.claude/

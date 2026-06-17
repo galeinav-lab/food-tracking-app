@@ -1,0 +1,254 @@
+import { Types } from "mongoose";
+import { FoodLog, IFoodLog } from "../models/food-log";
+import { DailySummary, IDailySummary } from "../models/daily-summary";
+import { Goal } from "../models/goal";
+import { User } from "../models/user";
+import { ExerciseEntry } from "../models/exercise-entry";
+import {
+    ForbiddenError,
+    ResourceNotFound,
+    UnauthorizedError,
+    ValidationError,
+} from "../models/client-error";
+import { EditFoodInput, HistoryRange, LogFoodInput, SummaryRange } from "../types/food";
+import { NutritionTotals } from "../types/nutrition";
+import { BaseService } from "./base-service";
+import { aiService } from "./ai-service";
+import { endOfDayUtc, startOfDayUtc, toDateStringInTz } from "../utils/date-tz";
+
+// See note on TS2589 — see food-service edits for the original rationale.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyFilter = any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyUpdate = any;
+
+const ZERO_TOTALS: NutritionTotals = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
+const DEFAULT_TZ = "Asia/Jerusalem";
+
+class FoodService extends BaseService<IFoodLog> {
+
+    public constructor() {
+        super(FoodLog);
+    }
+
+    public async logFood(userId: string, input: LogFoodInput): Promise<IFoodLog> {
+        const timezone = await this.getUserTimezone(userId);
+
+        const parsed = await aiService.analyzeFood(input.description);
+        const totals = parsed.totals ?? this.sumItems(parsed.items);
+
+        // Resolve the target calendar day (user tz). Past-day logging is supported.
+        const todayString = toDateStringInTz(new Date(), timezone);
+        const dateString = input.date ?? todayString;
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            throw new ValidationError("date must be YYYY-MM-DD");
+        }
+
+        // For "today" keep the real timestamp (so meals stay in logged order); for a
+        // past day anchor at that day's local midnight so range queries bucket it on
+        // the right calendar day (DST-safe via startOfDayUtc).
+        const storedDate =
+            dateString === todayString ? new Date() : startOfDayUtc(dateString, timezone);
+
+        const log = await FoodLog.create({
+            userId: new Types.ObjectId(userId),
+            description: input.description,
+            items: parsed.items,
+            totals,
+            date: storedDate,
+        });
+
+        await this.recomputeDailySummary(userId, dateString, timezone);
+        return log;
+    }
+
+    public async editLog(
+        userId: string,
+        logId: string,
+        input: EditFoodInput
+    ): Promise<IFoodLog> {
+        if (!Types.ObjectId.isValid(logId)) {
+            throw new ValidationError("Invalid log id");
+        }
+
+        const log = await FoodLog.findById(logId).exec();
+        if (!log) throw new ResourceNotFound(0);
+        if (String(log.userId) !== userId) {
+            throw new ForbiddenError("This log doesn't belong to you");
+        }
+
+        const timezone = await this.getUserTimezone(userId);
+
+        // Re-run AI WITH edit context (and the old description) so the model knows
+        // it's a correction. Bypasses NutritionCache.
+        const parsed = await aiService.analyzeFood(input.description, {
+            previousDescription: log.description,
+        });
+        const newTotals = parsed.totals ?? this.sumItems(parsed.items);
+
+        log.description = input.description;
+        log.items = parsed.items;
+        log.totals = newTotals;
+        await log.save();
+
+        // Recompute the day from source (editing the date isn't supported, so the
+        // day is unchanged).
+        await this.recomputeDailySummary(userId, toDateStringInTz(log.date, timezone), timezone);
+        return log;
+    }
+
+    public async deleteLog(userId: string, logId: string): Promise<void> {
+        if (!Types.ObjectId.isValid(logId)) {
+            throw new ValidationError("Invalid log id");
+        }
+
+        const log = await FoodLog.findById(logId).exec();
+        if (!log) throw new ResourceNotFound(0);
+        if (String(log.userId) !== userId) {
+            throw new ForbiddenError("This log doesn't belong to you");
+        }
+
+        const timezone = await this.getUserTimezone(userId);
+        const dateString = toDateStringInTz(log.date, timezone);
+
+        await log.deleteOne();
+
+        // Recompute the day from source after removal.
+        await this.recomputeDailySummary(userId, dateString, timezone);
+    }
+
+    public async getHistory(userId: string, range: HistoryRange): Promise<IFoodLog[]> {
+        const filter: AnyFilter = { userId: new Types.ObjectId(userId) };
+        if (range.from || range.to) {
+            const dateFilter: Record<string, Date> = {};
+            if (range.from) dateFilter.$gte = range.from;
+            if (range.to) dateFilter.$lte = range.to;
+            filter.date = dateFilter;
+        }
+        return FoodLog.find(filter).sort({ date: -1 }).exec();
+    }
+
+    public async getDay(
+        userId: string,
+        dateString: string
+    ): Promise<{ logs: IFoodLog[]; summary: IDailySummary | null }> {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            throw new ValidationError("date must be YYYY-MM-DD");
+        }
+
+        const timezone = await this.getUserTimezone(userId);
+        const start = startOfDayUtc(dateString, timezone);
+        const end = endOfDayUtc(dateString, timezone);
+
+        const logsFilter: AnyFilter = {
+            userId: new Types.ObjectId(userId),
+            date: { $gte: start, $lt: end },
+        };
+        const summaryFilter: AnyFilter = {
+            userId: new Types.ObjectId(userId),
+            date: dateString,
+        };
+
+        const [logs, summary] = await Promise.all([
+            FoodLog.find(logsFilter).sort({ date: -1 }).exec(),
+            DailySummary.findOne(summaryFilter).exec(),
+        ]);
+
+        return { logs, summary };
+    }
+
+    public async getSummaries(
+        userId: string,
+        range: SummaryRange
+    ): Promise<IDailySummary[]> {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(range.from) || !/^\d{4}-\d{2}-\d{2}$/.test(range.to)) {
+            throw new ValidationError("from and to must be YYYY-MM-DD");
+        }
+        if (range.from > range.to) {
+            throw new ValidationError("from must be <= to");
+        }
+        const filter: AnyFilter = {
+            userId: new Types.ObjectId(userId),
+            date: { $gte: range.from, $lte: range.to },
+        };
+        return DailySummary.find(filter).sort({ date: 1 }).exec();
+    }
+
+    private async getUserTimezone(userId: string): Promise<string> {
+        const user = await User.findById(userId, "preferences.timezone").lean().exec();
+        if (!user) throw new UnauthorizedError("User not found");
+        return user.preferences?.timezone || DEFAULT_TZ;
+    }
+
+    private sumItems(items: { nutrition: NutritionTotals }[]): NutritionTotals {
+        return items.reduce(
+            (acc, it) => ({
+                calories: acc.calories + (it.nutrition.calories ?? 0),
+                protein: acc.protein + (it.nutrition.protein ?? 0),
+                carbs: acc.carbs + (it.nutrition.carbs ?? 0),
+                fat: acc.fat + (it.nutrition.fat ?? 0),
+                fiber: acc.fiber + (it.nutrition.fiber ?? 0),
+            }),
+            { ...ZERO_TOTALS }
+        );
+    }
+
+    /**
+     * Rebuild a day's DailySummary FROM SOURCE: re-sum every one of this user's
+     * logs for that calendar day and reset logCount to the real count. Called by
+     * log / edit / delete so the summary can never drift from the underlying logs.
+     *
+     * Zero-logs decision: if the day has no logs left, the summary doc is DELETED
+     * (rather than zeroed). getDay then returns summary=null, which the dashboard
+     * already renders as zeros — so no empty docs linger in the collection.
+     */
+    public async recomputeDailySummary(
+        userId: string,
+        dateString: string,
+        timezone: string
+    ): Promise<void> {
+        const uid = new Types.ObjectId(userId);
+        const start = startOfDayUtc(dateString, timezone);
+        const end = endOfDayUtc(dateString, timezone);
+
+        // Source of truth: all of this user's logs that fall in the day's UTC range
+        // (the exact inverse of how the summary date string is computed).
+        const logsFilter: AnyFilter = { userId: uid, date: { $gte: start, $lt: end } };
+        const logs = await FoodLog.find(logsFilter).lean().exec();
+
+        if (logs.length === 0) {
+            const delFilter: AnyFilter = { userId: uid, date: dateString };
+            await DailySummary.deleteOne(delFilter).exec();
+            return;
+        }
+
+        const totals = logs.reduce(
+            (acc, log) => ({
+                calories: acc.calories + (log.totals?.calories ?? 0),
+                protein: acc.protein + (log.totals?.protein ?? 0),
+                carbs: acc.carbs + (log.totals?.carbs ?? 0),
+                fat: acc.fat + (log.totals?.fat ?? 0),
+                fiber: acc.fiber + (log.totals?.fiber ?? 0),
+            }),
+            { ...ZERO_TOTALS }
+        );
+
+        const goalFilter: AnyFilter = { userId: uid };
+        const goal = await Goal.findOne(goalFilter).lean().exec();
+
+        // Sum the day's exercise burn (stored on the summary for food-logged days).
+        const exFilter: AnyFilter = { userId: uid, date: dateString };
+        const exercises = await ExerciseEntry.find(exFilter).lean().exec();
+        const exerciseBurned = exercises.reduce((acc, e) => acc + (e.caloriesBurned ?? 0), 0);
+
+        const filter: AnyFilter = { userId: uid, date: dateString };
+        const update: AnyUpdate = {
+            $set: { totals, logCount: logs.length, exerciseBurned },
+            $setOnInsert: { goalSnapshot: goal ?? {} },
+        };
+        await DailySummary.updateOne(filter, update, { upsert: true });
+    }
+
+}
+
+export const foodService = new FoodService();

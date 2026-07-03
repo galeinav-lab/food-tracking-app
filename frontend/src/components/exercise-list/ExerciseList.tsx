@@ -66,7 +66,7 @@ function ExerciseList({ date, refreshKey, onChanged }: ExerciseListProps): JSX.E
             {!loading &&
                 !error &&
                 entries.map((en) => (
-                    <div className="ex-card" key={en._id}>
+                    <div className="ex-card glass" key={en._id}>
                         <div className="ex-card-head">
                             <div className="ex-thumb" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">

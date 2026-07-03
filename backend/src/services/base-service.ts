@@ -1,3 +1,10 @@
+// ── BaseService ────────────────────────────────────────────────────────────
+// A generic, ABSTRACT base class that every data service extends (AuthService,
+// FoodService, ...). This is the "repository pattern": the shared database CRUD
+// lives here once, and each subclass inherits it by calling super(SomeModel).
+// The `<T extends Document>` generic means each subclass is strongly typed to its
+// OWN Mongoose document type while reusing this exact code — that's inheritance +
+// generics working together to avoid copy-pasting findById/create/delete per model.
 import { Document, Model, Types } from "mongoose";
 import { ResourceNotFound } from "../models/client-error";
 
@@ -10,6 +17,9 @@ import { ResourceNotFound } from "../models/client-error";
  */
 export abstract class BaseService<T extends Document> {
 
+    // `abstract` + `protected constructor` => you can't `new BaseService()` directly;
+    // only a subclass can call this via super(). Each subclass passes its own Mongoose
+    // model, which gets stored once and reused by all the methods below.
     protected constructor(protected readonly model: Model<any>) {}
 
     public async findById(id: string | Types.ObjectId): Promise<T> {

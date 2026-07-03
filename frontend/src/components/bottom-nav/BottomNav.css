@@ -1,3 +1,6 @@
+/* Full-bleed bar; the ITEMS center into the shared content column on wide
+   screens (the calc is negative on phones, so max() falls back to the safe-area
+   inset / 0). Bottom padding keeps nav + center + above the home indicator. */
 .bottomnav {
     position: fixed;
     left: 0;
@@ -10,7 +13,9 @@
     height: 60px;
     padding-top: 6px;
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: rgba(23, 33, 50, 0.85);
+    padding-left: max(env(safe-area-inset-left, 0px), calc((100% - var(--content-max)) / 2));
+    padding-right: max(env(safe-area-inset-right, 0px), calc((100% - var(--content-max)) / 2));
+    background: rgba(24, 31, 19, 0.85); /* dark green blurred surface */
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-top: 1px solid var(--border);
@@ -26,7 +31,11 @@
     padding-top: 4px;
     color: var(--text-dim);
     text-decoration: none;
-    transition: color 150ms ease;
+    transition: color var(--dur-fast) var(--ease-out), transform var(--dur-press) var(--ease-out);
+}
+
+.bn-item:active {
+    transform: scale(0.94);
 }
 
 .bn-icon {
@@ -40,7 +49,7 @@
 }
 
 .bn-label {
-    font-family: var(--font-head);
+    font-family: var(--font-body);
     font-size: 0.66rem;
     font-weight: 600;
 }
@@ -74,11 +83,12 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
-    transition: transform 160ms ease;
+    transition: transform var(--dur-base) var(--ease-out), background var(--dur-fast) var(--ease-out);
 }
 
 .bn-add:active {
     transform: scale(0.94);
+    background: var(--accent-press);
 }
 
 /* + rotates to an × when the fan is open. */
@@ -100,37 +110,52 @@
     position: fixed;
     inset: 0;
     z-index: 39;
-    background: rgba(8, 12, 22, 0.4);
+    background: rgba(6, 8, 4, 0.55); /* deep olive-black scrim */
+    animation: bn-fade var(--dur-base) var(--ease-out);
 }
 
-/* Fan-out choice buttons (hidden until open). */
+@keyframes bn-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Fan-out choice buttons (hidden until open) — a tight 2×2 cluster above the +:
+   [ Meal | Workout ] on top, [ Barcode | Photo ] below. The .glass class gives
+   them the frosted surface; base transition = the CLOSING direction (quick
+   ease-in reverse); the .bn-open rules override with the springy staggered
+   entrance, bottom row first so the cluster grows out of the +. */
 .bn-fan {
     position: absolute;
     bottom: 0;
     left: 50%;
-    width: 70px;
-    margin-left: -35px;
+    width: 92px;
+    margin-left: -46px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
-    padding: 9px 0;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    background: var(--surface-2);
+    gap: 4px;
+    padding: 12px 0;
+    border-radius: var(--r-md);
     color: var(--text);
-    box-shadow: var(--shadow-card);
     cursor: pointer;
     opacity: 0;
     transform: translate(0, 0) scale(0.5);
     pointer-events: none;
     z-index: 1;
-    transition: transform 240ms cubic-bezier(0.2, 0.8, 0.3, 1), opacity 180ms ease;
+    transition: transform var(--dur-fast) var(--ease-in), opacity var(--dur-fast) var(--ease-in);
+}
+
+.bn-fan:active {
+    filter: brightness(0.96);
 }
 
 .bn-fan-icon {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     fill: none;
     stroke: var(--accent);
     stroke-width: 1.9;
@@ -139,28 +164,46 @@
 }
 
 .bn-fan-label {
-    font-family: var(--font-head);
-    font-size: 0.66rem;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
     font-weight: 600;
 }
 
 .bn-open .bn-fan {
     opacity: 1;
     pointer-events: auto;
+    transition: transform var(--dur-slow) var(--ease-spring), opacity var(--dur-base) var(--ease-out);
+}
+
+/* 2×2 grid targets: columns ±49px, bottom row -72px (just above the +),
+   top row -142px. Stagger: barcode → photo → meal → workout (grows upward). */
+.bn-open .bn-fan-barcode {
+    transform: translate(-49px, -72px) scale(1);
+}
+
+.bn-open .bn-fan-photo {
+    transform: translate(49px, -72px) scale(1);
+    transition-delay: var(--stagger);
 }
 
 .bn-open .bn-fan-meal {
-    transform: translate(-66px, -98px) scale(1);
+    transform: translate(-49px, -142px) scale(1);
+    transition-delay: calc(var(--stagger) * 2);
 }
 
 .bn-open .bn-fan-workout {
-    transform: translate(66px, -98px) scale(1);
-    transition-delay: 45ms;
+    transform: translate(49px, -142px) scale(1);
+    transition-delay: calc(var(--stagger) * 3);
 }
 
 @media (prefers-reduced-motion: reduce) {
     .bn-add,
-    .bn-fan {
+    .bn-fan,
+    .bn-item {
         transition: none;
+    }
+
+    .bn-backdrop {
+        animation: none;
     }
 }

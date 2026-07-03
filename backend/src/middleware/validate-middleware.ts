@@ -1,3 +1,9 @@
+// ── Validation middleware ──────────────────────────────────────────────────
+// A "higher-order function": validateBody(schema) RETURNS a middleware function.
+// That lets each route pass its own Joi schema, e.g. validateBody(logFoodSchema).
+// Why validate at the edge? So controllers/services can trust req.body is the right
+// shape — never sanitize the same thing in five places. This is the "validate at the
+// boundary" idea, and `stripUnknown` also drops unexpected keys (a security win).
 import { NextFunction, Request, Response } from "express";
 import { ObjectSchema } from "joi";
 import { ValidationError } from "../models/client-error";

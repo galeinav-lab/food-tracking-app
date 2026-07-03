@@ -1,4 +1,4 @@
-import { type JSX, useEffect, useMemo, useState } from "react";
+import { type JSX, useEffect, useState } from "react";
 import {
     Bar,
     BarChart,
@@ -10,48 +10,59 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { userUpdated } from "../../store/auth-slice";
-import { authService } from "../../services/auth.service";
+import { useRefresh } from "../../context/refresh-context";
 import { foodService } from "../../services/food.service";
 import { ApiError } from "../../services/http-client";
-import { IDailySummary } from "../../models/daily-summary";
-import { addDaysToDateString, formatDateLabel, formatDateShort, todayInTimeZone } from "../../utils/date";
+import { IDeficitDay, IWeeklyDeficit } from "../../models/deficit";
+import { formatDateLabel, formatDateShort } from "../../utils/date";
 import { colors, chartTheme } from "../../styles/colors";
 import "./WeeklyCalories.css";
 
-const KCAL_PER_KG = 7700;
-const DEFICIT_COLOR = colors.success; // under maintenance
-const SURPLUS_COLOR = colors.warning; // over maintenance
+const fmt = (n: number): string => Math.round(n).toLocaleString();
 
-interface DayBar {
-    date: string;
-    eaten: number | null; // null = no logs that day (excluded from deficit)
-    logged: boolean;
+// Custom tooltip so no-data days read clearly and logged days show their deficit.
+interface TipProps {
+    active?: boolean;
+    payload?: Array<{ payload: IDeficitDay }>;
+}
+function DayTooltip({ active, payload }: TipProps): JSX.Element | null {
+    if (!active || !payload || payload.length === 0) return null;
+    const d = payload[0].payload;
+    return (
+        <div className="wc-tip">
+            <div className="wc-tip-date">{formatDateLabel(d.date)}</div>
+            {d.logged && d.eaten != null && d.deficit != null ? (
+                <>
+                    <div>Eaten {fmt(d.eaten)} kcal</div>
+                    {d.exercise > 0 && <div>Exercise +{fmt(d.exercise)} kcal</div>}
+                    <div className={d.deficit >= 0 ? "wc-tip-deficit" : "wc-tip-surplus"}>
+                        {d.deficit >= 0 ? `Deficit ${fmt(d.deficit)}` : `Surplus ${fmt(-d.deficit)}`} kcal
+                    </div>
+                </>
+            ) : (
+                <div className="wc-tip-none">No food logged</div>
+            )}
+        </div>
+    );
 }
 
+// Per-day weekly calories chart. All numbers come from GET /api/food/deficit —
+// no deficit math here; it only renders perDay[]. Follows the selected date's week.
 function WeeklyCalories(): JSX.Element {
-    const dispatch = useAppDispatch();
-    const user = useAppSelector((state) => state.auth.user);
-    const timeZone =
-        user?.preferences.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const maintenance = user?.maintenanceCalories ?? null;
+    const { selectedDate, refreshKey } = useRefresh();
 
-    const [summaries, setSummaries] = useState<IDailySummary[]>([]);
+    const [data, setData] = useState<IWeeklyDeficit | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Last 7 days of summaries.
     useEffect(() => {
         let active = true;
-        const to = todayInTimeZone(timeZone);
-        const from = addDaysToDateString(to, -6);
         setLoading(true);
         setError(null);
         foodService
-            .getSummaries({ from, to })
-            .then((rows) => {
-                if (active) setSummaries(rows);
+            .getWeeklyDeficit(selectedDate)
+            .then((res) => {
+                if (active) setData(res);
             })
             .catch((err) => {
                 if (active) setError(err instanceof ApiError ? err.message : "Failed to load week");
@@ -62,74 +73,28 @@ function WeeklyCalories(): JSX.Element {
         return () => {
             active = false;
         };
-    }, [timeZone]);
-
-    // Ensure maintenance is available — older accounts get it backfilled by /auth/me.
-    useEffect(() => {
-        if (maintenance != null) return;
-        let active = true;
-        authService
-            .me()
-            .then((fresh) => {
-                if (active) dispatch(userUpdated(fresh));
-            })
-            .catch(() => {
-                /* best-effort; the guard below handles a still-missing value */
-            });
-        return () => {
-            active = false;
-        };
-    }, [maintenance, dispatch]);
-
-    const { data, loggedDays, weeklyDeficit, projectedChangeKg, yMax } = useMemo(() => {
-        const to = todayInTimeZone(timeZone);
-        const dates: string[] = [];
-        for (let i = 6; i >= 0; i--) dates.push(addDaysToDateString(to, -i));
-
-        const byDate = new Map(summaries.map((s) => [s.date, s]));
-        const bars: DayBar[] = dates.map((date) => {
-            const s = byDate.get(date);
-            const logged = !!s && s.logCount > 0;
-            return { date, eaten: logged && s ? s.totals.calories : null, logged };
-        });
-
-        // Only days the user actually logged count toward the deficit.
-        const logged = bars.filter((b) => b.logged && b.eaten != null);
-        const deficit =
-            maintenance != null
-                ? logged.reduce((acc, b) => acc + (maintenance - (b.eaten as number)), 0)
-                : 0;
-
-        const maxEaten = bars.reduce((m, b) => Math.max(m, b.eaten ?? 0), 0);
-        const max = Math.max(maxEaten, maintenance ?? 0);
-
-        return {
-            data: bars,
-            loggedDays: logged.length,
-            weeklyDeficit: deficit,
-            projectedChangeKg: deficit / KCAL_PER_KG,
-            yMax: max > 0 ? Math.ceil((max * 1.1) / 100) * 100 : 100,
-        };
-    }, [summaries, maintenance, timeZone]);
+    }, [selectedDate, refreshKey]);
 
     return (
         <div className="weekly">
-            <h1 className="weekly-title">Weekly calories</h1>
+            <h1 className="weekly-title">This week so far</h1>
 
             {loading && <p className="weekly-hint">Loading…</p>}
             {error && <p className="weekly-error">{error}</p>}
 
-            {!loading && !error && maintenance == null && (
-                <p className="weekly-hint">
-                    Maintenance calories aren't available yet — complete onboarding to see this chart.
-                </p>
-            )}
-
-            {!loading && !error && maintenance != null && (
+            {!loading && !error && data && (
                 <>
+                    <p className="weekly-sub">
+                        {data.loggedDayCount} of 7 days logged · Sun {formatDateShort(data.weekStart)} – Sat{" "}
+                        {formatDateShort(data.weekEnd)}
+                    </p>
+
                     <div className="weekly-chart">
                         <ResponsiveContainer width="100%" height={260}>
-                            <BarChart data={data} margin={{ top: 8, right: 12, left: -8, bottom: 4 }}>
+                            <BarChart
+                                data={data.perDay}
+                                margin={{ top: 8, right: 12, left: -8, bottom: 4 }}
+                            >
                                 <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
                                 <XAxis
                                     dataKey="date"
@@ -139,31 +104,42 @@ function WeeklyCalories(): JSX.Element {
                                     tickLine={chartTheme.axisLine}
                                 />
                                 <YAxis
-                                    domain={[0, yMax]}
                                     tick={chartTheme.axisTick}
                                     axisLine={chartTheme.axisLine}
                                     tickLine={chartTheme.axisLine}
                                     width={44}
                                 />
                                 <Tooltip
-                                    formatter={(value) => `${Number(value).toLocaleString()} kcal`}
-                                    labelFormatter={(label) => formatDateLabel(String(label))}
-                                    contentStyle={chartTheme.tooltipContentStyle}
-                                    labelStyle={chartTheme.tooltipLabelStyle}
-                                    itemStyle={chartTheme.tooltipItemStyle}
+                                    content={<DayTooltip />}
                                     cursor={{ fill: "rgba(255,255,255,0.05)" }}
                                 />
                                 <ReferenceLine
-                                    y={maintenance}
+                                    y={data.maintenance}
                                     stroke={colors.muted}
                                     strokeDasharray="5 5"
-                                    label={{ value: "maintenance", position: "right", fontSize: 11, fill: colors.muted }}
+                                    label={{
+                                        value: "maintenance",
+                                        position: "right",
+                                        fontSize: 11,
+                                        fill: colors.muted,
+                                    }}
                                 />
-                                <Bar dataKey="eaten" radius={[4, 4, 0, 0]}>
-                                    {data.map((d) => (
+                                {/* `background` draws a faint track per column, so a day
+                                    with no food logged shows an EMPTY track (no bar) —
+                                    clearly "no data", never a zero that looks like fasting. */}
+                                <Bar
+                                    dataKey="eaten"
+                                    radius={[4, 4, 0, 0]}
+                                    background={{ fill: "rgba(255,255,255,0.04)" }}
+                                >
+                                    {data.perDay.map((d) => (
                                         <Cell
                                             key={d.date}
-                                            fill={d.eaten != null && d.eaten < maintenance ? DEFICIT_COLOR : SURPLUS_COLOR}
+                                            fill={
+                                                d.deficit != null && d.deficit >= 0
+                                                    ? colors.success
+                                                    : colors.warning
+                                            }
                                         />
                                     ))}
                                 </Bar>
@@ -171,25 +147,27 @@ function WeeklyCalories(): JSX.Element {
                         </ResponsiveContainer>
                     </div>
 
-                    {loggedDays === 0 ? (
-                        <p className="weekly-hint">No food logged in the last 7 days yet.</p>
+                    {data.loggedDayCount === 0 ? (
+                        <p className="weekly-hint">No food logged this week yet.</p>
                     ) : (
                         <div className="weekly-summary">
-                            {weeklyDeficit >= 0 ? (
+                            {data.weeklyDeficit >= 0 ? (
                                 <p className="weekly-line">
-                                    Weekly deficit: <strong>{Math.round(weeklyDeficit).toLocaleString()} kcal</strong>{" "}
-                                    → about <strong>{Math.abs(projectedChangeKg).toFixed(1)} kg lost</strong> this week
+                                    Deficit so far:{" "}
+                                    <strong>{fmt(data.weeklyDeficit)} kcal</strong> → about{" "}
+                                    <strong>{Math.abs(data.projectedKg).toFixed(2)} kg</strong> toward loss
                                 </p>
                             ) : (
                                 <p className="weekly-line">
-                                    Weekly surplus:{" "}
-                                    <strong>{Math.abs(Math.round(weeklyDeficit)).toLocaleString()} kcal</strong> → about{" "}
-                                    <strong>{Math.abs(projectedChangeKg).toFixed(1)} kg gained</strong> this week
+                                    Surplus so far:{" "}
+                                    <strong>{fmt(-data.weeklyDeficit)} kcal</strong> → about{" "}
+                                    <strong>{Math.abs(data.projectedKg).toFixed(2)} kg</strong> gained
                                 </p>
                             )}
                             <p className="weekly-explainer">
-                                Based on {loggedDays} logged {loggedDays === 1 ? "day" : "days"}. ~7,700 kcal ≈ 1 kg of
-                                body fat. Days with no food logged are not counted.
+                                Based on {data.loggedDayCount} logged{" "}
+                                {data.loggedDayCount === 1 ? "day" : "days"} this week. Days with no food
+                                logged aren't counted, so this is progress so far — not a missed goal.
                             </p>
                         </div>
                     )}

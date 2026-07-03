@@ -1,3 +1,8 @@
+// ── Auth slice (Redux Toolkit) ─────────────────────────────────────────────
+// A "slice" bundles one piece of global state + the reducers that change it.
+// Redux is our ONE source of truth for auth (who's logged in + the token); the
+// rest of the app reads it with useAppSelector and changes it with dispatch().
+// Key RTK pieces below: createSlice, createAsyncThunk, reducers vs extraReducers.
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { authService } from "../services/auth.service";
 import { ApiError } from "../services/http-client";
@@ -40,6 +45,10 @@ function loadInitialState(): AuthState {
 }
 
 // --- Async thunks (call the framework-agnostic services) ---
+// `createAsyncThunk` wraps an async operation and auto-dispatches three actions
+// over its lifecycle: pending (started) → fulfilled (success) → rejected (failed).
+// We handle those three in `extraReducers` below to flip loading/error/user state.
+// `rejectWithValue` lets us send a clean error string to the `.rejected` case.
 
 export const login = createAsyncThunk<IAuthResult, ILoginInput, { rejectValue: string }>(
     "auth/login",
@@ -68,6 +77,9 @@ export const register = createAsyncThunk<IAuthResult, IRegisterInput, { rejectVa
 const authSlice = createSlice({
     name: "auth",
     initialState: loadInitialState(),
+    // `reducers` = synchronous state changes you trigger directly (dispatch(logout())).
+    // RTK uses Immer under the hood, so "mutating" state here (state.user = null) is
+    // SAFE — Immer turns it into an immutable update behind the scenes.
     reducers: {
         logout(state) {
             state.user = null;
@@ -86,6 +98,8 @@ const authSlice = createSlice({
             localStorage.setItem(USER_KEY, JSON.stringify(action.payload));
         },
     },
+    // `extraReducers` responds to actions defined ELSEWHERE — here, the pending/
+    // fulfilled/rejected actions from the login & register thunks above.
     extraReducers: (builder) => {
         const onPending = (state: AuthState) => {
             state.loading = true;
@@ -118,5 +132,8 @@ const authSlice = createSlice({
     },
 });
 
+// createSlice auto-generates "action creators" from the reducer names above —
+// export them so components can dispatch(logout()), etc. The reducer is the default
+// export and gets registered in store.ts.
 export const { logout, clearAuthError, userUpdated } = authSlice.actions;
 export default authSlice.reducer;

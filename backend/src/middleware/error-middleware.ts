@@ -1,3 +1,8 @@
+// ── Global error handler ───────────────────────────────────────────────────
+// Express recognizes a middleware with FOUR params (err, req, res, next) as an
+// error handler. It's registered LAST (see app.ts) so anything that throws or
+// calls next(err) anywhere in the app funnels here — one place to log + shape the
+// error response, instead of try/catch returning JSON in every controller.
 import {NextFunction, Request, Response} from "express";
 import {StatusCode} from "../models/enums";
 import {RouteNotFound} from "../models/client-error";
@@ -5,6 +10,8 @@ import {appConfig} from "../utils/app-config";
 
 class ErrorMiddleware {
 
+    // `err: any` because anything could be thrown. Our own errors (client-error.ts)
+    // carry a `.status`; unexpected ones default to 500.
     public catchAll(err: any, request: Request, response: Response, next: NextFunction) {
         const status = err.status ?? StatusCode.ServerError;
         const message = err.message ?? "Internal server error";

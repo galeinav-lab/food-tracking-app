@@ -1,12 +1,8 @@
-import { type JSX, useEffect, useMemo, useState } from "react";
+import { type JSX, useEffect, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { userUpdated } from "../../store/auth-slice";
-import { authService } from "../../services/auth.service";
 import { foodService } from "../../services/food.service";
 import { ApiError } from "../../services/http-client";
-import { IDailySummary } from "../../models/daily-summary";
-import { addDaysToDateString, todayInTimeZone } from "../../utils/date";
+import { IWeeklyDeficit } from "../../models/deficit";
 import { colors } from "../../styles/colors";
 import "./WeeklyRing.css";
 
@@ -15,29 +11,26 @@ const RING_COLOR = colors.accent;
 const TRACK_COLOR = colors.track;
 
 interface WeeklyRingProps {
-    timeZone: string;
+    // The selected calendar day; the ring shows THAT day's Sun–Sat week.
+    date: string;
     refreshKey: number;
 }
 
-function WeeklyRing({ timeZone, refreshKey }: WeeklyRingProps): JSX.Element {
-    const dispatch = useAppDispatch();
-    const user = useAppSelector((state) => state.auth.user);
-    const maintenance = user?.maintenanceCalories ?? null;
-
-    const [summaries, setSummaries] = useState<IDailySummary[]>([]);
+// Weekly deficit progress ring. All numbers come from GET /api/food/deficit —
+// this component does NO deficit math, it only displays what the endpoint returns.
+function WeeklyRing({ date, refreshKey }: WeeklyRingProps): JSX.Element {
+    const [data, setData] = useState<IWeeklyDeficit | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         let active = true;
-        const to = todayInTimeZone(timeZone);
-        const from = addDaysToDateString(to, -6);
         setLoading(true);
         setError(null);
         foodService
-            .getSummaries({ from, to })
-            .then((rows) => {
-                if (active) setSummaries(rows);
+            .getWeeklyDeficit(date)
+            .then((res) => {
+                if (active) setData(res);
             })
             .catch((err) => {
                 if (active) setError(err instanceof ApiError ? err.message : "Failed to load week");
@@ -48,89 +41,61 @@ function WeeklyRing({ timeZone, refreshKey }: WeeklyRingProps): JSX.Element {
         return () => {
             active = false;
         };
-    }, [timeZone, refreshKey]);
+    }, [date, refreshKey]);
 
-    // Backfill maintenance for older accounts.
-    useEffect(() => {
-        if (maintenance != null) return;
-        let active = true;
-        authService
-            .me()
-            .then((fresh) => {
-                if (active) dispatch(userUpdated(fresh));
-            })
-            .catch(() => {
-                /* guard handles a still-missing value */
-            });
-        return () => {
-            active = false;
-        };
-    }, [maintenance, dispatch]);
+    if (loading) return <div className="ring glass"><h2 className="ring-title">This week</h2><p className="ring-hint">Loading…</p></div>;
+    if (error) return <div className="ring glass"><h2 className="ring-title">This week</h2><p className="ring-error">{error}</p></div>;
+    if (!data) return <div className="ring glass"><h2 className="ring-title">This week</h2><p className="ring-hint">No data yet.</p></div>;
 
-    const { deficit, kg } = useMemo(() => {
-        if (maintenance == null) return { deficit: 0, kg: 0 };
-        // Only days with FOOD logs count. exercise raises that day's burn.
-        const d = summaries
-            .filter((s) => s.logCount > 0)
-            .reduce(
-                (acc, s) => acc + (maintenance + (s.exerciseBurned ?? 0) - s.totals.calories),
-                0
-            );
-        return { deficit: d, kg: d / TARGET };
-    }, [summaries, maintenance]);
+    const { weeklyDeficit, projectedKg, progressToTarget, loggedDayCount } = data;
 
-    // Progress ring as a 2-slice donut: filled portion vs remaining track.
-    const ringValue = Math.max(0, Math.min(deficit, TARGET));
+    // Ring fill = progress toward the 7,700 target, visually capped at 100% but the
+    // real number is shown below. A negative weeklyDeficit (net surplus) => empty ring.
+    const filledPct = Math.max(0, Math.min(progressToTarget, 1));
     const ringData = [
-        { name: "filled", value: ringValue, color: RING_COLOR },
-        { name: "rest", value: Math.max(0, TARGET - ringValue), color: TRACK_COLOR },
+        { name: "filled", value: filledPct, color: RING_COLOR },
+        { name: "rest", value: 1 - filledPct, color: TRACK_COLOR },
     ];
 
+    const kgAbs = Math.abs(projectedKg).toFixed(2);
+    const kgLabel = projectedKg >= 0 ? `≈ ${kgAbs} kg lost` : `≈ ${kgAbs} kg gained`;
+
     return (
-        <div className="ring">
-            <h2 className="ring-title">Weekly burn</h2>
+        <div className="ring glass">
+            <h2 className="ring-title">This week so far</h2>
 
-            {loading && <p className="ring-hint">Loading…</p>}
-            {error && <p className="ring-error">{error}</p>}
-            {!loading && !error && maintenance == null && (
-                <p className="ring-hint">Maintenance not available yet.</p>
-            )}
+            <div className="ring-wrap">
+                <ResponsiveContainer width="100%" height={190}>
+                    <PieChart>
+                        <Pie
+                            data={ringData}
+                            dataKey="value"
+                            nameKey="name"
+                            innerRadius="74%"
+                            outerRadius="100%"
+                            startAngle={90}
+                            endAngle={-270}
+                            stroke="none"
+                            isAnimationActive={true}
+                            animationDuration={550}
+                            animationEasing="ease-out"
+                        >
+                            {ringData.map((d) => (
+                                <Cell key={d.name} fill={d.color} />
+                            ))}
+                        </Pie>
+                    </PieChart>
+                </ResponsiveContainer>
+                <div className="ring-center">
+                    <div className="ring-num">{Math.round(weeklyDeficit).toLocaleString()}</div>
+                    <div className="ring-sub">/ {TARGET.toLocaleString()} kcal</div>
+                    <div className="ring-kg">{kgLabel}</div>
+                </div>
+            </div>
 
-            {!loading && !error && maintenance != null && (
-                <>
-                    <div className="ring-wrap">
-                        <ResponsiveContainer width="100%" height={200}>
-                            <PieChart>
-                                <Pie
-                                    data={ringData}
-                                    dataKey="value"
-                                    nameKey="name"
-                                    innerRadius="74%"
-                                    outerRadius="100%"
-                                    startAngle={90}
-                                    endAngle={-270}
-                                    stroke="none"
-                                    isAnimationActive={false}
-                                >
-                                    {ringData.map((d) => (
-                                        <Cell key={d.name} fill={d.color} />
-                                    ))}
-                                </Pie>
-                            </PieChart>
-                        </ResponsiveContainer>
-                        <div className="ring-center">
-                            <div className="ring-num">{Math.round(deficit).toLocaleString()}</div>
-                            <div className="ring-sub">/ {TARGET.toLocaleString()} kcal</div>
-                            <div className="ring-kg">
-                                {kg >= 0
-                                    ? `≈ ${kg.toFixed(1)} kg this week`
-                                    : `≈ ${Math.abs(kg).toFixed(1)} kg gained`}
-                            </div>
-                        </div>
-                    </div>
-                    <p className="ring-foot">Deficit toward 7,700 kcal (≈ 1 kg). Logged-food days only.</p>
-                </>
-            )}
+            <p className="ring-foot">
+                {loggedDayCount} of 7 days logged · deficit toward 7,700 kcal (≈ 1 kg)
+            </p>
         </div>
     );
 }

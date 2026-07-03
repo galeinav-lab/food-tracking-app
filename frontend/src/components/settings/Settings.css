@@ -9,7 +9,6 @@
     background: var(--card-bg);
     padding: 16px;
     margin-bottom: 20px;
-    max-width: 360px;
 }
 
 .settings-label {
@@ -95,7 +94,6 @@
     margin-top: 16px;
     padding: 12px 16px;
     width: 100%;
-    max-width: 360px;
     background: transparent;
     color: var(--error);
     border: 1px solid var(--border);

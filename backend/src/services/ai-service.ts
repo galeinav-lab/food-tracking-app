@@ -1,3 +1,11 @@
+// ── AIService ──────────────────────────────────────────────────────────────
+// Wraps the Anthropic (Claude) API to turn plain-language food ("2 eggs and toast")
+// into structured nutrition JSON, and to compute onboarding goals. Three ideas
+// worth understanding here:
+//   1. PROMPT DESIGN — a strict "system prompt" forces JSON-only output.
+//   2. CACHE-ASIDE — we check our DB cache before paying for an API call.
+//   3. NEVER TRUST THE LLM — every response is JSON-parsed AND shape-validated,
+//      and goals are clamped to safe bounds, before we use it.
 import Anthropic from "@anthropic-ai/sdk";
 import { appConfig } from "../utils/app-config";
 import { NutritionCache } from "../models/nutrition-cache";
@@ -5,6 +13,10 @@ import { BadGatewayError } from "../models/client-error";
 import { NutritionTotals, ParsedFoodItem, ParsedNutrition } from "../types/nutrition";
 import { CalculatedGoals, OnboardingInput } from "../types/onboarding";
 
+// The "system prompt" sets the model's role/rules for the whole conversation. We
+// demand raw JSON (no prose, no ``` fences) and give the EXACT schema, so the reply
+// is machine-parseable. Pinning the output shape like this is the key to reliably
+// using an LLM as a structured-data function rather than a chatbot.
 const SYSTEM_PROMPT = `You are a nutrition analysis assistant. The user will describe what they ate in plain language; you respond with the parsed nutrition.
 
 Return ONLY valid JSON matching this exact shape — no markdown, no code fences, no prose, no commentary:
@@ -75,6 +87,9 @@ export interface AnalyzeFoodOptions {
 class AIService {
     private client: Anthropic | null = null;
 
+    // "Lazy initialization": the SDK client is created on first use, not at startup.
+    // Benefit — the server can boot (and serve non-AI routes) even if the API key is
+    // missing; we only fail when something actually needs the AI.
     private getClient(): Anthropic {
         if (!this.client) {
             if (!appConfig.anthropicApiKey) {
@@ -94,7 +109,9 @@ class AIService {
         const skipCache = Boolean(opts.previousDescription);
         const key = this.normalizeKey(description);
 
-        // Cache check (skipped when caller provided extra context)
+        // CACHE-ASIDE pattern: look in our own DB first; only call the (slow, paid)
+        // AI on a miss, then write the result back for next time. Skipped for edits
+        // because the extra "this is a correction" context can change the answer.
         if (!skipCache) {
             const cached = await NutritionCache.findOne({ key }).exec();
             if (cached) {
@@ -202,8 +219,12 @@ class AIService {
      * Returns the clamped goals and a flag noting whether anything was adjusted.
      */
     private applySafetyClamp(aiGoals: NutritionTotals, p: OnboardingInput): CalculatedGoals {
+        // Mifflin-St Jeor equation — the standard estimate of BMR (Basal Metabolic
+        // Rate = calories burned at complete rest). The +5 / -161 is the sex constant.
         const bmr =
             10 * p.weightKg + 6.25 * p.heightCm - 5 * p.age + (p.sex === "male" ? 5 : -161);
+        // Maintenance = BMR × an activity multiplier (1.4 ≈ lightly active). Eat at
+        // maintenance to hold weight; below it to lose, above it to gain.
         const maintenance = bmr * 1.4;
 
         const absoluteFloor = p.sex === "female" ? ABSOLUTE_FLOOR_FEMALE : ABSOLUTE_FLOOR_MALE;
@@ -238,6 +259,9 @@ class AIService {
         return { goals, adjustedForSafety: safeCalories !== aiCalories };
     }
 
+    // Build a stable cache key. Lowercasing + sorting the words means "toast and eggs"
+    // and "eggs and toast" produce the SAME key, so they share one cached result.
+    // (Trade-off: it's fuzzy — different word order with the same words collides.)
     private normalizeKey(description: string): string {
         return description.toLowerCase().trim().split(/\s+/).sort().join(" ");
     }
@@ -262,14 +286,18 @@ class AIService {
         try {
             response = await this.getClient().messages.create({
                 model: MODEL,
-                max_tokens: MAX_TOKENS,
+                max_tokens: MAX_TOKENS, // hard cap on the reply length (cost/safety)
                 system: [
                     {
                         type: "text",
                         text: SYSTEM_PROMPT,
+                        // Anthropic PROMPT CACHING: the (long, unchanging) system prompt
+                        // is cached on their side, so repeated calls are cheaper/faster.
                         cache_control: { type: "ephemeral" },
                     },
                 ],
+                // "messages" is the conversation; we send a single user turn. The
+                // model replies in `response.content` as blocks (we want the text one).
                 messages: [{ role: "user", content: this.buildUserMessage(description, opts) }],
             });
         } catch (err) {
@@ -312,6 +340,10 @@ class AIService {
         return parsed;
     }
 
+    // A TypeScript "type guard" (note the return type `value is ParsedNutrition`):
+    // it checks the shape at RUNTIME and, if true, tells the compiler the value is
+    // that type. Essential when the input is `unknown` (parsed LLM JSON) — we verify
+    // every field before trusting it, so a malformed AI reply fails loudly here.
     private isParsedNutrition(value: unknown): value is ParsedNutrition {
         if (!value || typeof value !== "object") return false;
         const v = value as Record<string, unknown>;

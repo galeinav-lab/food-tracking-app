@@ -4,6 +4,61 @@
     gap: 18px;
 }
 
+/* ── Ambient radial glow (v3.1) ─────────────────────────────────────────────
+   Fixed full-screen layer behind the dashboard content (negative z-index paints
+   above the body canvas but below all content). Base = static gradient from mid
+   greens to the dark edges; the lime bloom is a SEPARATE layer animated only via
+   opacity + transform (never gradient stops), so the loop stays compositor-cheap. */
+.home-ambient {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse 130% 100% at 50% 32%,
+        var(--ambient-mid) 0%,
+        var(--ambient-deep) 45%,
+        var(--bg) 82%
+    );
+}
+
+.home-ambient-bloom {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse 75% 50% at 50% 32%,
+        var(--ambient-bloom) 0%,
+        rgba(163, 230, 53, 0.22) 45%,
+        transparent 78%
+    );
+    transform-origin: 50% 32%;
+    animation: ambient-breathe 22s ease-in-out infinite alternate;
+    will-change: opacity, transform;
+}
+
+@keyframes ambient-breathe {
+    from {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.09);
+    }
+}
+
+/* Paused while the tab is hidden (visibilitychange in Home.tsx). */
+.home-ambient-paused .home-ambient-bloom {
+    animation-play-state: paused;
+}
+
+/* Reduced motion: static gradient, no pulse (global kill-switch also applies). */
+@media (prefers-reduced-motion: reduce) {
+    .home-ambient-bloom {
+        animation: none;
+    }
+}
+
 .home-greet {
     display: flex;
     align-items: baseline;

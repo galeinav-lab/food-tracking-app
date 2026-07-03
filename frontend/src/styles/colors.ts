@@ -1,22 +1,24 @@
 // JS mirror of the CSS color tokens in index.css — for SVG/recharts which need
 // literal color strings (CSS var() doesn't resolve in those contexts). Keep in
 // sync with :root in index.css (single conceptual source of truth).
+// v3 "Dark Lime" — see design-system/nutritrack/MASTER.md.
 export const colors = {
-    accent: "#3B82F6",
-    macroProtein: "#F87171",
+    accent: "#A3E635",
+    macroProtein: "#FB7185",
     macroCarbs: "#FBBF24",
-    macroFat: "#34D399",
+    macroFat: "#2DD4BF",
+    macroFiber: "#C084FC",
     water: "#38BDF8",
-    track: "rgba(255,255,255,0.08)",
-    border: "rgba(255,255,255,0.09)",
-    textDim: "#64748B",
-    surface2: "#1E2A40",
+    track: "rgba(214,255,170,0.08)",
+    border: "rgba(214,255,170,0.10)",
+    textDim: "#86937A",
+    surface2: "#212B1A",
     // Chart theming (recharts needs literal colors; CSS var() doesn't resolve there).
-    text: "#F1F5F9",
-    muted: "#94A3B8",
-    grid: "rgba(255,255,255,0.08)",
-    success: "#34D399",
-    warning: "#FBBF24",
+    text: "#F2F5EC",
+    muted: "#B4BFA4",
+    grid: "rgba(214,255,170,0.08)",
+    success: "#4ADE80",
+    warning: "#F59E0B",
 } as const;
 
 // Shared recharts theming so axes/tooltips read on the dark theme.
@@ -24,10 +26,11 @@ export const chartTheme = {
     axisTick: { fontSize: 11, fill: colors.muted },
     axisLine: { stroke: colors.border },
     tooltipContentStyle: {
-        background: colors.surface2,
+        background: "#212B1A",
         border: `1px solid ${colors.border}`,
         borderRadius: 10,
         color: colors.text,
+        boxShadow: "0 8px 24px rgba(0,0,0,0.45)",
     },
     tooltipLabelStyle: { color: colors.muted },
     tooltipItemStyle: { color: colors.text },

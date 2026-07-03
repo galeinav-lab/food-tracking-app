@@ -75,3 +75,24 @@ export function addDaysToDateString(yyyymmdd: string, days: number): string {
     dt.setUTCDate(dt.getUTCDate() + days);
     return dt.toISOString().slice(0, 10);
 }
+
+/**
+ * The SUNDAY→SATURDAY week containing the given calendar date.
+ * getWeekRange("2026-06-17") // a Wednesday → { start: "2026-06-14", end: "2026-06-20" }
+ *
+ * Works on bare "YYYY-MM-DD" strings: the date is anchored at UTC midnight purely
+ * to ask `getUTCDay()` which weekday that calendar date is (0 = Sunday) — a
+ * calendar date's weekday is timezone-independent, so this is safe for Israel
+ * (or any tz). The tz only matters for deciding what "today" is, which callers
+ * resolve first via toDateStringInTz. Sunday start is deliberate (not the Monday
+ * convention): start = date − weekday, end = start + 6.
+ */
+export function getWeekRange(yyyymmdd: string): { start: string; end: string } {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(yyyymmdd)) {
+        throw new Error(`Invalid date string: ${yyyymmdd}`);
+    }
+    const [y, m, d] = yyyymmdd.split("-").map(Number);
+    const weekday = new Date(Date.UTC(y, m - 1, d)).getUTCDay(); // 0 = Sunday
+    const start = addDaysToDateString(yyyymmdd, -weekday);
+    return { start, end: addDaysToDateString(start, 6) };
+}

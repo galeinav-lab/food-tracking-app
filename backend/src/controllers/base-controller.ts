@@ -1,6 +1,14 @@
+// ── BaseController ─────────────────────────────────────────────────────────
+// Abstract base that every controller extends. Its job is the LAYERED-ARCHITECTURE
+// split: controllers handle HTTP (read the request, send a response) and delegate
+// the actual work to services. Centralizing the response shape here means every
+// endpoint returns the SAME JSON "envelope" — the frontend can rely on one shape.
 import { Response } from "express";
 import { StatusCode } from "../models/enums";
 
+// The "response envelope" pattern: success responses are { success:true, data },
+// errors are { success:false, error }. A discriminated union on `success` lets the
+// frontend narrow the type safely (if success is true, `data` exists).
 export interface SuccessEnvelope<T> {
     success: true;
     data: T;

@@ -29,7 +29,9 @@ const WaterDaySchema = new Schema<IWaterDay>(
     { timestamps: true }
 );
 
-// One running-total doc per user per day (supports upsert add/subtract).
+// UNIQUE compound index on (userId, date): guarantees at most ONE water doc per
+// user per day. That's what makes the "upsert + $inc" pattern safe — the service
+// can atomically create-or-increment today's total without risking duplicate rows.
 WaterDaySchema.index({ userId: 1, date: 1 }, { unique: true });
 
 export const WaterDay: Model<IWaterDay> = model<IWaterDay>(

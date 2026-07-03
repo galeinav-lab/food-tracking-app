@@ -1,7 +1,7 @@
 /* Sits above the bottom nav (which is ~64px tall + safe area). */
 .rp-fab {
     position: fixed;
-    right: 12px;
+    right: max(12px, env(safe-area-inset-right, 0px));
     bottom: calc(78px + env(safe-area-inset-bottom));
     z-index: 1500;
     display: inline-flex;
@@ -43,7 +43,7 @@
 
 .rp-panel {
     width: 100%;
-    max-width: 480px;
+    max-width: var(--content-max);
     background: var(--card-bg, #172132);
     border: 1px solid var(--border);
     border-bottom: none;

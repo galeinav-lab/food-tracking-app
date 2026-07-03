@@ -11,10 +11,12 @@ import "./DailyDashboard.css";
 const ZERO: INutrition = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
 const fmt = (n: number): string => Math.round(n).toLocaleString();
 
-const MACROS: { key: "protein" | "carbs" | "fat"; label: string; color: string }[] = [
+// All four goal nutrients render as IDENTICAL rings in a 2×2 grid (fiber included).
+const MACROS: { key: "protein" | "carbs" | "fat" | "fiber"; label: string; color: string }[] = [
     { key: "protein", label: "Protein", color: colors.macroProtein },
     { key: "carbs", label: "Carbs", color: colors.macroCarbs },
     { key: "fat", label: "Fat", color: colors.macroFat },
+    { key: "fiber", label: "Fiber", color: colors.macroFiber },
 ];
 
 interface DailyDashboardProps {
@@ -51,9 +53,9 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
         };
     }, [date, refreshKey]);
 
-    if (loading) return <div className="card dash-msg">Loading…</div>;
-    if (error) return <div className="card dash-msg dash-error">{error}</div>;
-    if (!goals) return <div className="card dash-msg">No goals set.</div>;
+    if (loading) return <div className="card glass dash-msg">Loading…</div>;
+    if (error) return <div className="card glass dash-msg dash-error">{error}</div>;
+    if (!goals) return <div className="card glass dash-msg">No goals set.</div>;
 
     const calGoal = goals.calories;
     const calEaten = consumed.calories;
@@ -61,13 +63,11 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
     const remaining = Math.max(0, Math.round(calGoal - calEaten));
     const over = calEaten > calGoal;
 
-    const fiberPct = goals.fiber > 0 ? Math.min((consumed.fiber / goals.fiber) * 100, 100) : 0;
-
     return (
         <div className="dash">
             <button
                 type="button"
-                className="card dash-hero"
+                className="card glass dash-hero"
                 onClick={() => setShowDetails((v) => !v)}
                 aria-expanded={showDetails}
                 aria-controls="dash-details"
@@ -107,8 +107,8 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
                             const g = goals[key];
                             const pct = g > 0 ? (c / g) * 100 : 0;
                             return (
-                                <div className="card macro" key={key}>
-                                    <Ring pct={pct} size={74} stroke={8} color={color} label={`${label} ${fmt(c)} of ${fmt(g)} g`}>
+                                <div className="card glass macro" key={key}>
+                                    <Ring pct={pct} size={96} stroke={9} color={color} label={`${label} ${fmt(c)} of ${fmt(g)} g`}>
                                         <span className="macro-g">{fmt(c)}</span>
                                     </Ring>
                                     <span className="macro-label">{label}</span>
@@ -116,18 +116,6 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
                                 </div>
                             );
                         })}
-                    </div>
-
-                    <div className="card dash-fiber">
-                        <div className="fiber-row">
-                            <span className="fiber-label">Fiber</span>
-                            <span className="fiber-val">
-                                {fmt(consumed.fiber)} / {fmt(goals.fiber)} g
-                            </span>
-                        </div>
-                        <div className="fiber-bar">
-                            <div className="fiber-fill" style={{ width: `${fiberPct}%` }} />
-                        </div>
                     </div>
                 </div>
             )}

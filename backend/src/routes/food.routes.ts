@@ -14,3 +14,4 @@ foodRouter.delete("/log/:id", foodController.deleteLog);
 foodRouter.get("/history", foodController.getHistory);
 foodRouter.get("/day/:date", foodController.getDay);
 foodRouter.get("/summaries", foodController.getSummaries);
+foodRouter.get("/deficit", foodController.getWeeklyDeficit);

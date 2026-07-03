@@ -1,148 +1,137 @@
-# NutriTrack — Design System (MASTER)
+# NutriTrack Design System — v3.1 "Dark Lime — Ambient Glass" (MASTER)
 
-> Single source of truth for the redesign. Generated with **ui-ux-pro-max** (palette,
-> typography, UX rules from its database), tuned to the brief: **Cal-AI-style layout, dark
-> blue theme, mobile-first**. When building a screen, follow this file.
-
-**Project:** NutriTrack · **Category:** Calorie / habit tracker (mobile) · **Theme:** Dark blue
-**Style (skill):** Dark Mode (OLED) · **Fonts (skill):** Geometric Modern — Outfit + Work Sans
-**Restyle-only:** no data/logic/Redux/API/recharts-data changes.
-
----
-
-## 1. Color tokens (deep navy, WCAG AA verified)
-
-Base navy pulled from the skill's dark palette (`#0F172A` family); azure accent + macro
-trio chosen for pop + contrast on navy.
-
-| Role | Token | Hex | Contrast vs `--bg` |
-|---|---|---|---|
-| App background | `--bg` | `#0F172A` | — |
-| Card surface | `--surface` | `#172132` | — |
-| Elevated (inputs/sheet) | `--surface-2` | `#1E2A40` | — |
-| Hover / pressed row | `--surface-3` | `#273550` | — |
-| Border / divider | `--border` | `rgba(255,255,255,0.09)` | — |
-| Primary text | `--text` | `#F1F5F9` | ~15.7:1 ✅ AAA |
-| Secondary text | `--text-muted` | `#94A3B8` | ~6.9:1 ✅ AA |
-| Dim/caption | `--text-dim` | `#64748B` | ~4.3:1 (large) |
-| Accent (rings/active/center +) | `--accent` | `#3B82F6` | white "+" 3.3:1 ✅ (UI/large) |
-| **CTA button bg** | `--accent-cta` | `#2563EB` | white text 4.5:1 ✅ AA |
-| Accent pressed | `--accent-press` | `#1D4ED8` | — |
-| On accent | `--on-accent` | `#FFFFFF` | — |
-| Protein ring | `--macro-protein` | `#F87171` | ~5.0:1 ✅ |
-| Carbs ring | `--macro-carbs` | `#FBBF24` | ~10.4:1 ✅ |
-| Fat ring | `--macro-fat` | `#34D399` | ~9.4:1 ✅ |
-| Success | `--success` | `#34D399` | — |
-| Danger | `--danger` | `#F87171` | — |
-| Warning (calm) | `--warning` | `#FBBF24` | — |
-| Water fill | `--water` | `#38BDF8` | — |
-| Ring/bar track | `--ring-track` | `rgba(255,255,255,0.08)` | — |
-
-> One source: these live in `frontend/src/index.css :root`. **No raw hex in components** —
-> always `var(--token)`. (Structured so a light theme could be added later.)
+> Source of truth for all UI styling. Palette-only revision of v2 (archived as
+> `MASTER-v2-light-olive.md`; v1 dark navy as `MASTER-v1-dark-navy.md`).
+> **Everything except color is inherited from v2 unchanged:** typography (Lora + Raleway),
+> radii, spacing, the entire motion system (§4 of v2 — sweeps, spring fan-out,
+> press-compress, ease tokens), component structure.
+> Style base: ui-ux-pro-max **"Dark Mode (OLED)"** — dark surfaces, vibrant neon accent,
+> minimal glow, high contrast, `color-scheme: dark`. All pairs below AA-checked.
 
 ---
 
-## 2. Typography (skill: "Geometric Modern")
+## 1. Palette — deep green darks + vivid lime
 
-Outfit for headings + ring numbers, Work Sans for body. System stack as fallback.
-
-```css
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600&display=swap');
---font-head: 'Outfit', -apple-system, 'Segoe UI', Roboto, sans-serif;
---font-body: 'Work Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
-```
-
-| Token | Size / line / weight / font | Use |
+### Surfaces (green-tinted darks — not neutral gray, not pure black)
+| Token | Hex | Use |
 |---|---|---|
-| `--font-hero` | 46 / 1.0 / 800 / head | Hero ring number |
-| `--font-h1` | 28 / 1.2 / 700 / head | Screen titles |
-| `--font-h2` | 19 / 1.3 / 600 / head | Card titles |
-| `--font-body` | 15 / 1.5 / 400 / body | Body |
-| `--font-label` | 14 / 1.4 / 600 / head | Buttons / nav labels |
-| `--font-small` | 13 / 1.4 / 400 / body | Secondary |
-| `--font-caption` | 11 / 1.3 / 600 / head, +0.04em, UPPERCASE | Ring/nav labels |
+| `--bg` | `#10140D` | Canvas — near-black charcoal with green undertone |
+| `--surface` / `--card-bg` | `#181F13` | Cards — lifted dark green (elevation via lightness) |
+| `--surface-2` | `#212B1A` | Inputs, chips, secondary fills |
+| `--surface-3` | `#2B3722` | Pressed states, handles, deep fills |
+| `--border` | `rgba(214, 255, 170, 0.10)` | Faint lime-tinted hairlines (kept subtle — lightness does the elevation) |
+| `--border-strong` | `rgba(214, 255, 170, 0.20)` | Hover/focus borders |
 
-Base body 16px, line-height 1.5. Numbers: `font-variant-numeric: tabular-nums`.
+### Text (light on dark; AA/AAA)
+| Token | Hex | Contrast on card | Use |
+|---|---|---|---|
+| `--text` | `#F2F5EC` | ≈15:1 | Primary — warm green-tinted off-white |
+| `--muted` / `--text-muted` | `#B4BFA4` | ≈7.8:1 | Secondary |
+| `--text-dim` | `#86937A` | ≈4.6:1 | Placeholders, faint labels |
 
----
+### Accent — vivid lime (the energy; glows on the dark base)
+| Token | Hex | Note |
+|---|---|---|
+| `--accent` | `#A3E635` | Lime — CTAs, ring fills, active nav, selected states. ≈11:1 on cards |
+| `--accent-cta` | `#84CC16` | Hover / secondary emphasis |
+| `--accent-press` | `#65A30D` | Pressed |
+| `--accent-disabled` | `#3F4A26` | Disabled fills |
+| `--accent-soft` | `rgba(163, 230, 53, 0.12)` | Lime sheen tints (hero, chips, selected) |
+| `--on-accent` | **`#16200A`** | ⚠️ **DARK text on lime** — white-on-lime fails (~1.5:1); dark-on-lime ≈12:1 ✓ |
+| `--glow-accent` | `0 6px 20px rgba(163, 230, 53, 0.35)` | + button / key highlights |
 
-## 3. Spacing · radii · effects (skill values, dark-adapted)
+### Macro trio (distinct from each other AND from lime; ≥4.5:1 on cards)
+| Token | Hex | |
+|---|---|---|
+| `--macro-protein` | `#FB7185` | Rose |
+| `--macro-carbs` | `#FBBF24` | Amber |
+| `--macro-fat` | `#2DD4BF` | Teal |
+| `--macro-fiber` | `#C084FC` | Violet |
+| `--water` | `#38BDF8` | Sky |
+| `--ring-track` | `rgba(214, 255, 170, 0.08)` | Empty ring/bar track |
 
-**Spacing** `--space-*`: 4 / 8 / 12 / 16 / 24 / 32 / 48.
-**Radii:** `--r-sm 12` · `--r-md 16` · `--r-lg 20` · `--r-xl 28` · `--r-pill 999`. Cards 20–28, sheet top 28.
-**Shadows (dark) + glow:**
-- `--shadow-card: 0 8px 24px rgba(0,0,0,.45)`
-- `--shadow-nav: 0 -6px 24px rgba(0,0,0,.5)`
-- `--glow-accent: 0 8px 26px rgba(59,130,246,.45)` (center "+", primary CTA)
+### State colors (deficit green ≠ lime accent — deliberately separated)
+| Token | Hex | Note |
+|---|---|---|
+| `--success` | `#4ADE80` | Spring green (hue ~142°) — clearly "green" where lime (~80°) reads "yellow-green"; ≈9.5:1 |
+| `--warning` | `#F59E0B` | Surplus / over-goal |
+| `--error` / `--danger` | `#F87171` | Errors, destructive (≈5.9:1) |
 
-**Motion:** 150–300ms `cubic-bezier(.4,0,.2,1)`; press scale 0.97 (120ms); sheet slide 280ms; ring fill 600ms (decorative). All under `@media (prefers-reduced-motion: reduce){ transition:none; animation:none; }`.
-**Safe area:** bottom nav `padding-bottom: env(safe-area-inset-bottom)`.
-**Touch:** targets ≥44×44px, ≥8px apart (skill UX rules 1–2).
+> Success vs lime: different hue family + different contexts (bars/labels vs CTAs/rings), and
+> values are always labeled — never color-only.
 
----
-
-## 4. Component specs
-
-**Card** — `background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:20px; box-shadow:var(--shadow-card);`
-
-**Primary CTA** — `background:var(--accent-cta); color:var(--on-accent); border-radius:var(--r-pill); padding:13px 20px; font:var(--font-label); box-shadow:var(--glow-accent);` press scale.
-**Secondary** — `background:var(--surface-2); color:var(--text); border:1px solid var(--border); border-radius:var(--r-pill);`
-**Chip (quick-add)** — pill, `--surface-2`, active = `--accent` border + text.
-**Input** — `background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 14px; color:var(--text); font-size:16px;` focus → `border-color:var(--accent); box-shadow:0 0 0 3px rgba(59,130,246,.25);`
-
-**Rings — lightweight SVG** (replaces recharts for hero + 3 macros; **same data/props**):
-- Two `<circle>`s: track (`--ring-track`) + progress arc (`stroke-dasharray` from `pct`, `stroke-linecap:round`, `rotate(-90)`).
-- **Hero:** Ø184, stroke 14, color `--accent`. Center: big **calories LEFT** number (`--font-hero`) + caption "kcal left". (Counts down: `goal − eaten`; if eaten > goal, show `0` and a small "over by N".)
-- **Macros:** Ø72, stroke 8, color = macro token. Below: grams + `--font-caption` label.
-- Over-target: arc caps at 100%, real number always shown — never an error.
-
-**recharts re-theme** (weekly burn ring, weekly bars, weight line — data unchanged): grids/axes `var(--border)`/`var(--text-dim)`, series use `--accent`/macro tokens, tooltips on `--surface-2`.
-
-**Bottom nav (fixed, native)** — height 60 + safe area, `background:var(--surface)` + `backdrop-filter:blur(12px)`, top hairline, `--shadow-nav`. **5 slots: Home · History · [ + ] · Weight · Settings.** Active = `--accent` icon+label; inactive = `--text-dim`. SVG icons only (no emoji). (Weekly view linked from Home/History.)
-**Center "+"** — Ø58 circle raised ~16px above bar, `--accent` bg, white "+", `--glow-accent`; opens the logging sheet.
-
-**Bottom sheet (logging)** — slides up from bottom, `--surface-2`, top corners `--r-xl`, grab handle, backdrop `rgba(0,0,0,.55)`, `max-height:88vh`, scroll. Segments **Food · Exercise · Water** → render existing `FoodLog` / `ExerciseLog` / `Water` forms unchanged.
-
----
-
-## 5. Dashboard layout (375px-first; fine at 768/1024)
-
-```
-Greeting + date
-┌ HERO CARD ────────────┐
-│        ◯  720         │   calories LEFT (goal − eaten), big & central
-│       kcal left       │
-└───────────────────────┘
-[ ◯P 85g ] [ ◯C 210g ] [ ◯F 60g ]   three macro rings
-◀  M  T  W [T] F  S  S  ▶            horizontal week strip (tap → that day)
-┌ Weekly burn ◯ │ Water ▭ ┐         existing widgets, re-carded
-└──────────────────────────┘
-Recently logged
-┌ [🍳] 2 eggs · 180 kcal · •P •C •F ┐  meal feed (icon-placeholder thumb)
-└──────────────────────────────────┘
-        ░░ bottom nav ░░  ⊕
-```
-
-- Meal cards: rounded `--surface-3` **thumbnail placeholder** (food glyph) where a photo
-  will go later; name, calories, small protein/carbs/fat dots. Uses existing `MealCard` data.
-- Date strip uses existing `getDay(date)` (read-only past days).
+### Charts (mirror in `frontend/src/styles/colors.ts`)
+grid/track `rgba(214,255,170,0.08)` · axis text `#B4BFA4` · tooltip bg `#212B1A`, border
+`rgba(214,255,170,0.10)`, text `#F2F5EC` · bars: success/warning above · lines/rings: lime + macro trio.
 
 ---
 
-## 6. Anti-patterns (skill) — DO NOT
+## 2. Everything inherited from v2 (unchanged)
+- **Typography:** Lora (headings/big numbers) + Raleway (body/labels). Same scale, `tabular-nums`.
+- **Radii:** 12 / 16 / 20 / 28 / pill.
+- **Motion system:** `--ease-out cubic-bezier(0.22,1,0.36,1)`, `--ease-in`, `--ease-spring`,
+  durations fast 150 / base 200 / slow 250 / press 50 / sweep 550, stagger 40ms; press-compress
+  on every tappable; ring/bar sweeps; spring fan-out with quick ease-in close; reduced-motion collapse.
+- **Structure rules:** tokens only (index.css + colors.ts mirror), transform/opacity-only animation.
 
-❌ Pure white/black backgrounds · ❌ Emojis as icons (use SVG: Lucide/Heroicons) ·
-❌ Missing `cursor:pointer` · ❌ Layout-shifting hovers · ❌ <4.5:1 text · ❌ Instant
-(0ms) state changes · ❌ Invisible focus · ❌ Raw hex in components · ❌ Horizontal scroll on mobile.
+### Dark-theme deltas (shadows & chrome)
+| Token | Value |
+|---|---|
+| `--shadow-card` | `0 8px 24px rgba(0, 0, 0, 0.45)` |
+| `--shadow-raised` | `0 10px 28px rgba(0, 0, 0, 0.55)` |
+| `--shadow-nav` | `0 -6px 24px rgba(0, 0, 0, 0.5)` |
+| Bottom nav | `rgba(24, 31, 19, 0.85)` + blur(14px) |
+| Scrims (sheet/fan backdrop) | `rgba(6, 8, 4, 0.55)` |
+| `color-scheme` | `dark` (native controls, autofill, scrollbars re-dark) |
 
-## 7. Pre-delivery checklist (skill)
+---
 
-- [ ] Tokens only (no raw hex in components)
-- [ ] Text contrast ≥ 4.5:1 (large ≥ 3:1)
-- [ ] SVG icons, consistent set; `cursor:pointer` on clickables
-- [ ] Transitions 150–300ms; `prefers-reduced-motion` respected
-- [ ] Visible focus states (keyboard)
-- [ ] Touch targets ≥ 44×44, ≥ 8px apart; center "+" + nav above safe area
-- [ ] No overflow at 375 / 768 / 1024px
-- [ ] Routes / Redux / API / recharts data unchanged
+## 3. Contrast rules (the dark-theme traps)
+1. **No dark-on-dark:** all text on surfaces uses the text tokens above (≥4.5:1). Inputs =
+   `--surface-2` bg + `--text` + visible `--border`; placeholders `--text-dim`.
+2. **Lime is a FILL color:** lime fills carry **dark** `--on-accent` text; lime as text only on
+   dark surfaces; never lime text on lime tints.
+3. Sheens (`--accent-soft`) stay ≤12% opacity — glow, not neon-everywhere.
+4. AA minimum everywhere; key text aims 7:1+ (OLED style guidance).
+
+## 3.5 — v3.1 additions: ambient glow + frosted glass
+
+### Ambient background (dashboard canvas)
+Fixed full-screen decorative layer behind the dashboard (`.home-ambient` in Home.css,
+`z-index: -1`, `pointer-events: none`, `aria-hidden`). Two layers:
+- **Base (static):** `radial-gradient(ellipse at 50% 32%, --ambient-mid → --ambient-deep → --bg)` —
+  lime-adjacent mid greens easing to the near-black edges that frame the screen.
+- **Bloom (animated):** a separate lime radial (`--ambient-bloom` core, ≤20% opacity — a
+  diffused bloom, never a hard disc) that "breathes": 22s `ease-in-out` alternate loop tweening
+  **only `opacity` (0.65→1) + `transform: scale(1→1.07)`** — never gradient stops/size.
+  Paused via `visibilitychange` (class toggle → `animation-play-state: paused`) and static
+  under `prefers-reduced-motion` (plus the global kill-switch).
+
+| Token | Value |
+|---|---|
+| `--ambient-mid` | `#2E401D` |
+| `--ambient-deep` | `#1A2412` |
+| `--ambient-bloom` | `rgba(163, 230, 53, 0.34)` |
+
+### Frosted-glass cards (`.glass` utility, index.css)
+Applied to the dashboard cards (hero, macro cards, fiber, weekly ring, water, meal/exercise
+cards). Semi-OPAQUE tint + MODEST blur — glass look, readable text, GPU-sane with many cards.
+
+| Token | Value |
+|---|---|
+| `--glass-bg` | `rgba(24, 31, 19, 0.60)` |
+| `--glass-bg-solid` | `rgba(24, 31, 19, 0.94)` (no-`backdrop-filter` fallback) |
+| `--glass-blur` | `10px` (do not crank) |
+| `--glass-border` | `rgba(214, 255, 170, 0.18)` |
+| `--glass-highlight` | `inset 0 1px 0 rgba(214, 255, 170, 0.12)` (top glass edge) |
+
+Rules: base `.glass` = solid fallback; `@supports (backdrop-filter)` upgrades to real blur.
+Doubled selector (`.glass.glass`) so it beats component backgrounds regardless of bundle order.
+Text on glass must stay AA over BOTH the bloom center and dark edges (the 72% tint guarantees
+the effective backdrop stays dark; verified ≈13:1 primary / ≈6.5:1 muted at the brightest point).
+
+## 4. Anti-patterns (do not)
+- Pure black `#000` canvas or neutral-gray darks (the green undertone is the identity).
+- White text on lime fills; lime-on-lime; heavy borders instead of lightness elevation.
+- Leftover v1 navy blues or v2 light-olive values anywhere (incl. recharts + var() fallbacks).
+- Hardcoded per-component colors; layout-property animation; ignoring reduced-motion.

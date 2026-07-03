@@ -34,7 +34,7 @@
     height: 100%;
     background: var(--water);
     border-radius: 999px;
-    transition: width 0.3s ease;
+    transition: width var(--dur-sweep) var(--ease-out);
 }
 
 .water-actions {
@@ -52,6 +52,12 @@
     border-radius: 6px;
     font-size: 0.85rem;
     cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
+        transform var(--dur-press) var(--ease-out);
+}
+
+.water-btn:active:not(:disabled) {
+    transform: scale(0.95);
 }
 
 .water-btn:hover:not(:disabled) {

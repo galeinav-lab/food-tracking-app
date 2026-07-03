@@ -70,7 +70,7 @@ function Water({ date, refreshKey }: WaterProps): JSX.Element {
     const pct = target > 0 ? Math.min((waterMl / target) * 100, 100) : 0;
 
     return (
-        <div className="water">
+        <div className="water glass">
             <div className="water-head">
                 <h2 className="water-title">Water</h2>
                 <span className="water-amount">

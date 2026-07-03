@@ -69,6 +69,19 @@ class FoodController extends BaseController {
         }
     };
 
+    // GET /api/food/deficit?date=YYYY-MM-DD — weekly (Sun–Sat) deficit for the week
+    // containing `date`; defaults to the current week in the user's timezone.
+    public getWeeklyDeficit = async (req: AuthedRequest, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const userId = this.requireUserId(req);
+            const anchor = req.query.date ? String(req.query.date) : undefined;
+            const result = await foodService.getWeeklyDeficit(userId, anchor);
+            this.sendSuccess(res, result);
+        } catch (err) {
+            next(err);
+        }
+    };
+
     public getSummaries = async (req: AuthedRequest, res: Response, next: NextFunction): Promise<void> => {
         try {
             const userId = this.requireUserId(req);

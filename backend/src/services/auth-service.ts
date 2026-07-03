@@ -1,3 +1,7 @@
+// ── AuthService ────────────────────────────────────────────────────────────
+// The "service layer" for auth: business rules for register/login live here, kept
+// separate from the controller (HTTP) and the model (DB schema). It extends
+// BaseService to inherit generic CRUD, and leans on secureService for crypto.
 import { IUserModel, User } from "../models/user";
 import { ConflictError, UnauthorizedError, ValidationError } from "../models/client-error";
 import { AuthResult, LoginInput, RegisterInput, SafeUser } from "../types/auth";
@@ -35,10 +39,15 @@ class AuthService extends BaseService<IUserModel> {
             throw new ValidationError("Email and password are required");
         }
 
+        // `.select("+passwordHash")` re-includes the hash for THIS query only — the
+        // schema marks it `select:false` so it's normally never loaded/returned.
         const user = await User.findOne({ email: input.email.toLowerCase() })
             .select("+passwordHash")
             .exec();
 
+        // Same generic "Invalid email or password" whether the email doesn't exist
+        // OR the password is wrong. This prevents "user enumeration" — an attacker
+        // can't tell which emails are registered by reading different error messages.
         if (!user) throw new UnauthorizedError("Invalid email or password");
 
         const ok = await secureService.comparePassword(input.password, user.passwordHash);

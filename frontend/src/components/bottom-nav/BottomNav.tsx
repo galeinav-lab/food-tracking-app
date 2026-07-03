@@ -1,6 +1,7 @@
 import { type JSX, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { LogMode } from "../logging-sheet/LoggingSheet";
+import { toastBus } from "../../services/toast-bus";
 import "./BottomNav.css";
 
 interface BottomNavProps {
@@ -18,6 +19,12 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
     const pick = (mode: LogMode): void => {
         setOpen(false);
         onAdd(mode);
+    };
+
+    // Placeholder actions — UI only for now, a friendly hint instead of an error.
+    const comingSoon = (feature: string): void => {
+        setOpen(false);
+        toastBus.show({ kind: "info", headline: `${feature} is coming soon!` });
     };
 
     return (
@@ -44,8 +51,9 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                     <span className="bn-label">History</span>
                 </NavLink>
 
+                {/* 2×2 fan-out grid: [Meal | Workout] on top, [Barcode | Photo] below. */}
                 <div className={open ? "bn-center bn-open" : "bn-center"}>
-                    <button type="button" className="bn-fan bn-fan-meal" onClick={() => pick("meal")} tabIndex={open ? 0 : -1}>
+                    <button type="button" className="bn-fan glass bn-fan-meal" onClick={() => pick("meal")} tabIndex={open ? 0 : -1}>
                         <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
                             <path d="M3 3v7a3 3 0 0 0 6 0V3" />
                             <path d="M6 3v18" />
@@ -55,7 +63,7 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                         <span className="bn-fan-label">Meal</span>
                     </button>
 
-                    <button type="button" className="bn-fan bn-fan-workout" onClick={() => pick("workout")} tabIndex={open ? 0 : -1}>
+                    <button type="button" className="bn-fan glass bn-fan-workout" onClick={() => pick("workout")} tabIndex={open ? 0 : -1}>
                         <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
                             <path d="M6.5 6.5 17.5 17.5" />
                             <path d="m21 21-1-1" />
@@ -66,6 +74,41 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                             <path d="m14 21 7-7" />
                         </svg>
                         <span className="bn-fan-label">Workout</span>
+                    </button>
+
+                    {/* TODO(barcode): replace comingSoon with the real barcode-scanning flow
+                        (camera + barcode lookup -> prefill the meal log). UI-only for now. */}
+                    <button
+                        type="button"
+                        className="bn-fan glass bn-fan-barcode"
+                        onClick={() => comingSoon("Barcode scanning")}
+                        tabIndex={open ? 0 : -1}
+                        aria-label="Scan barcode (coming soon)"
+                    >
+                        <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
+                            <path d="M3 5v14" />
+                            <path d="M8 5v14" />
+                            <path d="M12 5v14" />
+                            <path d="M17 5v14" />
+                            <path d="M21 5v14" />
+                        </svg>
+                        <span className="bn-fan-label">Barcode</span>
+                    </button>
+
+                    {/* TODO(photo): replace comingSoon with the real photo-logging flow
+                        (camera/gallery -> AI food recognition -> prefill the meal log). */}
+                    <button
+                        type="button"
+                        className="bn-fan glass bn-fan-photo"
+                        onClick={() => comingSoon("Photo logging")}
+                        tabIndex={open ? 0 : -1}
+                        aria-label="Log by photo (coming soon)"
+                    >
+                        <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
+                            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                            <circle cx="12" cy="13" r="3" />
+                        </svg>
+                        <span className="bn-fan-label">Photo</span>
                     </button>
 
                     <button

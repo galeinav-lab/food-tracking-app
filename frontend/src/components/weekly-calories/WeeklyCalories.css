@@ -1,11 +1,49 @@
 .weekly-title {
-    margin: 0 0 18px;
+    margin: 0 0 4px;
+    font-family: var(--font-head);
     font-size: 1.3rem;
+}
+
+.weekly-sub {
+    margin: 0 0 16px;
+    font-size: 0.82rem;
+    color: var(--muted);
 }
 
 .weekly-hint {
     color: var(--muted);
     font-size: 0.9rem;
+}
+
+/* Custom chart tooltip (dark theme). */
+.wc-tip {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    color: var(--text);
+    box-shadow: var(--shadow-card);
+}
+
+.wc-tip-date {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.wc-tip-deficit {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.wc-tip-surplus {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.wc-tip-none {
+    color: var(--muted);
+    font-style: italic;
 }
 
 .weekly-error {
@@ -19,9 +57,10 @@
 
 .weekly-summary {
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--r-md);
     background: var(--card-bg);
     padding: 14px 16px;
+    box-shadow: var(--shadow-card);
 }
 
 .weekly-line {

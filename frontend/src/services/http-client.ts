@@ -1,3 +1,10 @@
+// ── HTTP client ────────────────────────────────────────────────────────────
+// The single axios instance every service uses to talk to the backend. The big
+// idea here is INTERCEPTORS — hooks that run on EVERY request/response in one
+// place, so we don't repeat "attach token" / "handle errors" in every call:
+//   • request interceptor  → adds the JWT auth header
+//   • response interceptor → centralizes error handling (401 logout, auto-report,
+//     and converting any failure into a typed ApiError the UI can catch).
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { IApiResponse, IErrorEnvelope } from "../models/api-response";
 import { tokenStore } from "./token-store";

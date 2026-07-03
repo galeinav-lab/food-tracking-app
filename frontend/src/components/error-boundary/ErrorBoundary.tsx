@@ -12,15 +12,21 @@ interface ErrorBoundaryState {
     detail: string | null;
 }
 
-// Catches render-time crashes anywhere below it, shows a friendly fallback
-// (instead of a blank white screen), and auto-reports the technical details.
+// A React "error boundary": catches render-time crashes anywhere below it and shows
+// a friendly fallback instead of a blank white screen. NOTE: this MUST be a class
+// component — React only supports error boundaries via these two lifecycle methods,
+// there's no hook equivalent. (Boundaries catch render errors, NOT errors in event
+// handlers or async code — those are handled by the axios interceptor / global hooks.)
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     public state: ErrorBoundaryState = { hasError: false, errorId: null, detail: null };
 
+    // Runs during render when a child throws → flip to the fallback UI. Must be pure
+    // (no side effects) and just return the new state.
     public static getDerivedStateFromError(): Partial<ErrorBoundaryState> {
         return { hasError: true };
     }
 
+    // Runs AFTER the fallback renders → the place for side effects (logging/reporting).
     public componentDidCatch(error: Error, info: ErrorInfo): void {
         const stack = `${error.stack ?? ""}\n--- component stack ---${info.componentStack ?? ""}`;
         // Fire-and-forget; update the fallback with the id once we have it.

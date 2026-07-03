@@ -1,5 +1,12 @@
+/* The app's single centered column. Fluid on phones (side padding grows from
+   16px at 375px toward 28px on big phones via clamp), capped + centered on
+   tablets. Safe areas: top clears the notch/Dynamic Island (PWA/fullscreen),
+   sides clear the notch in landscape, bottom clears nav + home indicator. */
 .content {
-    max-width: 480px;
+    max-width: var(--content-max);
     margin: 0 auto;
-    padding: 16px 16px calc(96px + env(safe-area-inset-bottom));
+    padding-top: calc(16px + env(safe-area-inset-top, 0px));
+    padding-left: max(clamp(16px, 4vw, 28px), env(safe-area-inset-left, 0px));
+    padding-right: max(clamp(16px, 4vw, 28px), env(safe-area-inset-right, 0px));
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
 }

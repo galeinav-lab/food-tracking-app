@@ -1,3 +1,5 @@
+// Pre-typed Redux hooks — the standard RTK + TypeScript pattern. Define the typed
+// versions ONCE here so every component gets autocomplete + type-checking for free.
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "./store";
 

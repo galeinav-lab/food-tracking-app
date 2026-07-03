@@ -68,7 +68,7 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
 
     if (editing) {
         return (
-            <div className="meal-card">
+            <div className="meal-card glass">
                 <form className="meal-edit-form" onSubmit={submitEdit}>
                     <textarea
                         className="meal-edit-input"
@@ -97,7 +97,7 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
     }
 
     return (
-        <div className="meal-card">
+        <div className="meal-card glass">
             <div className="meal-card-head">
                 <div className="meal-thumb" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">

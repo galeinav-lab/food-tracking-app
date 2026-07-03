@@ -1,54 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Raleway:wght@400;500;600;700&display=swap');
 
 /* ============================================================
-   NutriTrack design tokens — Dark Blue (see design-system/nutritrack/MASTER.md)
+   NutriTrack design tokens — v3 "Dark Lime"
+   (see design-system/nutritrack/MASTER.md; v1 navy + v2 light olive archived)
    Single source of truth. Components reference var(--token) only.
-   Legacy token names (--card-bg, --muted, ...) are kept and re-valued so
-   existing screens go dark instead of breaking before their restyle pass.
+   Legacy token names (--card-bg, --muted, ...) are kept and re-valued
+   so screens not yet restyled go dark instead of breaking.
    ============================================================ */
 :root {
-    /* Render native form controls, scrollbars and spinners in dark mode so their
-       default text/background stay readable on the dark theme. */
+    /* Render native form controls in dark mode. */
     color-scheme: dark;
 
-    /* Surfaces */
-    --bg: #0F172A;
-    --surface: #172132;
-    --card-bg: #172132; /* legacy alias of --surface */
-    --surface-2: #1E2A40;
-    --surface-3: #273550;
-    --border: rgba(255, 255, 255, 0.09);
-    --border-strong: rgba(255, 255, 255, 0.16);
+    /* Surfaces — deep green-tinted darks (not neutral gray, not pure black) */
+    --bg: #10140D;
+    --surface: #181F13;
+    --card-bg: #181F13; /* legacy alias of --surface */
+    --surface-2: #212B1A;
+    --surface-3: #2B3722;
+    --border: rgba(214, 255, 170, 0.10);
+    --border-strong: rgba(214, 255, 170, 0.20);
 
-    /* Text */
-    --text: #F1F5F9;
-    --muted: #94A3B8;
-    --text-muted: #94A3B8; /* alias */
-    --text-dim: #64748B;
+    /* Text (light on dark; AA/AAA on the surfaces above) */
+    --text: #F2F5EC;
+    --muted: #B4BFA4;
+    --text-muted: #B4BFA4; /* alias */
+    --text-dim: #86937A;
 
-    /* Accent */
-    --accent: #3B82F6;
-    --accent-cta: #2563EB;
-    --accent-press: #1D4ED8;
-    --accent-disabled: #2A4068;
-    --on-accent: #FFFFFF;
+    /* Accent — vivid lime (glows on the dark base). NOTE: lime is bright, so
+       text/icons ON lime fills are DARK (--on-accent), never white. */
+    --accent: #A3E635;
+    --accent-cta: #84CC16;
+    --accent-press: #65A30D;
+    --accent-disabled: #3F4A26;
+    --accent-soft: rgba(163, 230, 53, 0.12);
+    --on-accent: #16200A;
 
-    /* Macros */
-    --macro-protein: #F87171;
+    /* Macros (distinct from each other + the lime accent) */
+    --macro-protein: #FB7185;
     --macro-carbs: #FBBF24;
-    --macro-fat: #34D399;
+    --macro-fat: #2DD4BF;
+    --macro-fiber: #C084FC;
 
-    /* Functional */
-    --success: #34D399;
+    /* Functional (success = spring green, deliberately NOT the lime accent) */
+    --success: #4ADE80;
     --error: #F87171;
     --danger: #F87171;
-    --warning: #FBBF24;
+    --warning: #F59E0B;
     --water: #38BDF8;
-    --ring-track: rgba(255, 255, 255, 0.08);
+    --ring-track: rgba(214, 255, 170, 0.08);
 
     /* Typography */
-    --font-head: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-body: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-head: 'Lora', Georgia, 'Times New Roman', serif;
+    --font-body: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    /* Layout — the single readable content column. Phones use the full width
+       (fluid side padding); tablets get this cap + centering so cards never
+       stretch into over-wide slabs. Shared by content, nav items, and sheets. */
+    --content-max: 480px;
 
     /* Spacing */
     --space-xs: 4px;
@@ -58,27 +66,60 @@
     --space-xl: 24px;
     --space-2xl: 32px;
 
-    /* Radii */
+    /* Radii (organic rounded) */
     --r-sm: 12px;
     --r-md: 16px;
     --r-lg: 20px;
     --r-xl: 28px;
     --r-pill: 999px;
 
-    /* Elevation */
+    /* Elevation — deep dark shadows + lime glow */
     --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+    --shadow-raised: 0 10px 28px rgba(0, 0, 0, 0.55);
     --shadow-nav: 0 -6px 24px rgba(0, 0, 0, 0.5);
-    --glow-accent: 0 8px 26px rgba(59, 130, 246, 0.45);
+    --glow-accent: 0 6px 20px rgba(163, 230, 53, 0.35);
+
+    /* v3.1 — Ambient gradient background (lime bloom center → dark olive edges) */
+    --ambient-mid: #3F5A25; /* mid green around the bloom */
+    --ambient-deep: #202D14; /* between mid and the dark edge (--bg) */
+    --ambient-bloom: rgba(163, 230, 53, 0.55); /* diffused lime core */
+
+    /* v3.1 — Frosted-glass cards. Semi-opaque tint + modest blur (many live
+       blur layers on screen — don't crank the blur). Tint is translucent enough
+       for the glow to visibly bleed through. */
+    --glass-bg: rgba(24, 31, 19, 0.55);
+    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* fallback when backdrop-filter unsupported */
+    --glass-blur: 10px;
+    --glass-border: rgba(214, 255, 170, 0.18);
+    --glass-highlight: inset 0 1px 0 rgba(214, 255, 170, 0.12); /* top glass edge */
+
+    /* Motion — entrances ease-out, exits ease-in, springs for playful pops */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --dur-fast: 150ms;
+    --dur-base: 200ms;
+    --dur-slow: 250ms;
+    --dur-press: 50ms;
+    --dur-sweep: 550ms;
+    --stagger: 40ms;
 }
 
 * {
     box-sizing: border-box;
 }
 
-html,
+/* CANVAS RULE (do not merge these): the dark canvas lives on <html> ONLY, and
+   <body> stays TRANSPARENT. If body gets an opaque background it paints OVER
+   negative-z-index layers (the dashboard's fixed ambient glow) and hides them —
+   that exact bug shipped once. */
+html {
+    background: var(--bg);
+}
+
 body {
     margin: 0;
-    background: var(--bg);
+    background: transparent;
     color: var(--text);
     line-height: 1.5;
     font-family: var(--font-body);
@@ -97,9 +138,8 @@ select {
     font-family: inherit;
 }
 
-/* Baseline readable inputs for the dark theme. Components may override radius/
-   padding, but text/background/placeholder are guaranteed legible everywhere
-   (prevents UA defaults like dark-text-on-dark or a white box on navy). */
+/* Baseline readable inputs for the light theme. Components may override radius/
+   padding, but text/background/placeholder are guaranteed legible everywhere. */
 input,
 textarea,
 select {
@@ -116,7 +156,7 @@ textarea::placeholder {
 }
 
 /* Chrome/Safari autofill ignores background-color — paint it via inset shadow so
-   autofilled fields (e.g. login email) stay light-on-dark, not dark-on-yellow. */
+   autofilled fields stay on-theme. */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -130,7 +170,36 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* Subtle dark scrollbars */
+/* Generic card surface (used by the dashboard hero/macros and the auth screens).
+   Sizing (padding/max-width) intentionally lives with each usage — the auth
+   screens scope their own 360px cap via .auth-container .card. A bare .card must
+   NEVER carry a max-width: it silently clamps dashboard cards on big phones. */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-card);
+}
+
+/* Frosted-glass card treatment (v3.1). The doubled selector wins over each
+   component's own background/border regardless of CSS bundle order. Base rule =
+   the graceful fallback (solid semi-opaque tint — never a transparent mess);
+   @supports upgrades it to a real backdrop blur. */
+.glass.glass {
+    background-color: var(--glass-bg-solid);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-card), var(--glass-highlight);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .glass.glass {
+        background-color: var(--glass-bg);
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+    }
+}
+
+/* Subtle light scrollbars */
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--surface-3) transparent;

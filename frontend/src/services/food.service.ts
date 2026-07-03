@@ -1,6 +1,7 @@
 import { http } from "./http-client";
 import { IDayView, IEditFoodInput, IFoodLog, ILogFoodInput } from "../models/food-log";
 import { IDailySummary } from "../models/daily-summary";
+import { IWeeklyDeficit } from "../models/deficit";
 
 // Query params for GET /api/food/history (backend parses these as date bounds).
 export interface IHistoryQuery {
@@ -50,5 +51,12 @@ export const foodService = {
     // GET /api/food/summaries?from=&to=  (both "YYYY-MM-DD", ascending by date)
     getSummaries(query: ISummaryQuery): Promise<IDailySummary[]> {
         return http.get<IDailySummary[]>("/food/summaries", { params: query });
+    },
+
+    // GET /api/food/deficit?date=YYYY-MM-DD — weekly (Sun–Sat) deficit for the week
+    // containing `date` (defaults to the current week server-side). The single
+    // source of truth for both weekly components; no deficit math on the client.
+    getWeeklyDeficit(date?: string): Promise<IWeeklyDeficit> {
+        return http.get<IWeeklyDeficit>("/food/deficit", { params: date ? { date } : {} });
     },
 };

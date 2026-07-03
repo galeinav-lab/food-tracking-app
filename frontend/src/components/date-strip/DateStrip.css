@@ -1,53 +1,148 @@
 .datestrip {
     display: flex;
+    flex-direction: column;
     gap: 8px;
-    overflow-x: auto;
-    padding: 2px;
-    scrollbar-width: none;
 }
 
-.datestrip::-webkit-scrollbar {
-    display: none;
+/* Week-nav header: ‹ prev | date range | Today | next › */
+.ds-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ds-nav {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
+        transform var(--dur-press) var(--ease-out);
+}
+
+.ds-nav:active:not(:disabled) {
+    transform: scale(0.94);
+}
+
+.ds-nav:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.ds-nav:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.ds-range {
+    flex: 1;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.ds-today-btn {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.ds-today-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.ds-today-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+    border-color: var(--border);
+    background: transparent;
+    color: var(--muted);
+}
+
+/* 7 equal boxes that always fit the width (flex:1 1 0 + min-width:0). */
+.ds-week {
+    display: flex;
+    gap: 6px;
 }
 
 .ds-day {
-    flex: 1 0 auto;
-    min-width: 44px;
+    flex: 1 1 0;
+    min-width: 0;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    padding: 10px 6px;
+    gap: 3px;
+    padding: 8px 2px;
     border: 1px solid var(--border);
-    border-radius: var(--r-md);
+    border-radius: var(--r-sm);
     background: var(--surface);
     color: var(--muted);
     cursor: pointer;
-    transition: border-color 150ms ease, color 150ms ease;
+    transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out),
+        color var(--dur-fast) var(--ease-out), transform var(--dur-press) var(--ease-out);
 }
 
-.ds-day:hover {
+.ds-day:hover:not(:disabled) {
     border-color: var(--border-strong);
 }
 
+.ds-day:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
 .ds-dow {
-    font-size: 0.7rem;
-    font-weight: 600;
+    font-size: 0.66rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
 }
 
 .ds-num {
     font-family: var(--font-head);
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--text);
+    font-variant-numeric: tabular-nums;
 }
 
-.ds-day {
-    position: relative;
+/* TODAY (not selected): accent outline + accent number + dot — emphasized. */
+.ds-today:not(.ds-active) {
+    border-color: var(--accent);
 }
 
+.ds-today:not(.ds-active) .ds-num {
+    color: var(--accent);
+}
+
+.ds-dot {
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+/* SELECTED: filled accent — the strongest state. */
 .ds-active {
     background: var(--accent);
     border-color: var(--accent);
@@ -58,22 +153,18 @@
     color: var(--on-accent);
 }
 
-/* Today gets an accent dot (so it's findable even when another day is selected). */
-.ds-dot {
-    position: absolute;
-    bottom: 4px;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--accent);
-}
-
-/* On the selected (accent-filled) day, flip the dot so it stays visible. */
 .ds-active .ds-dot {
     background: var(--on-accent);
 }
 
-/* Today, when NOT selected, gets a subtle accent outline. */
-.ds-today:not(.ds-active) {
-    border-color: var(--accent);
+/* FUTURE: greyed + not tappable (disabled attr already blocks clicks). */
+.ds-future {
+    opacity: 0.4;
+    cursor: default;
+    background: transparent;
+}
+
+.ds-future .ds-dow,
+.ds-future .ds-num {
+    color: var(--text-dim);
 }

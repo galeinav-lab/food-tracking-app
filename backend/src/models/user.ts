@@ -63,6 +63,8 @@ const UserSchema = new Schema<IUserModel>(
         email: {
             type: String,
             required: [true, "Email is required"],
+            // `unique` builds a unique index so the DB itself rejects duplicate
+            // emails. `lowercase` normalizes on save so "A@x.com" == "a@x.com".
             unique: true,
             lowercase: true,
             trim: true,
@@ -71,6 +73,9 @@ const UserSchema = new Schema<IUserModel>(
         passwordHash: {
             type: String,
             required: true,
+            // `select: false` => this field is NEVER returned by default queries, so
+            // the password hash can't accidentally leak in an API response. Login
+            // explicitly re-includes it with `.select("+passwordHash")`.
             select: false,
         },
         goals: {
@@ -109,6 +114,10 @@ const UserSchema = new Schema<IUserModel>(
 // NOTE: password hashing/comparison lives in secureService, not on the model —
 // the model just stores the already-hashed passwordHash.
 
+// A Mongoose "instance method" — available on every loaded user doc as
+// user.toSafeObject(). Returns a plain object with passwordHash stripped, so we
+// have one trusted way to produce a user that's safe to send to the client.
+// (Uses a `function` not an arrow so `this` correctly binds to the document.)
 UserSchema.methods.toSafeObject = function () {
     const obj = this.toObject();
     delete obj.passwordHash;

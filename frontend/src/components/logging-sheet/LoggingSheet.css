@@ -2,24 +2,24 @@
     position: fixed;
     inset: 0;
     z-index: 60;
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(6, 8, 4, 0.55); /* deep olive-black scrim */
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    animation: sheet-fade 200ms ease;
+    animation: sheet-fade var(--dur-base) var(--ease-out);
 }
 
 .sheet {
     width: 100%;
-    max-width: 480px;
+    max-width: var(--content-max);
     max-height: 88vh;
     overflow-y: auto;
-    background: var(--surface-2);
+    background: var(--surface);
     border-top-left-radius: var(--r-xl);
     border-top-right-radius: var(--r-xl);
     padding: 10px 18px calc(24px + env(safe-area-inset-bottom, 0px));
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-    animation: sheet-up 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.55);
+    animation: sheet-up var(--dur-slow) var(--ease-out);
 }
 
 .sheet-handle {

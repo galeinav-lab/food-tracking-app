@@ -11,10 +11,24 @@ import {
     ValidationError,
 } from "../models/client-error";
 import { EditFoodInput, HistoryRange, LogFoodInput, SummaryRange } from "../types/food";
+import { WeeklyDeficitResult } from "../types/deficit";
 import { NutritionTotals } from "../types/nutrition";
 import { BaseService } from "./base-service";
 import { aiService } from "./ai-service";
-import { endOfDayUtc, startOfDayUtc, toDateStringInTz } from "../utils/date-tz";
+import {
+    addDaysToDateString,
+    endOfDayUtc,
+    getWeekRange,
+    startOfDayUtc,
+    toDateStringInTz,
+} from "../utils/date-tz";
+import {
+    ActivityLevel,
+    DEFAULT_ACTIVITY_LEVEL,
+    DeficitDayInput,
+    calculateEnergy,
+    computeWeeklyDeficit,
+} from "../utils/energy";
 
 // See note on TS2589 — see food-service edits for the original rationale.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -172,6 +186,103 @@ class FoodService extends BaseService<IFoodLog> {
             date: { $gte: range.from, $lte: range.to },
         };
         return DailySummary.find(filter).sort({ date: 1 }).exec();
+    }
+
+    /**
+     * Weekly calorie deficit for the SUNDAY–SATURDAY week containing `anchorDate`
+     * (defaults to today in the user's timezone).
+     *
+     * Data sources — all existing, nothing re-derived:
+     *  - maintenance: the user's stored maintenanceCalories (set at onboarding /
+     *    activity change); falls back to the energy util if an old account is
+     *    missing it. The Mifflin-St Jeor formula lives ONLY in utils/energy.ts.
+     *  - caloriesEaten: DailySummary.totals.calories. Summaries are rebuilt from
+     *    source by recomputeDailySummary on every food/exercise change, so this
+     *    always reflects current logged data (no drift). A summary only exists
+     *    for days WITH food logs — which is exactly the "logged day" signal.
+     *  - exercise: summed fresh from ExerciseEntry per day (same values the
+     *    recompute stores on the summary; reading entries also lets exercise-only
+     *    days show their burn even though they're excluded from the sum).
+     *
+     * The actual math is the pure computeWeeklyDeficit in utils/energy.ts.
+     */
+    public async getWeeklyDeficit(
+        userId: string,
+        anchorDate?: string
+    ): Promise<WeeklyDeficitResult> {
+        const user = await User.findById(
+            userId,
+            "preferences.timezone maintenanceCalories activityLevel profile"
+        )
+            .lean()
+            .exec();
+        if (!user) throw new UnauthorizedError("User not found");
+        const timezone = user.preferences?.timezone || DEFAULT_TZ;
+
+        const anchor = anchorDate ?? toDateStringInTz(new Date(), timezone);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(anchor)) {
+            throw new ValidationError("date must be YYYY-MM-DD");
+        }
+        const { start, end } = getWeekRange(anchor);
+
+        const maintenance = this.resolveMaintenance(user);
+
+        // Both collections key days by the same YYYY-MM-DD string, so a plain
+        // string range covers the week (summaries only exist for food-logged days).
+        const uid = new Types.ObjectId(userId);
+        const rangeFilter: AnyFilter = { userId: uid, date: { $gte: start, $lte: end } };
+        const [summaries, exercises] = await Promise.all([
+            DailySummary.find(rangeFilter).lean().exec(),
+            ExerciseEntry.find(rangeFilter).lean().exec(),
+        ]);
+
+        const summaryByDate = new Map(summaries.map((s) => [s.date, s]));
+        const exerciseByDate = new Map<string, number>();
+        for (const e of exercises) {
+            exerciseByDate.set(e.date, (exerciseByDate.get(e.date) ?? 0) + (e.caloriesBurned ?? 0));
+        }
+
+        // Build all 7 days of the week. caloriesEaten stays null for days without
+        // food logs (incl. exercise-only days and future days) — the pure math
+        // excludes those from the sum but keeps them in perDay for display.
+        const days: DeficitDayInput[] = [];
+        for (let i = 0; i < 7; i++) {
+            const date = addDaysToDateString(start, i);
+            const summary = summaryByDate.get(date);
+            const logged = Boolean(summary && summary.logCount > 0);
+            days.push({
+                date,
+                maintenance,
+                exerciseCalories: exerciseByDate.get(date) ?? 0,
+                caloriesEaten: logged && summary ? summary.totals?.calories ?? 0 : null,
+            });
+        }
+
+        const math = computeWeeklyDeficit(days);
+        return { weekStart: start, weekEnd: end, maintenance, ...math };
+    }
+
+    // Maintenance source, in priority order: (1) the persisted user.maintenanceCalories,
+    // (2) recomputed via the energy util from the stored profile + activity level.
+    // Never re-implements the formula — calculateEnergy is the single owner of it.
+    private resolveMaintenance(user: {
+        maintenanceCalories?: number;
+        activityLevel?: ActivityLevel;
+        profile?: { weightKg?: number; heightCm?: number; age?: number; sex?: "male" | "female" };
+    }): number {
+        if (typeof user.maintenanceCalories === "number" && user.maintenanceCalories > 0) {
+            return user.maintenanceCalories;
+        }
+        const p = user.profile;
+        if (p?.weightKg && p?.heightCm && p?.age && p?.sex) {
+            return calculateEnergy(
+                { weightKg: p.weightKg, heightCm: p.heightCm, age: p.age, sex: p.sex },
+                user.activityLevel ?? DEFAULT_ACTIVITY_LEVEL
+            ).maintenanceCalories;
+        }
+        throw new ValidationError(
+            "Maintenance calories are not available yet — complete onboarding first."
+        );
     }
 
     private async getUserTimezone(userId: string): Promise<string> {

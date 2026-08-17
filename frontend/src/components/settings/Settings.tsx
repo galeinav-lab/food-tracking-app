@@ -123,6 +123,10 @@ function Settings(): JSX.Element {
                 Edit Daily Goals
             </Link>
 
+            <Link to="/saved-foods" className="settings-link">
+                Manage Saved Foods
+            </Link>
+
             <button
                 type="button"
                 className="settings-logout"

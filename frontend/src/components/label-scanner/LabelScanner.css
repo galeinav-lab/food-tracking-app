@@ -1,0 +1,253 @@
+.ls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ── Camera preview ─────────────────────────────────────────────────── */
+.ls-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    max-height: 46vh;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: var(--surface-3);
+}
+
+.ls-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Guide rectangle — hints where to put the nutrition table. */
+.ls-frame {
+    position: absolute;
+    inset: 12% 8%;
+    border: 2px dashed rgba(163, 230, 53, 0.75);
+    border-radius: var(--r-sm);
+    pointer-events: none;
+}
+
+.ls-tip {
+    margin: 10px 0 14px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+.ls-shutter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.ls-shutter:active {
+    transform: scale(0.94);
+}
+
+.ls-shutter-ring {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 4px solid var(--surface);
+    box-shadow: var(--glow-accent);
+}
+
+.ls-shutter-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.ls-upload {
+    margin-top: 14px;
+    padding: 10px 16px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+}
+
+.ls-camera-error {
+    margin: 4px 0 0;
+    padding: 14px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.ls-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin: 12px 0 0;
+    text-align: center;
+}
+
+/* ── Reading (AI in flight) ─────────────────────────────────────────── */
+.ls-reading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px;
+    text-align: center;
+}
+
+.ls-spinner {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid var(--ring-track);
+    border-top-color: var(--accent);
+    animation: ls-spin 800ms linear infinite;
+}
+
+@keyframes ls-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.ls-reading-text {
+    margin: 16px 0 4px;
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.ls-reading-sub {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ls-spinner {
+        animation-duration: 2s;
+    }
+}
+
+/* ── Serving-size prompt ────────────────────────────────────────────── */
+.ls-serving {
+    display: flex;
+    flex-direction: column;
+}
+
+.ls-serving-title {
+    margin: 0 0 8px;
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+}
+
+.ls-serving-hint {
+    margin: 0 0 14px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.ls-serving-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ls-input {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: 1.05rem;
+    font-family: var(--font-head);
+    font-variant-numeric: tabular-nums;
+}
+
+.ls-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.ls-serving-unit {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.ls-serving-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.ls-primary {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: var(--r-sm);
+    border: none;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.ls-primary:active {
+    transform: scale(0.98);
+}
+
+.ls-secondary {
+    padding: 12px 16px;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+/* ── Confirm ────────────────────────────────────────────────────────── */
+.ls-confirm {
+    animation: ls-in var(--dur-slow) var(--ease-out);
+}
+
+@keyframes ls-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ls-confirm-banner {
+    margin: 0 0 14px;
+    padding: 10px 12px;
+    border-radius: var(--r-sm);
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+}

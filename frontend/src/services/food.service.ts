@@ -2,6 +2,7 @@ import { http } from "./http-client";
 import { IDayView, IEditFoodInput, IFoodLog, ILogFoodInput } from "../models/food-log";
 import { IDailySummary } from "../models/daily-summary";
 import { IWeeklyDeficit } from "../models/deficit";
+import { ILogSavedFoodInput } from "../models/saved-food";
 
 // Query params for GET /api/food/history (backend parses these as date bounds).
 export interface IHistoryQuery {
@@ -26,6 +27,13 @@ export const foodService = {
     // POST /api/food/log
     logFood(input: ILogFoodInput): Promise<IFoodLog> {
         return http.post<IFoodLog>("/food/log", input);
+    },
+
+    // POST /api/food/log-saved — logs a saved food by amount (NO AI call). The
+    // server scales per100 and creates a normal FoodLog, so the day's summary /
+    // rings / deficit update exactly like a regular meal.
+    logSavedFood(input: ILogSavedFoodInput): Promise<IFoodLog> {
+        return http.post<IFoodLog>("/food/log-saved", input);
     },
 
     // PUT /api/food/log/:id — re-analyzes the description as an edit, returns updated log.

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { foodService } from "../services/food-service";
 import { EditFoodInput, HistoryRange, LogFoodInput, SummaryRange } from "../types/food";
+import { LogSavedFoodInput } from "../types/saved-food";
 import { UnauthorizedError } from "../models/client-error";
 import { StatusCode } from "../models/enums";
 import { BaseController } from "./base-controller";
@@ -15,6 +16,17 @@ class FoodController extends BaseController {
         try {
             const userId = this.requireUserId(req);
             const log = await foodService.logFood(userId, req.body as LogFoodInput);
+            this.sendSuccess(res, log, StatusCode.Created);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    // POST /api/food/log-saved — log a saved food by amount (no AI call).
+    public logSavedFood = async (req: AuthedRequest, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const userId = this.requireUserId(req);
+            const log = await foodService.logSavedFood(userId, req.body as LogSavedFoodInput);
             this.sendSuccess(res, log, StatusCode.Created);
         } catch (err) {
             next(err);

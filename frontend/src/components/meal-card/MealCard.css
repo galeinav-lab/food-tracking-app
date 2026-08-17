@@ -200,3 +200,42 @@
     font-size: 0.85rem;
     margin: 10px 0 0;
 }
+
+/* Amount prompt shown when a logged meal's units are too vague to convert to
+   per-100 (e.g. "1 serving") — we ask instead of guessing. */
+.meal-save-prompt {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    animation: card-in var(--dur-slow) var(--ease-out);
+}
+
+.meal-save-hint {
+    margin: 0 0 8px;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.meal-save-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.meal-save-input {
+    width: 92px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+.meal-save-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.btn-mini-on {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+}

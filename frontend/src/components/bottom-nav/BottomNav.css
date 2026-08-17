@@ -132,8 +132,8 @@
     position: absolute;
     bottom: 0;
     left: 50%;
-    width: 92px;
-    margin-left: -46px;
+    width: 84px;
+    margin-left: -42px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -175,25 +175,32 @@
     transition: transform var(--dur-slow) var(--ease-spring), opacity var(--dur-base) var(--ease-out);
 }
 
-/* 2×2 grid targets: columns ±49px, bottom row -72px (just above the +),
-   top row -142px. Stagger: barcode → photo → meal → workout (grows upward). */
-.bn-open .bn-fan-barcode {
-    transform: translate(-49px, -72px) scale(1);
+/* Grid targets, growing upward from the +. Two thumb-reachable rows hold the four
+   WORKING actions (2 per row at x ±45), and the lone coming-soon placeholder sits
+   centered on top. Max span is 45 + 42 = 87px each side (174px) — easily fits 375px.
+   Stagger radiates outward: meal → saved → workout → scan → photo. */
+.bn-open .bn-fan-meal {
+    transform: translate(-45px, -72px) scale(1);
 }
 
-.bn-open .bn-fan-photo {
-    transform: translate(49px, -72px) scale(1);
+.bn-open .bn-fan-saved {
+    transform: translate(45px, -72px) scale(1);
     transition-delay: var(--stagger);
 }
 
-.bn-open .bn-fan-meal {
-    transform: translate(-49px, -142px) scale(1);
+.bn-open .bn-fan-workout {
+    transform: translate(-45px, -142px) scale(1);
     transition-delay: calc(var(--stagger) * 2);
 }
 
-.bn-open .bn-fan-workout {
-    transform: translate(49px, -142px) scale(1);
+.bn-open .bn-fan-scan {
+    transform: translate(45px, -142px) scale(1);
     transition-delay: calc(var(--stagger) * 3);
+}
+
+.bn-open .bn-fan-photo {
+    transform: translate(0, -212px) scale(1);
+    transition-delay: calc(var(--stagger) * 4);
 }
 
 @media (prefers-reduced-motion: reduce) {

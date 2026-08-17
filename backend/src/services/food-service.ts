@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { FoodLog, IFoodLog } from "../models/food-log";
+import { FoodLog, IFoodItem, IFoodLog } from "../models/food-log";
 import { DailySummary, IDailySummary } from "../models/daily-summary";
 import { Goal } from "../models/goal";
 import { User } from "../models/user";
@@ -12,9 +12,11 @@ import {
 } from "../models/client-error";
 import { EditFoodInput, HistoryRange, LogFoodInput, SummaryRange } from "../types/food";
 import { WeeklyDeficitResult } from "../types/deficit";
+import { LogSavedFoodInput } from "../types/saved-food";
 import { NutritionTotals } from "../types/nutrition";
 import { BaseService } from "./base-service";
 import { aiService } from "./ai-service";
+import { savedFoodService } from "./saved-food-service";
 import {
     addDaysToDateString,
     endOfDayUtc,
@@ -39,6 +41,9 @@ type AnyUpdate = any;
 const ZERO_TOTALS: NutritionTotals = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
 const DEFAULT_TZ = "Asia/Jerusalem";
 
+// Keep scaled macros tidy (avoids float noise like 0.30000000000000004).
+const round2 = (n: number): number => Math.round(n * 100) / 100;
+
 class FoodService extends BaseService<IFoodLog> {
 
     public constructor() {
@@ -46,10 +51,71 @@ class FoodService extends BaseService<IFoodLog> {
     }
 
     public async logFood(userId: string, input: LogFoodInput): Promise<IFoodLog> {
-        const timezone = await this.getUserTimezone(userId);
-
         const parsed = await aiService.analyzeFood(input.description);
         const totals = parsed.totals ?? this.sumItems(parsed.items);
+
+        return this.createLogAndRecompute(userId, {
+            description: input.description,
+            items: parsed.items,
+            totals,
+            date: input.date,
+        });
+    }
+
+    /**
+     * Log a SAVED food — no AI call. Scales the food's per-100 macros by the
+     * amount (factor = amount / 100) and then goes through the EXACT SAME
+     * creation path as an AI-parsed meal (createLogAndRecompute), so the
+     * resulting FoodLog is indistinguishable downstream: history, macros, the
+     * daily summary and the weekly deficit all keep working untouched.
+     */
+    public async logSavedFood(userId: string, input: LogSavedFoodInput): Promise<IFoodLog> {
+        if (!(input.amount > 0)) {
+            throw new ValidationError("amount must be greater than 0");
+        }
+
+        // Ownership is enforced inside savedFoodService.getOwned (single place).
+        const saved = await savedFoodService.getOwned(userId, input.savedFoodId);
+
+        const factor = input.amount / 100;
+        const totals: NutritionTotals = {
+            calories: round2(saved.per100.calories * factor),
+            protein: round2(saved.per100.protein * factor),
+            carbs: round2(saved.per100.carbs * factor),
+            fat: round2(saved.per100.fat * factor),
+            fiber: round2(saved.per100.fiber * factor),
+        };
+
+        // One item, measured in the food's own base unit — the same {name, quantity,
+        // unit, nutrition} shape the AI produces.
+        const items: IFoodItem[] = [
+            {
+                name: saved.name,
+                quantity: input.amount,
+                unit: saved.baseUnit,
+                nutrition: totals,
+            },
+        ];
+
+        return this.createLogAndRecompute(userId, {
+            description: `${saved.name} (${input.amount} ${saved.baseUnit})`,
+            items,
+            totals,
+            date: input.date,
+        });
+    }
+
+    /**
+     * THE single FoodLog creation path (used by both AI meals and saved foods):
+     * resolves the target calendar day in the user's tz, stores the log, then
+     * rebuilds that day's DailySummary from source. Anything that creates a food
+     * log must go through here so no parallel bookkeeping can appear.
+     */
+    private async createLogAndRecompute(
+        userId: string,
+        input: { description: string; items: IFoodItem[]; totals: NutritionTotals; date?: string }
+    ): Promise<IFoodLog> {
+        const timezone = await this.getUserTimezone(userId);
 
         // Resolve the target calendar day (user tz). Past-day logging is supported.
         const todayString = toDateStringInTz(new Date(), timezone);
@@ -67,8 +133,8 @@ class FoodService extends BaseService<IFoodLog> {
         const log = await FoodLog.create({
             userId: new Types.ObjectId(userId),
             description: input.description,
-            items: parsed.items,
-            totals,
+            items: input.items,
+            totals: input.totals,
             date: storedDate,
         });
 

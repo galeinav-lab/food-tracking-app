@@ -3,12 +3,14 @@ import { foodController } from "../controllers/food-controller";
 import { tokenMiddleware } from "../middleware/token-middleware";
 import { validateBody } from "../middleware/validate-middleware";
 import { editFoodSchema, logFoodSchema } from "../validation/food.validation";
+import { logSavedFoodSchema } from "../validation/saved-food.validation";
 
 export const foodRouter = Router();
 
 foodRouter.use(tokenMiddleware.validateToken.bind(tokenMiddleware));
 
 foodRouter.post("/log", validateBody(logFoodSchema), foodController.logFood);
+foodRouter.post("/log-saved", validateBody(logSavedFoodSchema), foodController.logSavedFood);
 foodRouter.put("/log/:id", validateBody(editFoodSchema), foodController.editLog);
 foodRouter.delete("/log/:id", foodController.deleteLog);
 foodRouter.get("/history", foodController.getHistory);

@@ -11,6 +11,7 @@ import Weight from "../../weight/Weight";
 import WeeklyCalories from "../../weekly-calories/WeeklyCalories";
 import Settings from "../../settings/Settings";
 import GoalsEdit from "../../goals-edit/GoalsEdit";
+import SavedFoods from "../../saved-foods/SavedFoods";
 import OnboardingWizard from "../../onboarding/OnboardingWizard";
 import "./Main.css";
 
@@ -37,6 +38,7 @@ function Main(): JSX.Element {
                         <Route path="/history" element={<History />} />
                         <Route path="/weight" element={<Weight />} />
                         <Route path="/weekly" element={<WeeklyCalories />} />
+                        <Route path="/saved-foods" element={<SavedFoods />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="/settings/goals" element={<GoalsEdit />} />
                     </Route>

@@ -1,0 +1,256 @@
+.sfp {
+    display: flex;
+    flex-direction: column;
+}
+
+.sfp-search {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+}
+
+.sfp-search:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.sfp-hint {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 10px;
+}
+
+.sfp-hint-sm {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.sfp-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin: 10px 0 0;
+}
+
+/* ── Empty state ────────────────────────────────────────────────────── */
+.sfp-empty {
+    padding: 8px 0 4px;
+    text-align: center;
+}
+
+.sfp-empty-link {
+    display: inline-block;
+    margin: 4px 0 12px;
+    padding: 10px 18px;
+    border-radius: var(--r-pill);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* ── Pick list ──────────────────────────────────────────────────────── */
+.sfp-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-radius: var(--r-md);
+    color: var(--text);
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform var(--dur-press) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out);
+    animation: sfp-in var(--dur-slow) var(--ease-out);
+}
+
+@keyframes sfp-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sfp-item:active {
+    transform: scale(0.98);
+}
+
+.sfp-item-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sfp-item-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
+.sfp-item-per {
+    font-size: 0.76rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.sfp-item-unit {
+    color: var(--text-dim);
+}
+
+.sfp-item-go {
+    flex-shrink: 0;
+    font-size: 1.3rem;
+    color: var(--accent);
+    line-height: 1;
+}
+
+/* ── Amount step ────────────────────────────────────────────────────── */
+.sfp-amount {
+    display: flex;
+    flex-direction: column;
+    animation: sfp-in var(--dur-slow) var(--ease-out);
+}
+
+.sfp-back {
+    align-self: flex-start;
+    padding: 4px 0;
+    margin-bottom: 8px;
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sfp-picked-name {
+    margin: 0;
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    overflow-wrap: anywhere;
+}
+
+.sfp-picked-per {
+    margin: 4px 0 14px;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.sfp-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.sfp-amount-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sfp-input {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: 1.1rem;
+    font-family: var(--font-head);
+    font-variant-numeric: tabular-nums;
+}
+
+.sfp-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.sfp-unit {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* Live preview of the scaled macros. */
+.sfp-preview {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: var(--r-md);
+    text-align: center;
+}
+
+.sfp-preview-cal {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+}
+
+.sfp-preview-macros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.sfp-dot {
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: var(--r-pill);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.sfp-dot-p {
+    color: var(--macro-protein);
+    background: rgba(251, 113, 133, 0.14);
+}
+
+.sfp-dot-c {
+    color: var(--macro-carbs);
+    background: rgba(251, 191, 36, 0.14);
+}
+
+.sfp-dot-f {
+    color: var(--macro-fat);
+    background: rgba(45, 212, 191, 0.14);
+}
+
+.sfp-submit {
+    margin-top: 16px;
+    padding: 13px 18px;
+    border-radius: var(--r-sm);
+    border: none;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.sfp-submit:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.sfp-submit:disabled {
+    background: var(--accent-disabled);
+    color: var(--muted);
+    cursor: default;
+}

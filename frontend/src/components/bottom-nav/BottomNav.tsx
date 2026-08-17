@@ -51,7 +51,9 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                     <span className="bn-label">History</span>
                 </NavLink>
 
-                {/* 2×2 fan-out grid: [Meal | Workout] on top, [Barcode | Photo] below. */}
+                {/* Fan-out, growing upward from the +: the four WORKING actions fill
+                    the two thumb-reachable rows [Meal | Saved] then [Workout | Scan],
+                    with the lone coming-soon placeholder [Photo] on top. */}
                 <div className={open ? "bn-center bn-open" : "bn-center"}>
                     <button type="button" className="bn-fan glass bn-fan-meal" onClick={() => pick("meal")} tabIndex={open ? 0 : -1}>
                         <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
@@ -61,6 +63,13 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                             <path d="M18 12v9" />
                         </svg>
                         <span className="bn-fan-label">Meal</span>
+                    </button>
+
+                    <button type="button" className="bn-fan glass bn-fan-saved" onClick={() => pick("saved")} tabIndex={open ? 0 : -1}>
+                        <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                        </svg>
+                        <span className="bn-fan-label">Saved</span>
                     </button>
 
                     <button type="button" className="bn-fan glass bn-fan-workout" onClick={() => pick("workout")} tabIndex={open ? 0 : -1}>
@@ -76,23 +85,26 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                         <span className="bn-fan-label">Workout</span>
                     </button>
 
-                    {/* TODO(barcode): replace comingSoon with the real barcode-scanning flow
-                        (camera + barcode lookup -> prefill the meal log). UI-only for now. */}
+                    {/* Label scanning — a real, working action (replaced the planned
+                        barcode feature). Photographs a nutrition label; the AI reads
+                        it and the user confirms before it's saved. */}
                     <button
                         type="button"
-                        className="bn-fan glass bn-fan-barcode"
-                        onClick={() => comingSoon("Barcode scanning")}
+                        className="bn-fan glass bn-fan-scan"
+                        onClick={() => pick("scan")}
                         tabIndex={open ? 0 : -1}
-                        aria-label="Scan barcode (coming soon)"
+                        aria-label="Scan a nutrition label"
                     >
                         <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
-                            <path d="M3 5v14" />
-                            <path d="M8 5v14" />
-                            <path d="M12 5v14" />
-                            <path d="M17 5v14" />
-                            <path d="M21 5v14" />
+                            {/* viewfinder corners + label lines */}
+                            <path d="M3 8V5a2 2 0 0 1 2-2h3" />
+                            <path d="M16 3h3a2 2 0 0 1 2 2v3" />
+                            <path d="M21 16v3a2 2 0 0 1-2 2h-3" />
+                            <path d="M8 21H5a2 2 0 0 1-2-2v-3" />
+                            <path d="M7 10h10" />
+                            <path d="M7 14h6" />
                         </svg>
-                        <span className="bn-fan-label">Barcode</span>
+                        <span className="bn-fan-label">Scan</span>
                     </button>
 
                     {/* TODO(photo): replace comingSoon with the real photo-logging flow

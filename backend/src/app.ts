@@ -13,6 +13,7 @@ import { userRouter } from "./routes/user.routes";
 import { exerciseRouter } from "./routes/exercise.routes";
 import { waterRouter } from "./routes/water.routes";
 import { errorReportRouter } from "./routes/error-report.routes";
+import { savedFoodRouter } from "./routes/saved-food.routes";
 
 export const app = express();
 
@@ -41,7 +42,13 @@ app.use(
     })
 );
 
-// Core middleware
+// Core middleware.
+// The label-scan route carries a base64 photo (~1.4MB for a 1MB JPEG), which the
+// default 100kb JSON limit would reject with a 413 before our code ever runs.
+// Give ONLY that path a larger parser — registered first, so body-parser marks the
+// body as read and the default parser below skips it. Every other route keeps the
+// tight default limit.
+app.use("/api/saved-foods/scan-label", express.json({ limit: "10mb" }));
 app.use(express.json());
 app.use(loggerMiddleware.consoleLog);
 
@@ -59,6 +66,7 @@ app.use("/api/weight", weightRouter);
 app.use("/api/user", userRouter);
 app.use("/api/exercise", exerciseRouter);
 app.use("/api/water", waterRouter);
+app.use("/api/saved-foods", savedFoodRouter);
 app.use("/api/error-report", errorReportRouter);
 
 // Error handlers MUST come last

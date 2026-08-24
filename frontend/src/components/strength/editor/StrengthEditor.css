@@ -1,0 +1,102 @@
+/* Fields for the strength editor. The sheet shell, the stepper (.st-step*) and
+   the error text come from LoggingSheet.css / Strength.css — only the form
+   controls are defined here. */
+.ste {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 8px;
+}
+
+.ste-label {
+    display: block;
+    margin: 12px 0 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.ste-input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+}
+
+.ste-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Roomier stepper than the card's: this row is the point of the sheet. */
+.ste-step-lg {
+    padding: 5px;
+}
+
+.ste-step-lg .st-step-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.35rem;
+}
+
+.ste-weight-input {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: transparent;
+    border: none;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Sets + reps sit side by side — they're always read together. */
+.ste-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.ste-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.ste-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.ste-save {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: var(--r-sm);
+    border: none;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.ste-save:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.ste-save:disabled {
+    background: var(--accent-disabled);
+    cursor: default;
+}
+
+.ste-cancel {
+    padding: 12px 16px;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+}

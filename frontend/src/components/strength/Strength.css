@@ -1,0 +1,244 @@
+/* Strength list. Deliberately thin: the cards use the shared .glass surface and
+   .btn-mini actions (MealCard.css), and the editor reuses the .sheet-* modal. */
+.st {
+    display: flex;
+    flex-direction: column;
+}
+
+.st-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.st-title {
+    margin: 0;
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+}
+
+.st-add {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: var(--r-pill);
+    border: none;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.st-add:active {
+    transform: scale(0.95);
+}
+
+.st-intro {
+    margin: 6px 0 14px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+/* ── Tab strip ──────────────────────────────────────────────────────────
+   7 groups never fit a phone, so the strip scrolls sideways. Negative side
+   margins let it bleed to the screen edges (with matching padding) so the last
+   tab doesn't look clipped inside the content column. */
+.st-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    margin: 0 calc(-1 * clamp(16px, 4vw, 28px)) 16px;
+    padding: 2px clamp(16px, 4vw, 28px);
+}
+
+.st-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* Same visual language as the date strip's day chips: outlined + muted when
+   idle, filled accent when selected. */
+.st-tab {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out),
+        background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
+        transform var(--dur-press) var(--ease-out);
+}
+
+.st-tab:hover {
+    border-color: var(--border-strong);
+}
+
+.st-tab:active {
+    transform: scale(0.95);
+}
+
+.st-tab-count {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: var(--r-pill);
+    background: var(--surface-3);
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+.st-tab-on {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+}
+
+.st-tab-on .st-tab-count {
+    background: rgba(22, 32, 10, 0.18);
+    color: var(--on-accent);
+}
+
+/* ── Cards ──────────────────────────────────────────────────────────── */
+.st-card {
+    border-radius: var(--r-md);
+    padding: 14px;
+    margin-bottom: 12px;
+    animation: st-in var(--dur-slow) var(--ease-out);
+}
+
+@keyframes st-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.st-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.st-name {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
+.st-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.st-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.st-meta {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Weight stepper (shared with the editor sheet) ───────────────────── */
+.st-step {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px;
+    border-radius: var(--r-pill);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+}
+
+.st-step-btn {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-3);
+    color: var(--accent);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-out),
+        transform var(--dur-press) var(--ease-out);
+}
+
+.st-step-btn:active:not(:disabled) {
+    transform: scale(0.9);
+    background: var(--accent-soft);
+}
+
+.st-step-btn:disabled {
+    color: var(--text-dim);
+    cursor: default;
+}
+
+.st-weight {
+    min-width: 76px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+.st-weight-bw {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* ── States ─────────────────────────────────────────────────────────── */
+.st-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 28px 16px;
+    text-align: center;
+}
+
+.st-hint {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.st-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin: 8px 0 0;
+}

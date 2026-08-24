@@ -136,12 +136,19 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                     </button>
                 </div>
 
-                <NavLink to="/weight" className={navClass}>
+                {/* Strength-training list (dumbbell — same icon the Workout
+                    fan action uses). Purely a list of lifts: no calorie logging. */}
+                <NavLink to="/strength" className={navClass}>
                     <svg viewBox="0 0 24 24" className="bn-icon" aria-hidden="true">
-                        <path d="M4 21V10l8-5 8 5v11" />
-                        <path d="M9 21v-6h6v6" />
+                        <path d="M6.5 6.5 17.5 17.5" />
+                        <path d="m21 21-1-1" />
+                        <path d="m3 3 1 1" />
+                        <path d="m18 22 4-4" />
+                        <path d="m2 6 4-4" />
+                        <path d="m3 10 7-7" />
+                        <path d="m14 21 7-7" />
                     </svg>
-                    <span className="bn-label">Weight</span>
+                    <span className="bn-label">Lifts</span>
                 </NavLink>
 
                 <NavLink to="/settings" className={navClass}>

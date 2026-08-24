@@ -14,6 +14,7 @@ import { exerciseRouter } from "./routes/exercise.routes";
 import { waterRouter } from "./routes/water.routes";
 import { errorReportRouter } from "./routes/error-report.routes";
 import { savedFoodRouter } from "./routes/saved-food.routes";
+import { strengthRouter } from "./routes/strength.routes";
 
 export const app = express();
 
@@ -65,6 +66,8 @@ app.use("/api/onboarding", onboardingRouter);
 app.use("/api/weight", weightRouter);
 app.use("/api/user", userRouter);
 app.use("/api/exercise", exerciseRouter);
+// Strength-training list — a separate feature from the burn log above.
+app.use("/api/strength", strengthRouter);
 app.use("/api/water", waterRouter);
 app.use("/api/saved-foods", savedFoodRouter);
 app.use("/api/error-report", errorReportRouter);

@@ -12,6 +12,7 @@ import WeeklyCalories from "../../weekly-calories/WeeklyCalories";
 import Settings from "../../settings/Settings";
 import GoalsEdit from "../../goals-edit/GoalsEdit";
 import SavedFoods from "../../saved-foods/SavedFoods";
+import Strength from "../../strength/Strength";
 import OnboardingWizard from "../../onboarding/OnboardingWizard";
 import "./Main.css";
 
@@ -39,6 +40,7 @@ function Main(): JSX.Element {
                         <Route path="/weight" element={<Weight />} />
                         <Route path="/weekly" element={<WeeklyCalories />} />
                         <Route path="/saved-foods" element={<SavedFoods />} />
+                        <Route path="/strength" element={<Strength />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="/settings/goals" element={<GoalsEdit />} />
                     </Route>

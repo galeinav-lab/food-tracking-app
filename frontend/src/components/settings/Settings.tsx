@@ -127,6 +127,12 @@ function Settings(): JSX.Element {
                 Manage Saved Foods
             </Link>
 
+            {/* Weight logging + trajectory chart. Reachable here since it left
+                the bottom nav; the /weight page itself is unchanged. */}
+            <Link to="/weight" className="settings-link">
+                Track Weight
+            </Link>
+
             <button
                 type="button"
                 className="settings-logout"

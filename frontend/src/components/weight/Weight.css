@@ -3,50 +3,11 @@
     font-size: 1.3rem;
 }
 
-.weight-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 6px;
-}
-
-.weight-input {
-    flex: 1;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: inherit;
-}
-
-.weight-input:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-.weight-btn {
-    padding: 10px 18px;
-    background: var(--accent);
-    color: var(--on-accent);
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-}
-
-.weight-btn:disabled {
-    background: var(--accent-disabled);
-    cursor: default;
-}
-
+/* The logging form's rules (.weight-form / -input / -btn / -error) moved to
+   weight-entry/WeightEntry.css when the form was extracted for reuse. */
 .weight-hint {
     color: var(--muted);
     font-size: 0.9rem;
-}
-
-.weight-error {
-    color: var(--error);
-    font-size: 0.9rem;
-    margin: 6px 0 0;
 }
 
 .weight-chart {

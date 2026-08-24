@@ -155,12 +155,6 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                 </div>
                 <div className="meal-head-main">
                     <p className="meal-desc">{meal.description}</p>
-                    <div className="meal-dots">
-                        <span className="meal-dot meal-dot-cal">{fmt(meal.totals.calories)} kcal</span>
-                        <span className="meal-dot meal-dot-p">P {fmt(meal.totals.protein)}g</span>
-                        <span className="meal-dot meal-dot-c">C {fmt(meal.totals.carbs)}g</span>
-                        <span className="meal-dot meal-dot-f">F {fmt(meal.totals.fat)}g</span>
-                    </div>
                 </div>
                 {!readOnly && (
                     <div className="meal-actions">
@@ -186,6 +180,16 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                         </button>
                     </div>
                 )}
+            </div>
+
+            {/* Full-width row of its own: inside .meal-head-main the fixed-width
+                action buttons squeezed it to ~9px, so every chip wrapped onto a
+                line by itself. Out here the row has the whole card to sit on. */}
+            <div className="meal-dots">
+                <span className="meal-dot meal-dot-cal">{fmt(meal.totals.calories)} kcal</span>
+                <span className="meal-dot meal-dot-p">P {fmt(meal.totals.protein)}g</span>
+                <span className="meal-dot meal-dot-c">C {fmt(meal.totals.carbs)}g</span>
+                <span className="meal-dot meal-dot-f">F {fmt(meal.totals.fat)}g</span>
             </div>
 
             {/* Shown only when the server couldn't infer what amount this meal was. */}
@@ -256,14 +260,18 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                 ))}
             </ul>
 
-            <div className="meal-subtotal">
-                <span>Meal subtotal</span>
-                <span>
-                    {fmt(meal.totals.calories)} kcal · P {fmt(meal.totals.protein)}g · C{" "}
-                    {fmt(meal.totals.carbs)}g · F {fmt(meal.totals.fat)}g · Fiber{" "}
-                    {fmt(meal.totals.fiber)}g
-                </span>
-            </div>
+            {/* For a single-item meal the subtotal repeats the item line verbatim,
+                so it only earns its space once there's something to sum. */}
+            {meal.items.length > 1 && (
+                <div className="meal-subtotal">
+                    <span>Meal subtotal</span>
+                    <span>
+                        {fmt(meal.totals.calories)} kcal · P {fmt(meal.totals.protein)}g · C{" "}
+                        {fmt(meal.totals.carbs)}g · F {fmt(meal.totals.fat)}g · Fiber{" "}
+                        {fmt(meal.totals.fiber)}g
+                    </span>
+                </div>
+            )}
 
             {error && <p className="meal-error">{error}</p>}
         </div>

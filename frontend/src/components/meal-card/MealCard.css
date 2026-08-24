@@ -55,13 +55,20 @@
     overflow-wrap: anywhere;
 }
 
+/* Chips sit inline and wrap only when the row genuinely runs out of width.
+   Lives directly on the card (not in .meal-head-main) so it gets the full width;
+   the head's margin-bottom supplies the space above it. */
 .meal-dots {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
+    margin-bottom: 12px;
 }
 
 .meal-dot {
+    /* Shrink to content; never squeezed narrower than its text. */
+    flex: 0 0 auto;
     font-size: 0.72rem;
     font-weight: 600;
     padding: 2px 8px;

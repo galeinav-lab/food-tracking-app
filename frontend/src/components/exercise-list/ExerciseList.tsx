@@ -20,16 +20,21 @@ const fmt = (n: number): string => Math.round(n).toLocaleString();
 function ExerciseList({ date, refreshKey, onChanged }: ExerciseListProps): JSX.Element {
     const [entries, setEntries] = useState<IExerciseEntry[]>([]);
     const [loading, setLoading] = useState(true);
+    // Load failure = friendly message + retry; `error` is for the remove action
+    // and must not blank the day's entries.
+    const [loadError, setLoadError] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [busyId, setBusyId] = useState<string | null>(null);
 
     const load = useCallback(async () => {
         setLoading(true);
+        setLoadError(false);
         setError(null);
         try {
             setEntries(await exerciseService.list({ date }));
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : "Failed to load exercise");
+            console.error("Failed to load exercise", err);
+            setLoadError(true);
         } finally {
             setLoading(false);
         }
@@ -59,12 +64,22 @@ function ExerciseList({ date, refreshKey, onChanged }: ExerciseListProps): JSX.E
 
             {loading && <p className="exercise-section-hint">Loading…</p>}
             {error && <p className="exercise-section-error">{error}</p>}
-            {!loading && !error && entries.length === 0 && (
+
+            {!loading && loadError && (
+                <div>
+                    <p className="exercise-section-hint">Couldn't load this day's exercise.</p>
+                    <button type="button" className="btn-mini" onClick={() => void load()}>
+                        Try again
+                    </button>
+                </div>
+            )}
+
+            {!loading && !loadError && entries.length === 0 && (
                 <p className="exercise-section-hint">No exercise logged.</p>
             )}
 
             {!loading &&
-                !error &&
+                !loadError &&
                 entries.map((en) => (
                     <div className="ex-card glass" key={en._id}>
                         <div className="ex-card-head">

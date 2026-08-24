@@ -1,7 +1,6 @@
-import { type JSX, useEffect, useState } from "react";
+import { type JSX, useCallback, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { foodService } from "../../services/food.service";
-import { ApiError } from "../../services/http-client";
 import { IDailySummary } from "../../models/daily-summary";
 import { IFoodLog } from "../../models/food-log";
 import { addDaysToDateString, formatDateLabel, todayInTimeZone } from "../../utils/date";
@@ -28,58 +27,69 @@ function History(): JSX.Element {
 
     const [summaries, setSummaries] = useState<IDailySummary[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    // Both of this page's failures are LOADS (it has no mutations), so both get
+    // the friendly message + retry rather than the backend's wording.
+    const [loadError, setLoadError] = useState(false);
 
     // Inline drill-down (one expanded day at a time).
     const [expanded, setExpanded] = useState<string | null>(null);
     const [dayLogs, setDayLogs] = useState<IFoodLog[]>([]);
     const [dayLoading, setDayLoading] = useState(false);
-    const [dayError, setDayError] = useState<string | null>(null);
+    const [dayError, setDayError] = useState(false);
 
-    useEffect(() => {
-        let active = true;
+    // Named so the retry button can re-run exactly what the effect runs. The
+    // request counter replaces the old `active` flag: a response only lands if
+    // it's still the newest request (retry included).
+    const summariesReq = useRef(0);
+    const load = useCallback(async () => {
+        const reqId = ++summariesReq.current;
         const to = todayInTimeZone(timeZone);
         const from = addDaysToDateString(to, -29); // last 30 days inclusive
 
         setLoading(true);
-        setError(null);
-        foodService
-            .getSummaries({ from, to })
-            .then((rows) => {
-                if (!active) return;
-                // Endpoint returns ascending; show most recent first.
-                const sorted = [...rows].sort((a, b) => (a.date < b.date ? 1 : -1));
-                setSummaries(sorted);
-            })
-            .catch((err) => {
-                if (active) setError(err instanceof ApiError ? err.message : "Failed to load history");
-            })
-            .finally(() => {
-                if (active) setLoading(false);
-            });
-
-        return () => {
-            active = false;
-        };
+        setLoadError(false);
+        try {
+            const rows = await foodService.getSummaries({ from, to });
+            if (reqId !== summariesReq.current) return;
+            // Endpoint returns ascending; show most recent first.
+            setSummaries([...rows].sort((a, b) => (a.date < b.date ? 1 : -1)));
+        } catch (err) {
+            if (reqId !== summariesReq.current) return;
+            console.error("Failed to load history", err);
+            setLoadError(true);
+        } finally {
+            if (reqId === summariesReq.current) setLoading(false);
+        }
     }, [timeZone]);
 
-    const toggleDay = async (date: string) => {
-        if (expanded === date) {
-            setExpanded(null);
-            return;
-        }
-        setExpanded(date);
+    useEffect(() => {
+        void load();
+    }, [load]);
+
+    // Split out of toggleDay so the drill-down's retry can re-run just the fetch
+    // (calling toggleDay again would collapse the row instead of reloading it).
+    const loadDay = useCallback(async (date: string) => {
         setDayLogs([]);
-        setDayError(null);
+        setDayError(false);
         setDayLoading(true);
         try {
             const day = await foodService.getDay(date);
             setDayLogs(day.logs);
         } catch (err) {
-            setDayError(err instanceof ApiError ? err.message : "Failed to load that day");
+            console.error("Failed to load that day", err);
+            setDayError(true);
         } finally {
             setDayLoading(false);
         }
+    }, []);
+
+    const toggleDay = (date: string): void => {
+        if (expanded === date) {
+            setExpanded(null);
+            return;
+        }
+        setExpanded(date);
+        void loadDay(date);
     };
 
     return (
@@ -87,8 +97,17 @@ function History(): JSX.Element {
             <h1 className="history-title">History</h1>
 
             {loading && <p className="history-hint">Loading…</p>}
-            {error && <p className="history-error">{error}</p>}
-            {!loading && !error && summaries.length === 0 && (
+
+            {!loading && loadError && (
+                <div>
+                    <p className="history-hint">Couldn't load your history.</p>
+                    <button type="button" className="btn-mini" onClick={() => void load()}>
+                        Try again
+                    </button>
+                </div>
+            )}
+
+            {!loading && !loadError && summaries.length === 0 && (
                 <p className="history-hint">No logged days yet.</p>
             )}
 
@@ -134,7 +153,18 @@ function History(): JSX.Element {
                             {isExpanded && (
                                 <div className="history-detail">
                                     {dayLoading && <p className="history-hint">Loading…</p>}
-                                    {dayError && <p className="history-error">{dayError}</p>}
+                                    {!dayLoading && dayError && (
+                                        <div>
+                                            <p className="history-hint">Couldn't load that day.</p>
+                                            <button
+                                                type="button"
+                                                className="btn-mini"
+                                                onClick={() => void loadDay(s.date)}
+                                            >
+                                                Try again
+                                            </button>
+                                        </div>
+                                    )}
                                     {!dayLoading &&
                                         !dayError &&
                                         dayLogs.map((m) => <MealCard key={m._id} meal={m} readOnly />)}

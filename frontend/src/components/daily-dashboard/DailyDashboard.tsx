@@ -1,7 +1,6 @@
-import { type JSX, useEffect, useState } from "react";
+import { type JSX, useCallback, useEffect, useRef, useState } from "react";
 import { goalsService } from "../../services/goals.service";
 import { foodService } from "../../services/food.service";
-import { ApiError } from "../../services/http-client";
 import { IGoal } from "../../models/goal";
 import { INutrition } from "../../models/nutrition";
 import Ring from "../ring/Ring";
@@ -29,32 +28,50 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
     const [goals, setGoals] = useState<IGoal | null>(null);
     const [consumed, setConsumed] = useState<INutrition>(ZERO);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    // The dashboard has no actions of its own — its only failure is the load.
+    const [loadError, setLoadError] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
 
-    useEffect(() => {
-        let active = true;
+    // Named so the retry button re-runs exactly what the effect runs. The request
+    // counter replaces the old `active` flag: a response only lands if it's still
+    // the newest request (retry included).
+    const reqId = useRef(0);
+    const load = useCallback(async () => {
+        const id = ++reqId.current;
         setLoading(true);
-        setError(null);
-        Promise.all([goalsService.getGoals(), foodService.getDay(date)])
-            .then(([g, day]) => {
-                if (!active) return;
-                setGoals(g);
-                setConsumed(day.summary?.totals ?? ZERO);
-            })
-            .catch((err) => {
-                if (active) setError(err instanceof ApiError ? err.message : "Failed to load dashboard");
-            })
-            .finally(() => {
-                if (active) setLoading(false);
-            });
-        return () => {
-            active = false;
-        };
-    }, [date, refreshKey]);
+        setLoadError(false);
+        try {
+            const [g, day] = await Promise.all([
+                goalsService.getGoals(),
+                foodService.getDay(date),
+            ]);
+            if (id !== reqId.current) return;
+            setGoals(g);
+            setConsumed(day.summary?.totals ?? ZERO);
+        } catch (err) {
+            if (id !== reqId.current) return;
+            console.error("Failed to load dashboard", err);
+            setLoadError(true);
+        } finally {
+            if (id === reqId.current) setLoading(false);
+        }
+    }, [date]);
+
+    useEffect(() => {
+        void load();
+    }, [load, refreshKey]);
 
     if (loading) return <div className="card glass dash-msg">Loading…</div>;
-    if (error) return <div className="card glass dash-msg dash-error">{error}</div>;
+    if (loadError) {
+        return (
+            <div className="card glass dash-msg">
+                <p>Couldn't load your dashboard.</p>
+                <button type="button" className="btn-mini" onClick={() => void load()}>
+                    Try again
+                </button>
+            </div>
+        );
+    }
     if (!goals) return <div className="card glass dash-msg">No goals set.</div>;
 
     const calGoal = goals.calories;

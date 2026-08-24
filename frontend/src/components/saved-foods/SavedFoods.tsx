@@ -12,6 +12,9 @@ const fmt = (n: number): string => Math.round(n).toLocaleString();
 function SavedFoods(): JSX.Element {
     const [foods, setFoods] = useState<ISavedFood[]>([]);
     const [loading, setLoading] = useState(true);
+    // A failed LOAD is a page state (friendly message + retry); `error` is for
+    // action failures (delete) and must leave the list on screen.
+    const [loadError, setLoadError] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [query, setQuery] = useState("");
 
@@ -25,11 +28,14 @@ function SavedFoods(): JSX.Element {
 
     const load = useCallback(async (q: string) => {
         setLoading(true);
+        setLoadError(false);
         setError(null);
         try {
             setFoods(await savedFoodService.list(q.trim() || undefined));
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : "Failed to load saved foods");
+            // The backend's wording is for us, not the user.
+            console.error("Failed to load saved foods", err);
+            setLoadError(true);
         } finally {
             setLoading(false);
         }
@@ -135,7 +141,16 @@ function SavedFoods(): JSX.Element {
             {loading && <p className="sf-hint">Loading…</p>}
             {error && <p className="sf-error">{error}</p>}
 
-            {!loading && !error && foods.length === 0 && (
+            {!loading && loadError && (
+                <div>
+                    <p className="sf-hint">Couldn't load your saved foods.</p>
+                    <button type="button" className="btn-mini" onClick={() => void load(query)}>
+                        Try again
+                    </button>
+                </div>
+            )}
+
+            {!loading && !loadError && foods.length === 0 && (
                 <p className="sf-hint">
                     {query.trim()
                         ? `No saved foods match “${query.trim()}”.`
@@ -144,7 +159,7 @@ function SavedFoods(): JSX.Element {
             )}
 
             {!loading &&
-                !error &&
+                !loadError &&
                 foods.map((food) => (
                     <div className="sf-card glass" key={food._id}>
                         <div className="sf-card-main">

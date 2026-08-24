@@ -30,16 +30,21 @@ function Weight(): JSX.Element {
 
     const [entries, setEntries] = useState<IWeightEntry[]>([]);
     const [loading, setLoading] = useState(true);
+    // Load failure = friendly message + retry; `error` is for the remove action
+    // and must not blank the chart and history.
+    const [loadError, setLoadError] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const loadEntries = useCallback(async () => {
         setLoading(true);
+        setLoadError(false);
         setError(null);
         try {
             const rows = await weightService.list(); // all entries, ascending
             setEntries(rows);
         } catch (err) {
-            setError(err instanceof ApiError ? err.message : "Failed to load weight data");
+            console.error("Failed to load weight data", err);
+            setLoadError(true);
         } finally {
             setLoading(false);
         }
@@ -77,7 +82,16 @@ function Weight(): JSX.Element {
             {loading && <p className="weight-hint">Loading…</p>}
             {error && <p className="weight-error">{error}</p>}
 
-            {!loading && !error && (
+            {!loading && loadError && (
+                <div>
+                    <p className="weight-hint">Couldn't load your weight data.</p>
+                    <button type="button" className="btn-mini" onClick={() => void loadEntries()}>
+                        Try again
+                    </button>
+                </div>
+            )}
+
+            {!loading && !loadError && (
                 <>
                     {chartData.length > 0 && (
                         <div className="weight-chart">

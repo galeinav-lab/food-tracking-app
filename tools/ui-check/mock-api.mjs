@@ -60,6 +60,15 @@ const routes = [
         { _id: "e1", userId: "u1", date: "2026-10-01", type: "Running", caloriesBurned: 320, durationMin: 30, createdAt: ts, updatedAt: ts },
         { _id: "e2", userId: "u1", date: "2026-10-01", type: "Cycling", caloriesBurned: 180, durationMin: 25, createdAt: ts, updatedAt: ts },
     ]],
+    [/^\/api\/strength/, () => [
+        ["back", "Lat pulldown", 4, 10, 55], ["back", "Seated cable row", 3, 12, 50], ["back", "Pull-ups", 3, 8, 0],
+        ["back", "Barbell row (overhand, controlled tempo)", 4, 8, 62.5], ["chest", "Bench press", 4, 8, 70], ["chest", "Incline dumbbell press", 3, 10, 24],
+        ["legs", "Squat", 5, 5, 90],
+    ].map(([muscleGroup, name, sets, reps, weightKg], i) => ({ _id: "s" + i, userId: "u1", muscleGroup, name, sets, reps, weightKg, createdAt: ts, updatedAt: ts }))],
+    [/^\/api\/saved-foods/, () => [
+        ["Greek yogurt 5%", "g", n(97, 9, 4, 5, 0)], ["Oat milk (barista)", "ml", n(59, 1, 7, 3, 1)],
+        ["Homemade granola", "g", n(450, 10, 64, 17, 7)], ["Chicken breast, grilled", "g", n(165, 31, 0, 4, 0)],
+    ].map(([name, baseUnit, per100], i) => ({ _id: "f" + i, userId: "u1", name, baseUnit, per100, source: "manual", createdAt: ts, updatedAt: ts }))],
     [/^\/api\/weight/, () => [80.4, 80.1, 79.9, 79.6, 79.5].map((kg, i) => ({ _id: "w" + i, userId: "u1", weightKg: kg, date: days[i], createdAt: ts, updatedAt: ts }))],
 ];
 

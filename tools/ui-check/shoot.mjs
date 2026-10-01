@@ -53,6 +53,9 @@ for (const job of jobs) {
     if (job.scroll === "text-under-nav") {
         // Put a meal's item rows (dense text) right behind the bottom nav.
         y = await evaluate(`(() => { const it = document.querySelectorAll(".meal-item")[1]; if (!it) return 0; const r = it.getBoundingClientRect(); return Math.max(0, Math.round(r.top + scrollY - (innerHeight - 50))); })()`);
+    } else if (typeof job.scroll === "string" && job.scroll !== "top") {
+        // A CSS selector: bring that element to 16px below the top of the viewport.
+        y = await evaluate(`(() => { const el = document.querySelector(${JSON.stringify(job.scroll)}); if (!el) return 0; return Math.max(0, Math.round(el.getBoundingClientRect().top + scrollY - 16)); })()`);
     } else if (typeof job.scroll === "number") y = job.scroll;
     await evaluate(`window.scrollTo(0, ${y}); true`);
     await sleep(600);

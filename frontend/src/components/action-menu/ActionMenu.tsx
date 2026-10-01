@@ -1,4 +1,4 @@
-import { type JSX, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type JSX, type KeyboardEvent as ReactKeyboardEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./ActionMenu.css";
 
 export interface ActionMenuItem {
@@ -21,11 +21,12 @@ const GAP = 6; // px between trigger and popover (matches ActionMenu.css)
 // Compact "⋯" button that opens a small floating list of actions. Closes on an
 // outside tap, on Escape (focus returns to the trigger) and after a pick. Opens
 // downward unless that would land it under the fixed bottom nav (then upward).
+// Keyboard follows the WAI-ARIA menu pattern: focus starts on the first item,
+// ↑/↓ move (wrapping), Home/End jump, Tab closes and moves on from the trigger.
 function ActionMenu({ label, items, busy = false }: ActionMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
     const rootRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
-    const firstItemRef = useRef<HTMLButtonElement>(null);
     const popRef = useRef<HTMLDivElement>(null);
     const [up, setUp] = useState(false);
 
@@ -44,7 +45,7 @@ function ActionMenu({ label, items, busy = false }: ActionMenuProps): JSX.Elemen
 
     useEffect(() => {
         if (!open) return;
-        firstItemRef.current?.focus();
+        enabledItems()[0]?.focus();
         const onPointer = (e: PointerEvent): void => {
             if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
         };
@@ -62,8 +63,33 @@ function ActionMenu({ label, items, busy = false }: ActionMenuProps): JSX.Elemen
         };
     }, [open]);
 
+    function enabledItems(): HTMLButtonElement[] {
+        return Array.from(popRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not(:disabled)') ?? []);
+    }
+
+    // Roving focus: items are tabIndex -1, the arrow keys move between them.
+    const onMenuKey = (e: ReactKeyboardEvent<HTMLDivElement>): void => {
+        const list = enabledItems();
+        const at = list.indexOf(document.activeElement as HTMLButtonElement);
+        const go = (i: number): void => {
+            e.preventDefault();
+            list[(i + list.length) % list.length]?.focus();
+        };
+        if (e.key === "ArrowDown") go(at + 1);
+        else if (e.key === "ArrowUp") go(at - 1);
+        else if (e.key === "Home") go(0);
+        else if (e.key === "End") go(list.length - 1);
+        else if (e.key === "Tab") {
+            // No preventDefault: with focus back on the trigger, the browser's own
+            // Tab / Shift+Tab then moves past it as if the menu was never open.
+            setOpen(false);
+            triggerRef.current?.focus();
+        }
+    };
+
     const pick = (item: ActionMenuItem): void => {
         setOpen(false);
+        triggerRef.current?.focus();
         item.onSelect();
     };
 
@@ -77,8 +103,12 @@ function ActionMenu({ label, items, busy = false }: ActionMenuProps): JSX.Elemen
                 aria-haspopup="menu"
                 aria-expanded={open}
                 aria-busy={busy}
-                disabled={busy}
-                onClick={() => setOpen((o) => !o)}
+                // aria-disabled, not disabled: a disabled button drops keyboard
+                // focus to <body> the moment a picked action starts working.
+                aria-disabled={busy}
+                onClick={() => {
+                    if (!busy) setOpen((o) => !o);
+                }}
             >
                 {!busy && (
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
@@ -95,13 +125,14 @@ function ActionMenu({ label, items, busy = false }: ActionMenuProps): JSX.Elemen
                     className={up ? "amenu-pop amenu-pop-up glass-float" : "amenu-pop glass-float"}
                     role="menu"
                     aria-label={label}
+                    onKeyDown={onMenuKey}
                 >
-                    {items.map((item, i) => (
+                    {items.map((item) => (
                         <button
                             key={item.label}
-                            ref={i === 0 ? firstItemRef : undefined}
                             type="button"
                             role="menuitem"
+                            tabIndex={-1}
                             className={item.danger ? "amenu-item amenu-item-danger" : "amenu-item"}
                             disabled={item.disabled}
                             onClick={() => pick(item)}

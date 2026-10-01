@@ -165,7 +165,7 @@ function Weight(): JSX.Element {
                                     <span className="weight-row-kg">{en.weightKg.toFixed(1)} kg</span>
                                     <button
                                         type="button"
-                                        className="btn btn-danger btn-sm"
+                                        className="btn btn-secondary btn-sm"
                                         onClick={() => onRemove(en._id)}
                                     >
                                         Remove

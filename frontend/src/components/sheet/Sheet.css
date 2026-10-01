@@ -8,7 +8,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    animation: sheet-fade var(--dur-base) var(--ease-out);
+    animation: fade-in var(--dur-base) var(--ease-out);
 }
 
 .sheet {
@@ -71,14 +71,5 @@
     }
     to {
         transform: translateY(0);
-    }
-}
-
-@keyframes sheet-fade {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
     }
 }

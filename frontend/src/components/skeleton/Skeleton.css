@@ -1,10 +1,12 @@
 /* Loading placeholders. Opacity-only pulse (compositor-cheap, no shimmer
    gradient); the global reduced-motion rule in index.css freezes it at the base
    opacity below. */
+/* Lime-white tint: lightens whatever is behind it, so a line stays visible on a
+   glass card as well as on the gradient (a dark fill would vanish into either). */
 .skel {
     display: block;
     width: 100%;
-    background: var(--surface-3);
+    background: var(--border-strong);
     opacity: 0.7;
     animation: skel-pulse var(--dur-pulse) var(--ease-in-out) infinite alternate;
 }

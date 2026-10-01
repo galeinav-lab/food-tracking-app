@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { clearAuthError, login } from "../../../store/auth-slice";
-import "./Login.css";
+import "../Auth.css";
 
 function Login(): JSX.Element {
     const dispatch = useAppDispatch();
@@ -33,12 +33,13 @@ function Login(): JSX.Element {
 
     return (
         <div className="auth-container">
-            <form className="card" onSubmit={handleSubmit}>
+            <form className="card glass rise-in" onSubmit={handleSubmit}>
                 <h1 className="form-title">Log in</h1>
 
-                <div className="form-field">
-                    <label htmlFor="login-email">Email</label>
+                <div className="field">
+                    <label className="field-label" htmlFor="login-email">Email</label>
                     <input
+                        className="input"
                         id="login-email"
                         type="email"
                         value={email}
@@ -48,9 +49,10 @@ function Login(): JSX.Element {
                     />
                 </div>
 
-                <div className="form-field">
-                    <label htmlFor="login-password">Password</label>
+                <div className="field">
+                    <label className="field-label" htmlFor="login-password">Password</label>
                     <input
+                        className="input"
                         id="login-password"
                         type="password"
                         value={password}
@@ -60,9 +62,18 @@ function Login(): JSX.Element {
                     />
                 </div>
 
-                {error && <p className="error-text">{error}</p>}
+                {error && (
+                    <p className="form-error" role="alert">
+                        {error}
+                    </p>
+                )}
 
-                <button className="btn btn-primary btn-block" type="submit" disabled={loading}>
+                <button
+                    className={loading ? "btn btn-primary btn-block btn-loading" : "btn btn-primary btn-block"}
+                    type="submit"
+                    disabled={loading}
+                    aria-busy={loading}
+                >
                     {loading ? "Logging in…" : "Log in"}
                 </button>
 

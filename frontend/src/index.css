@@ -238,6 +238,20 @@ code {
     animation: rise-in var(--dur-slow) var(--ease-out) backwards;
 }
 
+/* Opacity-only fade (step changes, scrims). */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fade-in var(--dur-base) var(--ease-out) backwards;
+}
+
 /* List cascade: each child starts --stagger after the previous one, capped at
    the 8th so long lists never trail in (items 9+ share the last delay). */
 .stagger > :nth-child(2) { animation-delay: var(--stagger); }
@@ -252,8 +266,8 @@ code {
 /* Shared button (v3.2). Every button composes .btn + one variant (+ optional
    size/width modifier). Component CSS may add LAYOUT (flex, margins) but never
    re-declares the look — that's how the per-screen copies drifted apart.
-   Press feedback is transform-only; hover is gated to real pointers so it never
-   sticks after a tap on touch screens. */
+   Only transform is animated (press-compress); colour changes are instant.
+   Hover is gated to real pointers so it never sticks after a tap on touch screens. */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -269,10 +283,7 @@ code {
     text-decoration: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: transform var(--dur-press) var(--ease-out),
-        background-color var(--dur-fast) var(--ease-out),
-        border-color var(--dur-fast) var(--ease-out),
-        color var(--dur-fast) var(--ease-out);
+    transition: transform var(--dur-press) var(--ease-out);
 }
 
 .btn:active:not(:disabled) {
@@ -347,6 +358,81 @@ code {
 
 .btn-block {
     width: 100%;
+}
+
+/* Toggle / choice buttons: set aria-pressed and the selected look follows. */
+.btn-secondary[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+/* Busy state for a submit that's waiting on the server: a small ring spins
+   (transform only) before the label. Pair with disabled + aria-busy. */
+.btn-loading {
+    cursor: progress;
+}
+
+.btn-loading::before {
+    content: "";
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 700ms linear infinite;
+}
+
+@keyframes btn-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Shared form field (v3.2): label + control + one error style for every form.
+   Focus = accent border + soft ring (instant, no transition). Invalid controls
+   use aria-invalid="true", so the error look and the a11y state can't drift. */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field-label {
+    font-size: var(--text-sm);
+    color: var(--muted);
+}
+
+.input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-control);
+    background-color: var(--surface-2);
+    color: var(--text);
+    font-family: inherit;
+    font-size: var(--text-base);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.input[aria-invalid="true"] {
+    border-color: var(--error);
+}
+
+.input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px var(--danger-soft);
+}
+
+.form-error {
+    margin: 0;
+    color: var(--error);
+    font-size: var(--text-sm);
 }
 
 /* Subtle light scrollbars */

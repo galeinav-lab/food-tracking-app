@@ -1,0 +1,49 @@
+/* Shared by Login and Register (was two identical copies). Fields, inputs,
+   errors and buttons are the shared .field / .input / .form-error / .btn. */
+.auth-container {
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+}
+
+/* Scoped to the auth screens: a bare .card here is global and used to clamp the
+   dashboard cards to 360px (see the .card note in index.css). Surface = .glass. */
+.auth-container .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    width: 100%;
+    max-width: 360px;
+    padding: var(--space-xl);
+    border-radius: var(--r-raised);
+}
+
+.form-title {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--text-lg);
+}
+
+/* First + last name side by side. */
+.form-row {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.form-row .field {
+    flex: 1;
+    min-width: 0;
+}
+
+.switch-text {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--muted);
+    text-align: center;
+}
+
+.switch-text .link {
+    color: var(--accent);
+    font-weight: 600;
+}

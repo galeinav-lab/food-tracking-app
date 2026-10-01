@@ -152,14 +152,21 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 **Shared building blocks — use these, never a per-screen copy:**
 - **Buttons** — `.btn` + one variant `.btn-primary` / `.btn-secondary` / `.btn-danger`, optional
   `.btn-sm` / `.btn-block` (index.css). Includes press-compress, focus ring, hover gated to
-  `(hover: hover)`. Component CSS may add layout only.
+  `(hover: hover)`. Component CSS may add layout only. Choice/toggle buttons use `.btn-secondary` +
+  `aria-pressed="true"` for the selected look. A submit waiting on the server adds `.btn-loading`
+  (+ `disabled`, `aria-busy`): a small transform-only spinner before the label. Only `transform`
+  is transitioned; colour changes are instant.
+- **Form fields** — `.field` > `.field-label` + `.input`, errors as `<p class="form-error"
+  role="alert">` (index.css). Focus = accent border + soft ring; `aria-invalid="true"` gives the
+  error border. Login, Register and Onboarding use these; older screens migrate in later phases.
 - **Bottom sheet** — `<Sheet title ariaLabel onClose>` (`components/sheet/`): scrim, slide-up panel,
   handle, header + close. Every sheet/panel renders it; content styles stay with the feature.
 - **Loading** — `<Skeleton shape="line|block|circle">` inside `<SkeletonGroup label>`
   (`components/skeleton/`) instead of "Loading…" text. Opacity-only pulse. A `block` is drawn as
   the glass card it stands in for.
 - **Entrances** — `.rise-in` (one element) and `.stagger` (on a list: children cascade by
-  `--stagger`, capped at the 8th child) using the shared `rise-in` keyframe (index.css).
+  `--stagger`, capped at the 8th child) using the shared `rise-in` keyframe (index.css). `.fade-in` is the opacity-only
+  variant (step changes, scrims).
 
 Motion rule: entrance keyframes never use `animation-fill-mode: forwards/both` — a held
 `transform` on an ancestor turns it into the containing block for `position: fixed` children.

@@ -10,6 +10,7 @@ They are **not** imported by the app and not part of any build. Node 22+ (built-
 | `shoot.mjs` | Opens the running frontend in headless Chrome, seeds a fake session in localStorage, runs each job (viewport, route, optional clicks/actions/scroll/CSS) and saves PNGs at 2× scale. |
 | `contact.mjs` | Builds a labelled grid ("contact sheet") from a list of PNGs. |
 | `compare.mjs` | Pixel-diffs `P-current.png` vs `P-proposed.png` pairs and writes side-by-side composites. |
+| `check-action-menu.mjs` | Drives `<ActionMenu>` with real mouse/keyboard events (open, ↑/↓/Home/End, Escape, outside tap, Tab, Enter) and prints the ARIA + focus state after each step. |
 | `cdp.mjs` | Shared Chrome DevTools Protocol client: reuses Chrome on `:9333` or starts a headless one. |
 | `jobs/*.json` | Job lists used so far: `pages.json` (in-app pages), `forms.json` (login/register/onboarding steps), `blur-compare.json`. |
 

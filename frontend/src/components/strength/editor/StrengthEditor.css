@@ -4,12 +4,12 @@
 .ste {
     display: flex;
     flex-direction: column;
-    padding-bottom: 8px;
+    padding-bottom: var(--space-sm);
 }
 
 .ste-label {
     display: block;
-    margin: 12px 0 6px;
+    margin: var(--space-md) 0 6px;
 }
 
 /* Roomier stepper than the card's: this row is the point of the sheet. */
@@ -20,7 +20,7 @@
 .ste-step-lg .st-step-btn {
     width: 44px;
     height: 44px;
-    font-size: 1.35rem;
+    font-size: var(--text-lg);
 }
 
 /* The number inside the stepper: borderless, large, lime. */
@@ -29,7 +29,7 @@
     min-width: 0;
     padding: 6px 0;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: var(--text-md);
     font-weight: 700;
     color: var(--accent);
     background: transparent;
@@ -51,7 +51,7 @@
 .ste-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: var(--space-md);
 }
 
 .ste-field {

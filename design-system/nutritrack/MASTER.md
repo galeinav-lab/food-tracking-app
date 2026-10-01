@@ -120,7 +120,7 @@ blurred card re-blur each frame. The glass look = translucent tint + light borde
 |---|---|---|
 | Card | `.glass` | `--glass-bg` tint + `--glass-border` + `--shadow-card, --glass-highlight`. No blur. |
 | Inset | `.glass-inset` | `--glass-inset-bg` — a recessed well *inside* a card (e.g. History's day detail). No blur. |
-| Float | `.glass-float` | `--glass-bg-solid` + `--border-strong` + raised shadow, no blur. Used by `<ActionMenu>`; the + menu, sheets and toasts move onto it in the dashboard/nav phase. |
+| Float | `.glass-float` | `--glass-float-bg` (.98 — at .94 bright text behind ghosted through) + `--border-strong` + raised shadow, no blur. Used by `<ActionMenu>`; the + menu, sheets and toasts move onto it in the dashboard/nav phase. |
 | Nav | `.bottomnav` | **The only blurred surface:** `.72` tint + `blur(var(--glass-blur))` (10px), `--glass-bg-solid` fallback. Applied in the dashboard/nav phase; until then it is `.85` + 14px. |
 
 | Token | Value |
@@ -128,6 +128,7 @@ blurred card re-blur each frame. The glass look = translucent tint + light borde
 | `--glass-bg` | `rgba(24, 31, 19, 0.55)` |
 | `--glass-inset-bg` | `rgba(16, 20, 13, 0.55)` |
 | `--glass-bg-solid` | `rgba(24, 31, 19, 0.94)` (nav fallback) |
+| `--glass-float-bg` | `rgba(24, 31, 19, 0.98)` (float tier) |
 | `--glass-blur` | `10px` (nav only) |
 | `--glass-border` | `rgba(214, 255, 170, 0.18)` |
 | `--glass-highlight` | `inset 0 1px 0 rgba(214, 255, 170, 0.12)` |
@@ -145,7 +146,8 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 | Group | Tokens |
 |---|---|
 | Radius roles | `--r-control` (=r-sm, inputs/buttons/chips) · `--r-card` (=r-md) · `--r-raised` (=r-lg, hero) · `--r-sheet` (=r-xl) |
-| Type scale | `--text-xs .72` · `--text-sm .85` · `--text-base .95` · `--text-md 1.1` · `--text-lg 1.3` · `--text-display 2.8` (rem) |
+| Type scale | `--text-xs .72` · `--text-sm .85` · `--text-base .95` · `--text-md 1.1` · `--text-lg 1.3` · `--text-xl 1.75` · `--text-display 2.8` (rem). Pick by role: hints/errors sm, meta xs, values base, glyph buttons lg |
+| Layout | `--nav-clearance 96px` — screen bottom the fixed nav covers (content padding, popover flip) |
 | Form controls | `--text-input 1rem` — every input/select/textarea is ≥16px (iOS Safari zooms on focus below that); outside the type scale on purpose |
 | Elevation / chrome | `--shadow-sheet` · `--scrim` · `--danger-soft` |
 | Tints | `--macro-protein-soft` · `--macro-carbs-soft` · `--macro-fat-soft` (14% chips/thumbs) · `--on-accent-soft` (badges on lime) |
@@ -169,11 +171,16 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 - **Lists & cards** — `.card-list` (vertical stack, `--space-md` gap) + `.stagger`; macro/duration
   labels are `.chip` + `.chip-accent` / `-protein` / `-carbs` / `-fat` / `-burn`.
 - **Card actions** — `<ActionMenu label items busy>` (`components/action-menu/`): a `.btn-icon` "⋯"
-  trigger opening a float-tier menu; closes on outside tap / Escape / pick, spinner while busy.
+  trigger opening a float-tier menu; closes on outside tap / Escape / pick, spinner while busy;
+  opens upward when it would otherwise land within `--nav-clearance` of the bottom.
   Use it when inline buttons would squeeze a card's title. `.input-sm` pairs inputs with `.btn-sm`.
 - **Entrances** — `.rise-in` (one element) and `.stagger` (on a list: children cascade by
   `--stagger`, capped at the 8th child) using the shared `rise-in` keyframe (index.css). `.fade-in` is the opacity-only
   variant (step changes, scrims).
+
+Spacing: components use the `--space-*` tokens where a value is on the 4/8/12/16/24/32 scale.
+Off-scale values (2/3/6/10/14/18/28px) still exist app-wide, including the shared `.field`; they
+are normalised in one app-wide pass (phase 5) so screens never disagree with each other.
 
 Motion rule: entrance keyframes never use `animation-fill-mode: forwards/both` — a held
 `transform` on an ancestor turns it into the containing block for `position: fixed` children.

@@ -13,11 +13,11 @@
 
 .water-title {
     margin: 0;
-    font-size: 1rem;
+    font-size: var(--text-base);
 }
 
 .water-amount {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     color: var(--muted);
     font-variant-numeric: tabular-nums;
 }
@@ -27,7 +27,7 @@
     background: var(--ring-track);
     border-radius: var(--r-pill);
     overflow: hidden; /* rounds the fill's ends */
-    margin-bottom: 12px;
+    margin-bottom: var(--space-md);
 }
 
 /* Full width, scaled from the left edge (transform-only animation). */
@@ -41,7 +41,7 @@
 .water-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--space-sm);
     align-items: center;
 }
 

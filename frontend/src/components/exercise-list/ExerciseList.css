@@ -6,21 +6,21 @@
 }
 
 .exercise-section-title {
-    margin: 0 0 12px;
+    margin: 0 0 var(--space-md);
     font-family: var(--font-head);
     font-size: var(--text-md);
 }
 
 .exercise-section-hint {
     color: var(--muted);
-    font-size: 0.9rem;
-    margin: 0 0 4px;
+    font-size: var(--text-sm);
+    margin: 0 0 var(--space-xs);
 }
 
 .exercise-section-error {
     color: var(--error);
-    font-size: 0.9rem;
-    margin: 0 0 4px;
+    font-size: var(--text-sm);
+    margin: 0 0 var(--space-xs);
 }
 
 .ex-card {
@@ -31,7 +31,7 @@
 .ex-card-head {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: var(--space-md);
 }
 
 .ex-thumb {
@@ -70,6 +70,6 @@
 
 .ex-note {
     margin: 0;
-    font-size: 0.82rem;
+    font-size: var(--text-sm);
     color: var(--muted);
 }

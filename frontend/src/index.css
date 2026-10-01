@@ -62,6 +62,9 @@
        (fluid side padding); tablets get this cap + centering so cards never
        stretch into over-wide slabs. Shared by content, nav items, and sheets. */
     --content-max: 480px;
+    /* Bottom of the screen the fixed nav (incl. the raised + button) covers.
+       Content pads by this; popovers flip upward rather than land under it. */
+    --nav-clearance: 96px;
 
     /* Spacing */
     --space-xs: 4px;
@@ -90,6 +93,7 @@
     --text-base: 0.95rem; /* body, inputs, buttons */
     --text-md: 1.1rem; /* section / sheet titles */
     --text-lg: 1.3rem; /* page titles */
+    --text-xl: 1.75rem; /* secondary big numbers (previews, rings) */
     --text-display: 2.8rem; /* hero number */
     /* Form controls never go below 16px: iOS Safari zooms the page when a focused
        input/select/textarea is smaller. Separate from the type scale on purpose. */
@@ -117,7 +121,8 @@
        every frame). The bottom nav is the only blurred surface. */
     --glass-bg: rgba(24, 31, 19, 0.55); /* card tier */
     --glass-inset-bg: rgba(16, 20, 13, 0.55); /* inset tier: recessed wells inside a card */
-    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* float tier; nav fallback without backdrop-filter */
+    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* nav fallback without backdrop-filter */
+    --glass-float-bg: rgba(24, 31, 19, 0.98); /* float tier: bright text behind must not ghost through */
     --glass-blur: 10px; /* nav only */
     --glass-border: rgba(214, 255, 170, 0.18);
     --glass-highlight: inset 0 1px 0 rgba(214, 255, 170, 0.12); /* top glass edge */
@@ -231,7 +236,7 @@ code {
 /* Float tier: surfaces that pop over content (menus, sheets, toasts). Near-opaque
    so text behind never competes; no blur. */
 .glass-float.glass-float {
-    background-color: var(--glass-bg-solid);
+    background-color: var(--glass-float-bg);
     border: 1px solid var(--border-strong);
     box-shadow: var(--shadow-raised), var(--glass-highlight);
 }

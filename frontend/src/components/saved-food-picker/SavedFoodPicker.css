@@ -7,18 +7,18 @@
 }
 
 .sfp-search {
-    margin-bottom: 12px;
+    margin-bottom: var(--space-md);
 }
 
 .sfp-hint {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     line-height: 1.5;
     margin: 0 0 10px;
 }
 
 .sfp-hint-sm {
-    font-size: 0.8rem;
+    font-size: var(--text-xs);
     color: var(--text-dim);
 }
 
@@ -28,12 +28,12 @@
 
 /* ── Empty state ────────────────────────────────────────────────────── */
 .sfp-empty {
-    padding: 8px 0 4px;
+    padding: var(--space-sm) 0 var(--space-xs);
     text-align: center;
 }
 
 .sfp-empty-link {
-    margin: 4px 0 12px;
+    margin: var(--space-xs) 0 var(--space-md);
 }
 
 /* ── Pick list ──────────────────────────────────────────────────────── */
@@ -49,7 +49,7 @@
     gap: 10px;
     width: 100%;
     text-align: left;
-    padding: 12px 14px;
+    padding: var(--space-md) 14px;
     border: 1px solid var(--border);
     border-radius: var(--r-card);
     color: var(--text);
@@ -89,7 +89,7 @@
 }
 
 .sfp-item-per {
-    font-size: 0.76rem;
+    font-size: var(--text-xs);
     color: var(--muted);
     font-variant-numeric: tabular-nums;
 }
@@ -100,7 +100,7 @@
 
 .sfp-item-go {
     flex-shrink: 0;
-    font-size: 1.3rem;
+    font-size: var(--text-lg);
     color: var(--accent);
     line-height: 1;
 }
@@ -113,8 +113,8 @@
 
 .sfp-back {
     align-self: flex-start;
-    padding: 4px 0;
-    margin-bottom: 8px;
+    padding: var(--space-xs) 0;
+    margin-bottom: var(--space-sm);
     background: none;
     border: none;
     color: var(--accent);
@@ -132,13 +132,13 @@
 .sfp-picked-name {
     margin: 0;
     font-family: var(--font-head);
-    font-size: 1.15rem;
+    font-size: var(--text-md);
     overflow-wrap: anywhere;
 }
 
 .sfp-picked-per {
-    margin: 4px 0 14px;
-    font-size: 0.8rem;
+    margin: var(--space-xs) 0 14px;
+    font-size: var(--text-sm);
     color: var(--muted);
 }
 
@@ -155,8 +155,8 @@
 /* The amount is the point of this step: larger, in the heading face. */
 .sfp-input {
     flex: 1;
-    padding: 12px 14px;
-    font-size: 1.1rem;
+    padding: var(--space-md) 14px;
+    font-size: var(--text-md);
     font-family: var(--font-head);
     font-variant-numeric: tabular-nums;
 }
@@ -179,7 +179,7 @@
 .sfp-preview-cal {
     display: block;
     font-family: var(--font-head);
-    font-size: 1.8rem;
+    font-size: var(--text-xl);
     font-weight: 700;
     color: var(--accent);
     font-variant-numeric: tabular-nums;
@@ -195,5 +195,5 @@
 }
 
 .sfp-submit {
-    margin-top: 16px;
+    margin-top: var(--space-lg);
 }

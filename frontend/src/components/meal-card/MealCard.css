@@ -10,8 +10,8 @@
 .meal-card-head {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
 }
 
 .meal-thumb {
@@ -47,23 +47,23 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
-    margin-bottom: 12px;
+    margin-bottom: var(--space-md);
 }
 
 .meal-items {
     list-style: none;
-    margin: 0 0 12px;
+    margin: 0 0 var(--space-md);
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-sm);
 }
 
 .meal-item {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding-bottom: 8px;
+    padding-bottom: var(--space-sm);
     border-bottom: 1px solid var(--border);
 }
 
@@ -73,7 +73,7 @@
 }
 
 .meal-item-name {
-    font-size: 0.9rem;
+    font-size: var(--text-base);
 }
 
 .meal-item-qty {
@@ -82,14 +82,14 @@
 }
 
 .meal-item-macros {
-    font-size: 0.8rem;
+    font-size: var(--text-sm);
     color: var(--muted);
 }
 
 .meal-subtotal {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    gap: var(--space-md);
     font-size: var(--text-sm);
     font-weight: 600;
     border-top: 1px solid var(--border);
@@ -109,7 +109,7 @@
 
 .meal-edit-actions {
     display: flex;
-    gap: 8px;
+    gap: var(--space-sm);
 }
 
 .meal-error {
@@ -119,14 +119,14 @@
 /* Amount prompt shown when a logged meal's units are too vague to convert to
    per-100 (e.g. "1 serving") — we ask instead of guessing. */
 .meal-save-prompt {
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
     border-top: 1px solid var(--border);
 }
 
 .meal-save-hint {
-    margin: 0 0 8px;
-    font-size: 0.8rem;
+    margin: 0 0 var(--space-sm);
+    font-size: var(--text-sm);
     color: var(--muted);
 }
 

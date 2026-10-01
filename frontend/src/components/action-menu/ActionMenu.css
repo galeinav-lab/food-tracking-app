@@ -20,6 +20,13 @@
     animation: amenu-in var(--dur-base) var(--ease-out);
 }
 
+/* Flipped above the trigger when there's no room before the bottom nav. */
+.amenu-pop-up {
+    top: auto;
+    bottom: calc(100% + 6px);
+    transform-origin: bottom right;
+}
+
 @keyframes amenu-in {
     from {
         opacity: 0;
@@ -34,7 +41,7 @@
 .amenu-item {
     display: block;
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px var(--space-md);
     border: none;
     border-radius: var(--r-control);
     background: transparent;

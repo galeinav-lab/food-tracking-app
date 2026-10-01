@@ -94,41 +94,49 @@ grid/track `rgba(214,255,170,0.08)` · axis text `#B4BFA4` · tooltip bg `#212B1
 3. Sheens (`--accent-soft`) stay ≤12% opacity — glow, not neon-everywhere.
 4. AA minimum everywhere; key text aims 7:1+ (OLED style guidance).
 
-## 3.5 — v3.1 additions: ambient glow + frosted glass
+## 3.5 — Ambient backdrop + glass (v3.1, revised in v3.2)
 
-### Ambient background (dashboard canvas)
-Fixed full-screen decorative layer behind the dashboard (`.home-ambient` in Home.css,
-`z-index: -1`, `pointer-events: none`, `aria-hidden`). Two layers:
-- **Base (static):** `radial-gradient(ellipse at 50% 32%, --ambient-mid → --ambient-deep → --bg)` —
-  lime-adjacent mid greens easing to the near-black edges that frame the screen.
-- **Bloom (animated):** a separate lime radial (`--ambient-bloom` core, ≤20% opacity — a
-  diffused bloom, never a hard disc) that "breathes": 22s `ease-in-out` alternate loop tweening
-  **only `opacity` (0.65→1) + `transform: scale(1→1.07)`** — never gradient stops/size.
-  Paused via `visibilitychange` (class toggle → `animation-play-state: paused`) and static
-  under `prefers-reduced-motion` (plus the global kill-switch).
+### Ambient background
+Two fixed, full-screen decorative layers (`z-index: -1`, `pointer-events: none`, `aria-hidden`):
+- **Base (static, every in-app page):** `.ambient` in Layout.css, rendered once by `Layout` when the
+  app shell shows. `radial-gradient(ellipse at 50% 32%, --ambient-mid → --ambient-deep → --bg)`.
+  Never animated. The glass cards read as glass only because this shows through their tint.
+- **Bloom (animated, dashboard only):** `.home-ambient` / `.home-ambient-bloom` in Home.css, on top
+  of the base. A lime radial that "breathes" (22s alternate loop, **only `opacity` + `transform:
+  scale`**). Paused via `visibilitychange`, static under `prefers-reduced-motion`.
 
 | Token | Value |
 |---|---|
-| `--ambient-mid` | `#2E401D` |
-| `--ambient-deep` | `#1A2412` |
-| `--ambient-bloom` | `rgba(163, 230, 53, 0.34)` |
+| `--ambient-mid` | `#3F5A25` |
+| `--ambient-deep` | `#202D14` |
+| `--ambient-bloom` | `rgba(163, 230, 53, 0.55)` |
 
-### Frosted-glass cards (`.glass` utility, index.css)
-Applied to the dashboard cards (hero, macro cards, fiber, weekly ring, water, meal/exercise
-cards). Semi-OPAQUE tint + MODEST blur — glass look, readable text, GPU-sane with many cards.
+### Glass tiers (index.css)
+Cards carry **no `backdrop-filter`**: over the smooth ambient gradient a blur is visually a no-op
+(measured on Home at 375/412px: mean per-pixel change ≈0.3/255), and the animated bloom made every
+blurred card re-blur each frame. The glass look = translucent tint + light border + top highlight.
+
+| Tier | Class / surface | Treatment |
+|---|---|---|
+| Card | `.glass` | `--glass-bg` tint + `--glass-border` + `--shadow-card, --glass-highlight`. No blur. |
+| Inset | `.glass-inset` | `--glass-inset-bg` — a recessed well *inside* a card (e.g. History's day detail). No blur. |
+| Float | + menu, sheets, toasts | Near-opaque, no blur (moves onto this tier in the dashboard/nav phase). |
+| Nav | `.bottomnav` | **The only blurred surface:** `.72` tint + `blur(var(--glass-blur))` (10px), `--glass-bg-solid` fallback. Applied in the dashboard/nav phase; until then it is `.85` + 14px. |
 
 | Token | Value |
 |---|---|
-| `--glass-bg` | `rgba(24, 31, 19, 0.60)` |
-| `--glass-bg-solid` | `rgba(24, 31, 19, 0.94)` (no-`backdrop-filter` fallback) |
-| `--glass-blur` | `10px` (do not crank) |
+| `--glass-bg` | `rgba(24, 31, 19, 0.55)` |
+| `--glass-inset-bg` | `rgba(16, 20, 13, 0.55)` |
+| `--glass-bg-solid` | `rgba(24, 31, 19, 0.94)` (nav fallback) |
+| `--glass-blur` | `10px` (nav only) |
 | `--glass-border` | `rgba(214, 255, 170, 0.18)` |
-| `--glass-highlight` | `inset 0 1px 0 rgba(214, 255, 170, 0.12)` (top glass edge) |
+| `--glass-highlight` | `inset 0 1px 0 rgba(214, 255, 170, 0.12)` |
 
-Rules: base `.glass` = solid fallback; `@supports (backdrop-filter)` upgrades to real blur.
-Doubled selector (`.glass.glass`) so it beats component backgrounds regardless of bundle order.
-Text on glass must stay AA over BOTH the bloom center and dark edges (the 72% tint guarantees
-the effective backdrop stays dark; verified ≈13:1 primary / ≈6.5:1 muted at the brightest point).
+Rules: doubled selectors (`.glass.glass`) so they beat component backgrounds regardless of bundle
+order; radius/padding stay with the component. Max blurred layers on any screen: **1** (the nav).
+Contrast: removing blur doesn't change it (blur keeps average luminance). Muted text on a card is
+≈6.3:1 over the base gradient's brightest point; over the Home bloom core at full intensity it
+computes to ≈3.9:1 — pre-existing, to fix with the dashboard phase.
 
 ## 3.6 — v3.2 additions: semantic tokens + shared building blocks
 
@@ -148,7 +156,10 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 - **Bottom sheet** — `<Sheet title ariaLabel onClose>` (`components/sheet/`): scrim, slide-up panel,
   handle, header + close. Every sheet/panel renders it; content styles stay with the feature.
 - **Loading** — `<Skeleton shape="line|block|circle">` inside `<SkeletonGroup label>`
-  (`components/skeleton/`) instead of "Loading…" text. Opacity-only pulse.
+  (`components/skeleton/`) instead of "Loading…" text. Opacity-only pulse. A `block` is drawn as
+  the glass card it stands in for.
+- **Entrances** — `.rise-in` (one element) and `.stagger` (on a list: children cascade by
+  `--stagger`, capped at the 8th child) using the shared `rise-in` keyframe (index.css).
 
 Motion rule: entrance keyframes never use `animation-fill-mode: forwards/both` — a held
 `transform` on an ancestor turns it into the containing block for `position: fixed` children.

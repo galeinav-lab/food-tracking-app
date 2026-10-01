@@ -61,7 +61,7 @@ function WeightEntry({ onLogged, initialWeightKg = null, autoFocus = false }: We
                     onChange={(e) => setWeightInput(e.target.value)}
                     autoFocus={autoFocus}
                 />
-                <button type="submit" className="weight-btn" disabled={submitting}>
+                <button type="submit" className="btn btn-primary" disabled={submitting}>
                     {submitting ? "Saving…" : "Log"}
                 </button>
             </form>

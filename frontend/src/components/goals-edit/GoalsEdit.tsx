@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { goalsService } from "../../services/goals.service";
 import { ApiError } from "../../services/http-client";
 import { INutrition } from "../../models/nutrition";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./GoalsEdit.css";
 
 const FIELDS: { key: keyof INutrition; label: string; unit: string }[] = [
@@ -89,7 +90,12 @@ function GoalsEdit(): JSX.Element {
     if (loading) {
         return (
             <div className="goals-edit">
-                <p className="goals-hint">Loading…</p>
+                <h1 className="goals-title">Edit daily goals</h1>
+                <SkeletonGroup label="Loading goals" className="goals-form glass">
+                    {FIELDS.map(({ key }) => (
+                        <Skeleton key={key} shape="block" height="64px" />
+                    ))}
+                </SkeletonGroup>
             </div>
         );
     }
@@ -98,7 +104,7 @@ function GoalsEdit(): JSX.Element {
         <div className="goals-edit">
             <h1 className="goals-title">Edit daily goals</h1>
 
-            <form className="goals-form" onSubmit={handleSubmit}>
+            <form className="goals-form glass rise-in" onSubmit={handleSubmit}>
                 {FIELDS.map(({ key, label, unit }) => (
                     <div className="goals-field" key={key}>
                         <label htmlFor={`goal-${key}`}>
@@ -119,10 +125,10 @@ function GoalsEdit(): JSX.Element {
                 {success && <p className="goals-success">Goals saved.</p>}
 
                 <div className="goals-actions">
-                    <button type="submit" className="goals-save" disabled={saving}>
+                    <button type="submit" className="btn btn-primary" disabled={saving}>
                         {saving ? "Saving…" : "Save goals"}
                     </button>
-                    <button type="button" className="goals-back" onClick={() => navigate("/")}>
+                    <button type="button" className="btn btn-secondary" onClick={() => navigate("/")}>
                         Back to dashboard
                     </button>
                 </div>

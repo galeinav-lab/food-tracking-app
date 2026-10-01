@@ -15,6 +15,12 @@ const LEVELS: { value: ActivityLevel; label: string }[] = [
     { value: "active", label: "Active (6–7 days/week)" },
 ];
 
+const CHEVRON = (
+    <svg className="settings-chev" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 6l6 6-6 6" />
+    </svg>
+);
+
 function Settings(): JSX.Element {
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.auth.user);
@@ -70,10 +76,10 @@ function Settings(): JSX.Element {
     };
 
     return (
-        <div className="settings">
+        <div className="settings stagger">
             <h1 className="settings-title">Settings</h1>
 
-            <div className="settings-section">
+            <div className="settings-section glass">
                 <label className="settings-label" htmlFor="activity-level">
                     Activity level
                 </label>
@@ -96,7 +102,7 @@ function Settings(): JSX.Element {
                 {error && <p className="settings-error">{error}</p>}
             </div>
 
-            <form className="settings-section" onSubmit={saveWater}>
+            <form className="settings-section glass" onSubmit={saveWater}>
                 <label className="settings-label" htmlFor="water-target">
                     Daily water target (litres)
                 </label>
@@ -111,7 +117,7 @@ function Settings(): JSX.Element {
                         value={waterL}
                         onChange={(e) => setWaterL(e.target.value)}
                     />
-                    <button type="submit" className="settings-save" disabled={waterSaving}>
+                    <button type="submit" className="btn btn-primary" disabled={waterSaving}>
                         {waterSaving ? "Saving…" : "Save"}
                     </button>
                 </div>
@@ -119,23 +125,26 @@ function Settings(): JSX.Element {
                 {waterError && <p className="settings-error">{waterError}</p>}
             </form>
 
-            <Link to="/settings/goals" className="settings-link">
-                Edit Daily Goals
-            </Link>
-
-            <Link to="/saved-foods" className="settings-link">
-                Manage Saved Foods
-            </Link>
-
-            {/* Weight logging + trajectory chart. Reachable here since it left
-                the bottom nav; the /weight page itself is unchanged. */}
-            <Link to="/weight" className="settings-link">
-                Track Weight
-            </Link>
+            {/* Sub-pages as one grouped list of rows. Weight logging lives here
+                since it left the bottom nav; the /weight page itself is unchanged. */}
+            <nav className="settings-nav glass" aria-label="More settings">
+                <Link to="/settings/goals" className="settings-row">
+                    Edit Daily Goals
+                    {CHEVRON}
+                </Link>
+                <Link to="/saved-foods" className="settings-row">
+                    Manage Saved Foods
+                    {CHEVRON}
+                </Link>
+                <Link to="/weight" className="settings-row">
+                    Track Weight
+                    {CHEVRON}
+                </Link>
+            </nav>
 
             <button
                 type="button"
-                className="settings-logout"
+                className="btn btn-danger btn-block settings-logout"
                 onClick={() => dispatch(logout())}
             >
                 Log out

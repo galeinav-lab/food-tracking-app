@@ -24,9 +24,12 @@
     border-radius: var(--r-pill);
 }
 
-/* A card-sized or chart-sized area. */
+/* A card-sized or chart-sized area: drawn as the glass card it stands in for
+   (a flat --surface-3 fill disappears into the ambient gradient). */
 .skel-block {
     height: 64px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--r-card);
 }
 

@@ -103,12 +103,14 @@
     --ambient-deep: #202D14; /* between mid and the dark edge (--bg) */
     --ambient-bloom: rgba(163, 230, 53, 0.55); /* diffused lime core */
 
-    /* v3.1 — Frosted-glass cards. Semi-opaque tint + modest blur (many live
-       blur layers on screen — don't crank the blur). Tint is translucent enough
-       for the glow to visibly bleed through. */
-    --glass-bg: rgba(24, 31, 19, 0.55);
-    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* fallback when backdrop-filter unsupported */
-    --glass-blur: 10px;
+    /* v3.2 — Glass. The look is the translucent tint + light border + top
+       highlight over the ambient gradient; cards carry NO backdrop blur (over a
+       smooth gradient it's invisible, and the animated bloom forced a re-blur
+       every frame). The bottom nav is the only blurred surface. */
+    --glass-bg: rgba(24, 31, 19, 0.55); /* card tier */
+    --glass-inset-bg: rgba(16, 20, 13, 0.55); /* inset tier: recessed wells inside a card */
+    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* nav fallback when backdrop-filter is unsupported */
+    --glass-blur: 10px; /* nav only */
     --glass-border: rgba(214, 255, 170, 0.18);
     --glass-highlight: inset 0 1px 0 rgba(214, 255, 170, 0.12); /* top glass edge */
 
@@ -202,23 +204,50 @@ code {
     box-shadow: var(--shadow-card);
 }
 
-/* Frosted-glass card treatment (v3.1). The doubled selector wins over each
-   component's own background/border regardless of CSS bundle order. Base rule =
-   the graceful fallback (solid semi-opaque tint — never a transparent mess);
-   @supports upgrades it to a real backdrop blur. */
+/* Glass card (v3.2): tint + border + top highlight, no backdrop-filter (see the
+   --glass-* tokens). The doubled selector wins over each component's own
+   background/border regardless of CSS bundle order. Radius/padding stay with
+   the component. Reads as glass only over the ambient gradient (.ambient). */
 .glass.glass {
-    background-color: var(--glass-bg-solid);
+    background-color: var(--glass-bg);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-card), var(--glass-highlight);
 }
 
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-    .glass.glass {
-        background-color: var(--glass-bg);
-        backdrop-filter: blur(var(--glass-blur));
-        -webkit-backdrop-filter: blur(var(--glass-blur));
+/* Inset tier: a recessed area INSIDE a glass card (never a card of its own). */
+.glass-inset.glass-inset {
+    background-color: var(--glass-inset-bg);
+}
+
+/* Shared entrance: fade + 6px rise. `backwards` hides an item during its delay
+   and holds nothing afterwards, so the element ends at transform: none (a held
+   transform would capture position: fixed descendants). */
+@keyframes rise-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
     }
 }
+
+.rise-in,
+.stagger > * {
+    animation: rise-in var(--dur-slow) var(--ease-out) backwards;
+}
+
+/* List cascade: each child starts --stagger after the previous one, capped at
+   the 8th so long lists never trail in (items 9+ share the last delay). */
+.stagger > :nth-child(2) { animation-delay: var(--stagger); }
+.stagger > :nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+.stagger > :nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
+.stagger > :nth-child(5) { animation-delay: calc(var(--stagger) * 4); }
+.stagger > :nth-child(6) { animation-delay: calc(var(--stagger) * 5); }
+.stagger > :nth-child(7) { animation-delay: calc(var(--stagger) * 6); }
+.stagger > :nth-child(8) { animation-delay: calc(var(--stagger) * 7); }
+.stagger > :nth-child(n + 9) { animation-delay: calc(var(--stagger) * 8); }
 
 /* Shared button (v3.2). Every button composes .btn + one variant (+ optional
    size/width modifier). Component CSS may add LAYOUT (flex, margins) but never

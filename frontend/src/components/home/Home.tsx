@@ -37,7 +37,7 @@ function Home(): JSX.Element {
 
     return (
         <div className="home">
-            {/* Ambient radial glow behind the dashboard (fixed, decorative only). */}
+            {/* Breathing lime bloom over the shared ambient gradient (fixed, decorative only). */}
             <div
                 className={ambientPaused ? "home-ambient home-ambient-paused" : "home-ambient"}
                 aria-hidden="true"

@@ -1,3 +1,21 @@
 .layout {
     min-height: 100vh;
 }
+
+/* Static ambient gradient behind every in-app page (mid greens → dark edges).
+   The glass cards read as glass only because this shows through their tint.
+   Fixed + z-index -1: paints above the <html> canvas, below all content (body
+   stays transparent — see the CANVAS RULE in index.css). Never animated; Home
+   adds its breathing lime bloom as a separate layer on top. */
+.ambient {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse 130% 100% at 50% 32%,
+        var(--ambient-mid) 0%,
+        var(--ambient-deep) 45%,
+        var(--bg) 82%
+    );
+}

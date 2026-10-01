@@ -1,6 +1,6 @@
-/* Fields for the strength editor. The sheet shell, the stepper (.st-step*) and
-   the error text come from LoggingSheet.css / Strength.css — only the form
-   controls are defined here. */
+/* Fields for the strength editor. The sheet shell comes from <Sheet>
+   (sheet/Sheet.css); the stepper (.st-step*) and the error text from
+   Strength.css — only the form controls are defined here. */
 .ste {
     display: flex;
     flex-direction: column;

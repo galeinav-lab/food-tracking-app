@@ -93,7 +93,7 @@ function Register(): JSX.Element {
 
                 {error && <p className="error-text">{error}</p>}
 
-                <button className="btn" type="submit" disabled={loading}>
+                <button className="btn btn-primary btn-block" type="submit" disabled={loading}>
                     {loading ? "Creating account…" : "Create account"}
                 </button>
 

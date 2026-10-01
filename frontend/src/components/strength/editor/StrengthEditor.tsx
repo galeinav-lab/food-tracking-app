@@ -4,6 +4,7 @@ import {
     MUSCLE_GROUPS,
     MuscleGroup,
 } from "../../../models/strength";
+import Sheet from "../../sheet/Sheet";
 import "./StrengthEditor.css";
 
 const GROUP_LABEL: Record<MuscleGroup, string> = {
@@ -45,8 +46,8 @@ interface StrengthEditorProps {
 }
 
 /**
- * Create/edit sheet for one exercise. Uses the app's standard bottom sheet
- * (.sheet-* from LoggingSheet) so it slides up and dims like every other modal.
+ * Create/edit sheet for one exercise. Uses the shared <Sheet> shell so it
+ * slides up and dims like every other modal.
  * The weight row is a stepper, not a bare field: bumping the load is the thing
  * users come here to do, and it's still two taps from the card's Edit button.
  */
@@ -115,134 +116,116 @@ function StrengthEditor({
     const shown = localError ?? error;
 
     return (
-        <div className="sheet-backdrop" onClick={onClose}>
-            <div
-                className="sheet"
-                role="dialog"
-                aria-modal="true"
-                aria-label={title}
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="sheet-handle" />
-                <div className="sheet-head">
-                    <h2 className="sheet-title">{title}</h2>
-                    <button type="button" className="sheet-close" onClick={onClose} aria-label="Close">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <path d="M6 6l12 12M18 6L6 18" />
-                        </svg>
+        <Sheet title={title} ariaLabel={title} onClose={onClose}>
+            <form className="ste" onSubmit={submit}>
+                <label className="ste-label" htmlFor="ste-name">
+                    Exercise
+                </label>
+                <input
+                    id="ste-name"
+                    className="ste-input"
+                    type="text"
+                    value={name}
+                    maxLength={80}
+                    placeholder="e.g. Bench press"
+                    onChange={(e) => setName(e.target.value)}
+                    autoFocus={!isEdit}
+                />
+
+                <label className="ste-label" htmlFor="ste-weight">
+                    Weight (kg) — 0 for bodyweight
+                </label>
+                <div className="st-step ste-step-lg">
+                    <button
+                        type="button"
+                        className="st-step-btn"
+                        onClick={() => bump(-STEP_KG)}
+                        aria-label={`Decrease weight by ${STEP_KG} kg`}
+                    >
+                        −
+                    </button>
+                    <input
+                        id="ste-weight"
+                        className="ste-input ste-weight-input"
+                        type="number"
+                        inputMode="decimal"
+                        min={0}
+                        max={MAX_KG}
+                        step={0.5}
+                        value={weight}
+                        onChange={(e) => setWeight(e.target.value)}
+                    />
+                    <button
+                        type="button"
+                        className="st-step-btn"
+                        onClick={() => bump(STEP_KG)}
+                        aria-label={`Increase weight by ${STEP_KG} kg`}
+                    >
+                        +
                     </button>
                 </div>
 
-                <form className="ste" onSubmit={submit}>
-                    <label className="ste-label" htmlFor="ste-name">
-                        Exercise
-                    </label>
-                    <input
-                        id="ste-name"
-                        className="ste-input"
-                        type="text"
-                        value={name}
-                        maxLength={80}
-                        placeholder="e.g. Bench press"
-                        onChange={(e) => setName(e.target.value)}
-                        autoFocus={!isEdit}
-                    />
-
-                    <label className="ste-label" htmlFor="ste-weight">
-                        Weight (kg) — 0 for bodyweight
-                    </label>
-                    <div className="st-step ste-step-lg">
-                        <button
-                            type="button"
-                            className="st-step-btn"
-                            onClick={() => bump(-STEP_KG)}
-                            aria-label={`Decrease weight by ${STEP_KG} kg`}
-                        >
-                            −
-                        </button>
+                <div className="ste-pair">
+                    <div className="ste-field">
+                        <label className="ste-label" htmlFor="ste-sets">
+                            Sets
+                        </label>
                         <input
-                            id="ste-weight"
-                            className="ste-input ste-weight-input"
+                            id="ste-sets"
+                            className="ste-input"
                             type="number"
-                            inputMode="decimal"
-                            min={0}
-                            max={MAX_KG}
-                            step={0.5}
-                            value={weight}
-                            onChange={(e) => setWeight(e.target.value)}
+                            inputMode="numeric"
+                            min={1}
+                            max={50}
+                            value={sets}
+                            onChange={(e) => setSets(e.target.value)}
                         />
-                        <button
-                            type="button"
-                            className="st-step-btn"
-                            onClick={() => bump(STEP_KG)}
-                            aria-label={`Increase weight by ${STEP_KG} kg`}
-                        >
-                            +
-                        </button>
                     </div>
-
-                    <div className="ste-pair">
-                        <div className="ste-field">
-                            <label className="ste-label" htmlFor="ste-sets">
-                                Sets
-                            </label>
-                            <input
-                                id="ste-sets"
-                                className="ste-input"
-                                type="number"
-                                inputMode="numeric"
-                                min={1}
-                                max={50}
-                                value={sets}
-                                onChange={(e) => setSets(e.target.value)}
-                            />
-                        </div>
-                        <div className="ste-field">
-                            <label className="ste-label" htmlFor="ste-reps">
-                                Reps
-                            </label>
-                            <input
-                                id="ste-reps"
-                                className="ste-input"
-                                type="number"
-                                inputMode="numeric"
-                                min={1}
-                                max={500}
-                                value={reps}
-                                onChange={(e) => setReps(e.target.value)}
-                            />
-                        </div>
+                    <div className="ste-field">
+                        <label className="ste-label" htmlFor="ste-reps">
+                            Reps
+                        </label>
+                        <input
+                            id="ste-reps"
+                            className="ste-input"
+                            type="number"
+                            inputMode="numeric"
+                            min={1}
+                            max={500}
+                            value={reps}
+                            onChange={(e) => setReps(e.target.value)}
+                        />
                     </div>
+                </div>
 
-                    <label className="ste-label" htmlFor="ste-group">
-                        Muscle group
-                    </label>
-                    <select
-                        id="ste-group"
-                        className="ste-input"
-                        value={muscleGroup}
-                        onChange={(e) => setMuscleGroup(e.target.value as MuscleGroup)}
-                    >
-                        {MUSCLE_GROUPS.map((g) => (
-                            <option key={g} value={g}>
-                                {GROUP_LABEL[g]}
-                            </option>
-                        ))}
-                    </select>
+                <label className="ste-label" htmlFor="ste-group">
+                    Muscle group
+                </label>
+                <select
+                    id="ste-group"
+                    className="ste-input"
+                    value={muscleGroup}
+                    onChange={(e) => setMuscleGroup(e.target.value as MuscleGroup)}
+                >
+                    {MUSCLE_GROUPS.map((g) => (
+                        <option key={g} value={g}>
+                            {GROUP_LABEL[g]}
+                        </option>
+                    ))}
+                </select>
 
-                    {shown && <p className="st-error">{shown}</p>}
+                {shown && <p className="st-error">{shown}</p>}
 
-                    <div className="ste-actions">
-                        <button type="submit" className="ste-save" disabled={busy}>
-                            {busy ? "Saving…" : isEdit ? "Save changes" : "Add exercise"}
-                        </button>
-                        <button type="button" className="ste-cancel" onClick={onClose} disabled={busy}>
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                <div className="ste-actions">
+                    <button type="submit" className="ste-save" disabled={busy}>
+                        {busy ? "Saving…" : isEdit ? "Save changes" : "Add exercise"}
+                    </button>
+                    <button type="button" className="ste-cancel" onClick={onClose} disabled={busy}>
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </Sheet>
     );
 }
 

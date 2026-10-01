@@ -1,4 +1,5 @@
-/* Sits above the bottom nav (which is ~64px tall + safe area). */
+/* Sits above the bottom nav (which is ~64px tall + safe area). The panel itself
+   is the shared <Sheet> shell; only the FAB and the form content live here. */
 .rp-fab {
     position: fixed;
     right: max(12px, env(safe-area-inset-right, 0px));
@@ -8,15 +9,15 @@
     align-items: center;
     gap: 6px;
     padding: 9px 13px;
-    border-radius: 999px;
+    border-radius: var(--r-pill);
     border: 1px solid var(--border);
-    background: var(--surface-2, #172132);
+    background: var(--surface-2);
     color: var(--text);
     font-size: 0.8rem;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
-    box-shadow: var(--shadow-card, 0 6px 18px rgba(0, 0, 0, 0.4));
+    box-shadow: var(--shadow-card);
     opacity: 0.92;
 }
 
@@ -30,79 +31,19 @@
     line-height: 1;
 }
 
-.rp-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 2100;
-    background: rgba(0, 0, 0, 0.55);
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0;
-}
-
-.rp-panel {
-    width: 100%;
-    max-width: var(--content-max);
-    background: var(--card-bg, #172132);
-    border: 1px solid var(--border);
-    border-bottom: none;
-    border-radius: 18px 18px 0 0;
-    padding: 18px 18px calc(20px + env(safe-area-inset-bottom));
-    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.45);
-    animation: rp-up 220ms ease;
-}
-
-@keyframes rp-up {
-    from {
-        transform: translateY(100%);
-    }
-    to {
-        transform: translateY(0);
-    }
-}
-
-.rp-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-}
-
-.rp-title {
-    margin: 0;
-    font-size: 1.05rem;
-    font-family: var(--font-head, inherit);
-    color: var(--text);
-}
-
-.rp-close {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 1.5rem;
-    line-height: 1;
-    cursor: pointer;
-}
-
-.rp-close:hover {
-    color: var(--text);
-}
-
 .rp-label {
     display: block;
     margin-bottom: 6px;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     color: var(--muted);
 }
 
 .rp-textarea {
     width: 100%;
-    box-sizing: border-box;
     padding: 11px 12px;
     border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--surface-2, #1e2a3d);
+    border-radius: var(--r-control);
+    background: var(--surface-2);
     color: var(--text);
     font-size: 0.92rem;
     font-family: inherit;
@@ -123,27 +64,4 @@
 .rp-actions {
     display: flex;
     justify-content: flex-end;
-}
-
-.rp-submit {
-    padding: 11px 20px;
-    border-radius: 10px;
-    border: none;
-    background: var(--accent, #3b82f6);
-    color: var(--on-accent);
-    font-size: 0.92rem;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-}
-
-.rp-submit:disabled {
-    opacity: 0.6;
-    cursor: default;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .rp-panel {
-        animation: none;
-    }
 }

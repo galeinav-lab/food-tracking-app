@@ -130,6 +130,29 @@ Doubled selector (`.glass.glass`) so it beats component backgrounds regardless o
 Text on glass must stay AA over BOTH the bloom center and dark edges (the 72% tint guarantees
 the effective backdrop stays dark; verified ≈13:1 primary / ≈6.5:1 muted at the brightest point).
 
+## 3.6 — v3.2 additions: semantic tokens + shared building blocks
+
+Values above are unchanged; v3.2 adds names for ROLES so components stop picking raw numbers.
+
+| Group | Tokens |
+|---|---|
+| Radius roles | `--r-control` (=r-sm, inputs/buttons/chips) · `--r-card` (=r-md) · `--r-raised` (=r-lg, hero) · `--r-sheet` (=r-xl) |
+| Type scale | `--text-xs .72` · `--text-sm .85` · `--text-base .95` · `--text-md 1.1` · `--text-lg 1.3` · `--text-display 2.8` (rem) |
+| Elevation / chrome | `--shadow-sheet` · `--scrim` · `--danger-soft` |
+| Motion | `--ease-in-out` · `--dur-pulse` (skeleton loop) |
+
+**Shared building blocks — use these, never a per-screen copy:**
+- **Buttons** — `.btn` + one variant `.btn-primary` / `.btn-secondary` / `.btn-danger`, optional
+  `.btn-sm` / `.btn-block` (index.css). Includes press-compress, focus ring, hover gated to
+  `(hover: hover)`. Component CSS may add layout only.
+- **Bottom sheet** — `<Sheet title ariaLabel onClose>` (`components/sheet/`): scrim, slide-up panel,
+  handle, header + close. Every sheet/panel renders it; content styles stay with the feature.
+- **Loading** — `<Skeleton shape="line|block|circle">` inside `<SkeletonGroup label>`
+  (`components/skeleton/`) instead of "Loading…" text. Opacity-only pulse.
+
+Motion rule: entrance keyframes never use `animation-fill-mode: forwards/both` — a held
+`transform` on an ancestor turns it into the containing block for `position: fixed` children.
+
 ## 4. Anti-patterns (do not)
 - Pure black `#000` canvas or neutral-gray darks (the green undertone is the identity).
 - White text on lime fills; lime-on-lime; heavy borders instead of lightness elevation.

@@ -13,13 +13,13 @@
 
 .toast {
     pointer-events: auto;
-    background: var(--surface-2, #172132);
+    background: var(--surface-2);
     border: 1px solid var(--border);
     border-left: 4px solid var(--accent);
     border-radius: 12px;
     padding: 12px 14px;
-    box-shadow: var(--shadow-card, 0 8px 24px rgba(0, 0, 0, 0.35));
-    animation: toast-in 220ms ease;
+    box-shadow: var(--shadow-card);
+    animation: toast-in var(--dur-slow) var(--ease-out);
 }
 
 @keyframes toast-in {
@@ -34,11 +34,11 @@
 }
 
 .toast-error {
-    border-left-color: var(--error, #f87171);
+    border-left-color: var(--error);
 }
 
 .toast-success {
-    border-left-color: var(--macro-fat, #34d399);
+    border-left-color: var(--macro-fat);
 }
 
 .toast-row {
@@ -98,7 +98,7 @@
 .toast-pre {
     margin: 8px 0 6px;
     padding: 8px;
-    background: var(--surface-3, rgba(0, 0, 0, 0.25));
+    background: var(--surface-3);
     border-radius: 8px;
     font-size: 0.72rem;
     line-height: 1.4;

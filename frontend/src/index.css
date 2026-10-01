@@ -73,11 +73,30 @@
     --r-xl: 28px;
     --r-pill: 999px;
 
+    /* v3.2 — Semantic radii. Components pick a ROLE, never a raw px value. */
+    --r-control: var(--r-sm); /* inputs, buttons, chips */
+    --r-card: var(--r-md); /* standard cards */
+    --r-raised: var(--r-lg); /* hero / prominent cards */
+    --r-sheet: var(--r-xl); /* bottom sheets */
+
+    /* v3.2 — Type scale (rem). Headings use --font-head, everything else --font-body. */
+    --text-xs: 0.72rem; /* chips, foot notes */
+    --text-sm: 0.85rem; /* hints, secondary labels */
+    --text-base: 0.95rem; /* body, inputs, buttons */
+    --text-md: 1.1rem; /* section / sheet titles */
+    --text-lg: 1.3rem; /* page titles */
+    --text-display: 2.8rem; /* hero number */
+
     /* Elevation — deep dark shadows + lime glow */
     --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
     --shadow-raised: 0 10px 28px rgba(0, 0, 0, 0.55);
     --shadow-nav: 0 -6px 24px rgba(0, 0, 0, 0.5);
+    --shadow-sheet: 0 -10px 40px rgba(0, 0, 0, 0.55);
     --glow-accent: 0 6px 20px rgba(163, 230, 53, 0.35);
+
+    /* Scrim behind sheets and the + fan (deep olive-black). */
+    --scrim: rgba(6, 8, 4, 0.55);
+    --danger-soft: rgba(248, 113, 113, 0.1);
 
     /* v3.1 — Ambient gradient background (lime bloom center → dark olive edges) */
     --ambient-mid: #3F5A25; /* mid green around the bloom */
@@ -97,11 +116,13 @@
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-in: cubic-bezier(0.4, 0, 1, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1); /* looping pulses */
     --dur-fast: 150ms;
     --dur-base: 200ms;
     --dur-slow: 250ms;
     --dur-press: 50ms;
     --dur-sweep: 550ms;
+    --dur-pulse: 1100ms; /* skeleton loop (one direction) */
     --stagger: 40ms;
 }
 
@@ -197,6 +218,106 @@ code {
         backdrop-filter: blur(var(--glass-blur));
         -webkit-backdrop-filter: blur(var(--glass-blur));
     }
+}
+
+/* Shared button (v3.2). Every button composes .btn + one variant (+ optional
+   size/width modifier). Component CSS may add LAYOUT (flex, margins) but never
+   re-declares the look — that's how the per-screen copies drifted apart.
+   Press feedback is transform-only; hover is gated to real pointers so it never
+   sticks after a tap on touch screens. */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 11px var(--space-lg);
+    border: 1px solid transparent;
+    border-radius: var(--r-control);
+    font-family: inherit;
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform var(--dur-press) var(--ease-out),
+        background-color var(--dur-fast) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out),
+        color var(--dur-fast) var(--ease-out);
+}
+
+.btn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.btn:disabled {
+    cursor: default;
+}
+
+/* Filled lime — the one main action on a screen/sheet. */
+.btn-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.btn-primary:active:not(:disabled) {
+    background: var(--accent-press);
+}
+
+/* Muted label (not --on-accent) so "Saving…" stays readable on the dim fill. */
+.btn-primary:disabled {
+    background: var(--accent-disabled);
+    color: var(--muted);
+}
+
+/* Quiet filled chip — secondary actions (Cancel, Edit, Retry, +250 ml). */
+.btn-secondary {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+/* Outline in the error color — destructive actions (Log out, Delete). */
+.btn-danger {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--error);
+}
+
+.btn-secondary:disabled,
+.btn-danger:disabled {
+    opacity: 0.6;
+}
+
+@media (hover: hover) {
+    .btn-primary:hover:not(:disabled) {
+        background: var(--accent-cta);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+        border-color: var(--error);
+        background: var(--danger-soft);
+    }
+}
+
+/* Modifiers */
+.btn-sm {
+    padding: 5px 10px;
+    font-size: var(--text-sm);
+}
+
+.btn-block {
+    width: 100%;
 }
 
 /* Subtle light scrollbars */

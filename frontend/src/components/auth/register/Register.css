@@ -6,7 +6,9 @@
     padding: 24px;
 }
 
-.card {
+/* Scoped to the auth screens: a bare .card here is global and used to clamp the
+   dashboard cards to 360px (see the .card note in index.css). */
+.auth-container .card {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -54,22 +56,6 @@
 .form-field input:focus {
     outline: none;
     border-color: var(--accent);
-}
-
-.btn {
-    width: 100%;
-    padding: 11px 14px;
-    background: var(--accent);
-    color: var(--on-accent);
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-}
-
-.btn:disabled {
-    background: var(--accent-disabled);
-    cursor: default;
 }
 
 .error-text {

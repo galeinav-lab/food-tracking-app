@@ -46,8 +46,8 @@ or `CDP_PORT` via environment variables when the defaults don't fit.
 - `actions`: async JS run in the page with helpers `set(selector, value)` (fires React's input
   event), `click(selector, index?)`, `sleep(ms)`, `slow(ms)` (toggle the mock's delay mid-job).
 - `slow`: mock delay applied before the route loads (capture skeletons with a short `wait`).
-- `scroll`: a pixel offset, a CSS selector (that element is scrolled to the top of the screen), or
-  `"text-under-nav"` (meal rows behind the bottom nav).
+- `scroll`: a pixel offset, a CSS selector (that element is scrolled to the top of the screen),
+  `"text-under-nav"` (meal rows behind the bottom nav), or `"keep"` (wherever `actions` scrolled).
 - `css`: injected after load (e.g. to A/B a style for `compare.mjs`).
 
 The mock data and the fake session never touch the real backend or database.

@@ -50,7 +50,10 @@ for (const job of jobs) {
     }
     await evaluate(`(() => { let s = document.getElementById("cmp"); if (!s) { s = document.createElement("style"); s.id = "cmp"; document.head.appendChild(s); } s.textContent = ${JSON.stringify(job.css ?? "")}; return true; })()`);
     let y = 0;
-    if (job.scroll === "text-under-nav") {
+    if (job.scroll === "keep") {
+        // Leave the page wherever job.actions scrolled it.
+        y = await evaluate("Math.round(scrollY)");
+    } else if (job.scroll === "text-under-nav") {
         // Put a meal's item rows (dense text) right behind the bottom nav.
         y = await evaluate(`(() => { const it = document.querySelectorAll(".meal-item")[1]; if (!it) return 0; const r = it.getBoundingClientRect(); return Math.max(0, Math.round(r.top + scrollY - (innerHeight - 50))); })()`);
     } else if (typeof job.scroll === "string" && job.scroll !== "top") {

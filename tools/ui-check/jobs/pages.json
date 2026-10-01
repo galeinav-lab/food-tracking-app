@@ -1,0 +1,114 @@
+[
+ {
+  "name": "375-settings",
+  "width": 375,
+  "height": 812,
+  "path": "/settings"
+ },
+ {
+  "name": "375-history",
+  "width": 375,
+  "height": 812,
+  "path": "/history"
+ },
+ {
+  "name": "375-history-expanded",
+  "width": 375,
+  "height": 812,
+  "path": "/history",
+  "click": ".history-row"
+ },
+ {
+  "name": "375-weight",
+  "width": 375,
+  "height": 812,
+  "path": "/weight"
+ },
+ {
+  "name": "375-goals",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals"
+ },
+ {
+  "name": "375-home-top",
+  "width": 375,
+  "height": 812,
+  "path": "/"
+ },
+ {
+  "name": "375-home-scrolled",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": "text-under-nav"
+ },
+ {
+  "name": "412-settings",
+  "width": 412,
+  "height": 915,
+  "path": "/settings"
+ },
+ {
+  "name": "412-history",
+  "width": 412,
+  "height": 915,
+  "path": "/history"
+ },
+ {
+  "name": "412-history-expanded",
+  "width": 412,
+  "height": 915,
+  "path": "/history",
+  "click": ".history-row"
+ },
+ {
+  "name": "412-weight",
+  "width": 412,
+  "height": 915,
+  "path": "/weight"
+ },
+ {
+  "name": "412-goals",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals"
+ },
+ {
+  "name": "412-home-top",
+  "width": 412,
+  "height": 915,
+  "path": "/"
+ },
+ {
+  "name": "412-home-scrolled",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": "text-under-nav"
+ },
+ {
+  "name": "375-history-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/history",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "375-weight-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/weight",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "375-goals-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals",
+  "slow": 8000,
+  "wait": 1500
+ }
+]

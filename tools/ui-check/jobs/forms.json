@@ -1,0 +1,238 @@
+[
+ {
+  "name": "375-login",
+  "width": 375,
+  "height": 812,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "375-login-focus",
+  "width": 375,
+  "height": 812,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800,
+  "actions": "set(\"#login-email\",\"dana@example.test\"); document.querySelector(\"#login-email\").focus();"
+ },
+ {
+  "name": "375-login-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800,
+  "actions": "set(\"#login-email\",\"dana@example.test\"); set(\"#login-password\",\"example-pass\"); await sleep(50);await slow(8000); click(\"button[type=submit]\");",
+  "afterWait": 900
+ },
+ {
+  "name": "375-login-error",
+  "width": 375,
+  "height": 812,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800,
+  "actions": "set(\"#login-email\",\"dana@example.test\"); set(\"#login-password\",\"example-pass\"); await sleep(50);click(\"button[type=submit]\");",
+  "afterWait": 1200
+ },
+ {
+  "name": "375-register",
+  "width": 375,
+  "height": 812,
+  "path": "/register",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "375-onb-1-empty",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800
+ },
+ {
+  "name": "375-onb-1-error",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "click(\".onb-next\"); await sleep(350);"
+ },
+ {
+  "name": "375-onb-1-filled",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);"
+ },
+ {
+  "name": "375-onb-2-goal",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);"
+ },
+ {
+  "name": "375-onb-3-target",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);set(\"#onb-target\",\"74\"); set(\"#onb-timeframe\",\"6\"); await sleep(50);"
+ },
+ {
+  "name": "375-onb-4-review",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);set(\"#onb-target\",\"74\"); set(\"#onb-timeframe\",\"6\"); await sleep(50);click(\".onb-next\"); await sleep(350);"
+ },
+ {
+  "name": "375-onb-5-calculating",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);set(\"#onb-target\",\"74\"); set(\"#onb-timeframe\",\"6\"); await sleep(50);click(\".onb-next\"); await sleep(350);await slow(8000); click(\".onb-next\");",
+  "afterWait": 900
+ },
+ {
+  "name": "375-onb-6-done",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);set(\"#onb-target\",\"74\"); set(\"#onb-timeframe\",\"6\"); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-next\");",
+  "afterWait": 1500
+ },
+ {
+  "name": "412-login",
+  "width": 412,
+  "height": 915,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "412-login-focus",
+  "width": 412,
+  "height": 915,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800,
+  "actions": "set(\"#login-email\",\"dana@example.test\"); document.querySelector(\"#login-email\").focus();"
+ },
+ {
+  "name": "412-login-loading",
+  "width": 412,
+  "height": 915,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800,
+  "actions": "set(\"#login-email\",\"dana@example.test\"); set(\"#login-password\",\"example-pass\"); await sleep(50);await slow(8000); click(\"button[type=submit]\");",
+  "afterWait": 900
+ },
+ {
+  "name": "412-login-error",
+  "width": 412,
+  "height": 915,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800,
+  "actions": "set(\"#login-email\",\"dana@example.test\"); set(\"#login-password\",\"example-pass\"); await sleep(50);click(\"button[type=submit]\");",
+  "afterWait": 1200
+ },
+ {
+  "name": "412-register",
+  "width": 412,
+  "height": 915,
+  "path": "/register",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "412-onb-1-empty",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800
+ },
+ {
+  "name": "412-onb-1-error",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "click(\".onb-next\"); await sleep(350);"
+ },
+ {
+  "name": "412-onb-1-filled",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);"
+ },
+ {
+  "name": "412-onb-2-goal",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);"
+ },
+ {
+  "name": "412-onb-3-target",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);set(\"#onb-target\",\"74\"); set(\"#onb-timeframe\",\"6\"); await sleep(50);"
+ },
+ {
+  "name": "412-onb-4-review",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);set(\"#onb-target\",\"74\"); set(\"#onb-timeframe\",\"6\"); await sleep(50);click(\".onb-next\"); await sleep(350);"
+ },
+ {
+  "name": "412-onb-5-calculating",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);set(\"#onb-target\",\"74\"); set(\"#onb-timeframe\",\"6\"); await sleep(50);click(\".onb-next\"); await sleep(350);await slow(8000); click(\".onb-next\");",
+  "afterWait": 900
+ },
+ {
+  "name": "412-onb-6-done",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800,
+  "actions": "set(\"#onb-weight\",\"80\"); set(\"#onb-height\",\"178\"); set(\"#onb-age\",\"30\"); await sleep(50); click(\".onb-opt\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-goal\", 0); await sleep(50);click(\".onb-next\"); await sleep(350);set(\"#onb-target\",\"74\"); set(\"#onb-timeframe\",\"6\"); await sleep(50);click(\".onb-next\"); await sleep(350);click(\".onb-next\");",
+  "afterWait": 1500
+ }
+]

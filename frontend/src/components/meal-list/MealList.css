@@ -1,6 +1,6 @@
 .meal-list-title {
     margin: 0 0 14px;
-    font-size: 1.1rem;
+    font-size: var(--text-md);
 }
 
 .meal-list-hint {

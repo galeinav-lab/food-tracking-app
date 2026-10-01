@@ -254,9 +254,9 @@ upserts the summary (deletes it if zero logs). Every food **log/edit/delete** an
 3. **Component** — `components/x/X.tsx` + `X.css`; `function X(): JSX.Element` (import `type JSX` — React 19).
    Read `selectedDate`/`refreshKey` from `useRefresh()`; fetch on demand with loading/error states; use
    design tokens (no hardcoded colors); recharts colors come from `styles/colors.ts`. Reuse the shared
-   UI blocks rather than restyling your own: `.btn` + variant and `.field`/`.input`/`.form-error`
-   (index.css), `<Sheet>` for any bottom sheet, `<Skeleton>`/`<SkeletonGroup>` for loading (see
-   `design-system/nutritrack/MASTER.md` §3.6).
+   UI blocks rather than restyling your own: `.btn` + variant, `.field`/`.input`/`.form-error`,
+   `.card-list`/`.chip` (index.css), `<Sheet>` for any bottom sheet, `<ActionMenu>` for a card's
+   actions, `<Skeleton>`/`<SkeletonGroup>` for loading (see `design-system/nutritrack/MASTER.md` §3.6).
 4. **Check it visually** — `tools/ui-check/` runs the frontend against a mock API (sample data, no
    backend, no login) and screenshots routes/states at phone widths in headless Chrome. Dev-only:
    nothing in the app imports it. Usage and job format in `tools/ui-check/README.md`.

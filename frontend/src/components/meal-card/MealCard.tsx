@@ -5,6 +5,7 @@ import { toastBus } from "../../services/toast-bus";
 import { ApiError } from "../../services/http-client";
 import { IFoodLog } from "../../models/food-log";
 import { SavedFoodBaseUnit } from "../../models/saved-food";
+import ActionMenu from "../action-menu/ActionMenu";
 import "./MealCard.css";
 
 interface MealCardProps {
@@ -117,19 +118,24 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
             <div className="meal-card glass">
                 <form className="meal-edit-form" onSubmit={submitEdit}>
                     <textarea
-                        className="meal-edit-input"
+                        className="input meal-edit-input"
                         value={draft}
                         onChange={(e) => setDraft(e.target.value)}
                         rows={2}
                         disabled={busy}
                     />
                     <div className="meal-edit-actions">
-                        <button type="submit" className="btn-mini" disabled={busy || !draft.trim()}>
+                        <button
+                            type="submit"
+                            className={busy ? "btn btn-primary btn-sm btn-loading" : "btn btn-primary btn-sm"}
+                            disabled={busy || !draft.trim()}
+                            aria-busy={busy}
+                        >
                             {busy ? "Analyzing…" : "Save"}
                         </button>
                         <button
                             type="button"
-                            className="btn-mini"
+                            className="btn btn-secondary btn-sm"
                             onClick={cancelEdit}
                             disabled={busy}
                         >
@@ -137,7 +143,11 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                         </button>
                     </div>
                 </form>
-                {error && <p className="meal-error">{error}</p>}
+                {error && (
+                    <p className="form-error meal-error" role="alert">
+                        {error}
+                    </p>
+                )}
             </div>
         );
     }
@@ -156,29 +166,19 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                 <div className="meal-head-main">
                     <p className="meal-desc">{meal.description}</p>
                 </div>
+                {/* Actions live behind a compact menu: three inline buttons squeezed
+                    the meal name into a one-syllable column on phones. The trigger
+                    spins while a save/remove is in flight. */}
                 {!readOnly && (
-                    <div className="meal-actions">
-                        <button
-                            type="button"
-                            className="btn-mini"
-                            onClick={() => void saveAsFood()}
-                            disabled={busy || saving}
-                            title="Save as a reusable food"
-                        >
-                            {saving ? "Saving…" : "Save food"}
-                        </button>
-                        <button type="button" className="btn-mini" onClick={startEdit} disabled={busy}>
-                            Edit
-                        </button>
-                        <button
-                            type="button"
-                            className="btn-mini btn-mini-danger"
-                            onClick={handleRemove}
-                            disabled={busy}
-                        >
-                            {busy ? "Removing…" : "Remove"}
-                        </button>
-                    </div>
+                    <ActionMenu
+                        label="Meal actions"
+                        busy={busy || saving}
+                        items={[
+                            { label: "Save as food", onSelect: () => void saveAsFood() },
+                            { label: "Edit", onSelect: startEdit },
+                            { label: "Remove", onSelect: () => void handleRemove(), danger: true },
+                        ]}
+                    />
                 )}
             </div>
 
@@ -186,21 +186,21 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                 action buttons squeezed it to ~9px, so every chip wrapped onto a
                 line by itself. Out here the row has the whole card to sit on. */}
             <div className="meal-dots">
-                <span className="meal-dot meal-dot-cal">{fmt(meal.totals.calories)} kcal</span>
-                <span className="meal-dot meal-dot-p">P {fmt(meal.totals.protein)}g</span>
-                <span className="meal-dot meal-dot-c">C {fmt(meal.totals.carbs)}g</span>
-                <span className="meal-dot meal-dot-f">F {fmt(meal.totals.fat)}g</span>
+                <span className="chip chip-accent">{fmt(meal.totals.calories)} kcal</span>
+                <span className="chip chip-protein">P {fmt(meal.totals.protein)}g</span>
+                <span className="chip chip-carbs">C {fmt(meal.totals.carbs)}g</span>
+                <span className="chip chip-fat">F {fmt(meal.totals.fat)}g</span>
             </div>
 
             {/* Shown only when the server couldn't infer what amount this meal was. */}
             {amountPrompt && (
-                <form className="meal-save-prompt" onSubmit={submitAmountPrompt}>
+                <form className="meal-save-prompt fade-in" onSubmit={submitAmountPrompt}>
                     <p className="meal-save-hint">
                         How much was this meal in total? We need it to store macros per 100.
                     </p>
                     <div className="meal-save-row">
                         <input
-                            className="meal-save-input"
+                            className="input input-sm meal-save-input"
                             type="number"
                             min="1"
                             step="1"
@@ -213,7 +213,8 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                         />
                         <button
                             type="button"
-                            className={saveUnit === "g" ? "btn-mini btn-mini-on" : "btn-mini"}
+                            className="btn btn-secondary btn-sm"
+                            aria-pressed={saveUnit === "g"}
                             onClick={() => setSaveUnit("g")}
                             disabled={saving}
                         >
@@ -221,18 +222,24 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                         </button>
                         <button
                             type="button"
-                            className={saveUnit === "ml" ? "btn-mini btn-mini-on" : "btn-mini"}
+                            className="btn btn-secondary btn-sm"
+                            aria-pressed={saveUnit === "ml"}
                             onClick={() => setSaveUnit("ml")}
                             disabled={saving}
                         >
                             ml
                         </button>
-                        <button type="submit" className="btn-mini" disabled={saving}>
+                        <button
+                            type="submit"
+                            className={saving ? "btn btn-primary btn-sm btn-loading" : "btn btn-primary btn-sm"}
+                            disabled={saving}
+                            aria-busy={saving}
+                        >
                             {saving ? "Saving…" : "Save"}
                         </button>
                         <button
                             type="button"
-                            className="btn-mini"
+                            className="btn btn-secondary btn-sm"
                             onClick={() => setAmountPrompt(false)}
                             disabled={saving}
                         >
@@ -273,7 +280,11 @@ function MealCard({ meal, onChanged, readOnly = false }: MealCardProps): JSX.Ele
                 </div>
             )}
 
-            {error && <p className="meal-error">{error}</p>}
+            {error && (
+                <p className="form-error meal-error" role="alert">
+                    {error}
+                </p>
+            )}
         </div>
     );
 }

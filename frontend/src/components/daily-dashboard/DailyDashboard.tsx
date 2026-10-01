@@ -66,7 +66,7 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
         return (
             <div className="card glass dash-msg">
                 <p>Couldn't load your dashboard.</p>
-                <button type="button" className="btn-mini" onClick={() => void load()}>
+                <button type="button" className="btn btn-secondary btn-sm" onClick={() => void load()}>
                     Try again
                 </button>
             </div>

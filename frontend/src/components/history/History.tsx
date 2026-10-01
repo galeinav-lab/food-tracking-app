@@ -160,7 +160,7 @@ function History(): JSX.Element {
                             {isExpanded && (
                                 <div className="history-detail glass-inset">
                                     {dayLoading && (
-                                        <SkeletonGroup label="Loading meals">
+                                        <SkeletonGroup label="Loading meals" className="card-list">
                                             <Skeleton shape="block" height="96px" />
                                             <Skeleton shape="block" height="96px" />
                                         </SkeletonGroup>
@@ -177,9 +177,13 @@ function History(): JSX.Element {
                                             </button>
                                         </div>
                                     )}
-                                    {!dayLoading &&
-                                        !dayError &&
-                                        dayLogs.map((m) => <MealCard key={m._id} meal={m} readOnly />)}
+                                    {!dayLoading && !dayError && dayLogs.length > 0 && (
+                                        <div className="card-list">
+                                            {dayLogs.map((m) => (
+                                                <MealCard key={m._id} meal={m} readOnly />
+                                            ))}
+                                        </div>
+                                    )}
                                     {!dayLoading && !dayError && (
                                         <div className="history-totals">
                                             <span>Day total</span>

@@ -2,6 +2,7 @@ import { type JSX, useCallback, useEffect, useState } from "react";
 import { exerciseService } from "../../services/exercise.service";
 import { ApiError } from "../../services/http-client";
 import { IExerciseEntry } from "../../models/exercise";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./ExerciseList.css";
 
 interface ExerciseListProps {
@@ -62,13 +63,17 @@ function ExerciseList({ date, refreshKey, onChanged }: ExerciseListProps): JSX.E
         <div className="exercise-section">
             <h2 className="exercise-section-title">Exercise</h2>
 
-            {loading && <p className="exercise-section-hint">Loading…</p>}
+            {loading && (
+                <SkeletonGroup label="Loading exercise" className="card-list">
+                    <Skeleton shape="block" height="76px" />
+                </SkeletonGroup>
+            )}
             {error && <p className="exercise-section-error">{error}</p>}
 
             {!loading && loadError && (
                 <div>
                     <p className="exercise-section-hint">Couldn't load this day's exercise.</p>
-                    <button type="button" className="btn-mini" onClick={() => void load()}>
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => void load()}>
                         Try again
                     </button>
                 </div>
@@ -78,43 +83,50 @@ function ExerciseList({ date, refreshKey, onChanged }: ExerciseListProps): JSX.E
                 <p className="exercise-section-hint">No exercise logged.</p>
             )}
 
-            {!loading &&
-                !loadError &&
-                entries.map((en) => (
-                    <div className="ex-card glass" key={en._id}>
-                        <div className="ex-card-head">
-                            <div className="ex-thumb" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M6.5 6.5 17.5 17.5" />
-                                    <path d="m21 21-1-1" />
-                                    <path d="m3 3 1 1" />
-                                    <path d="m18 22 4-4" />
-                                    <path d="m2 6 4-4" />
-                                    <path d="m3 10 7-7" />
-                                    <path d="m14 21 7-7" />
-                                </svg>
-                            </div>
-                            <div className="ex-card-main">
-                                <p className="ex-type">{en.type}</p>
-                                <div className="ex-dots">
-                                    <span className="ex-dot ex-dot-cal">{fmt(en.caloriesBurned)} kcal</span>
-                                    {en.durationMin ? (
-                                        <span className="ex-dot">{fmt(en.durationMin)} min</span>
-                                    ) : null}
+            {!loading && !loadError && entries.length > 0 && (
+                <div className="card-list stagger">
+                    {entries.map((en) => (
+                        <div className="ex-card glass" key={en._id}>
+                            <div className="ex-card-head">
+                                <div className="ex-thumb" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M6.5 6.5 17.5 17.5" />
+                                        <path d="m21 21-1-1" />
+                                        <path d="m3 3 1 1" />
+                                        <path d="m18 22 4-4" />
+                                        <path d="m2 6 4-4" />
+                                        <path d="m3 10 7-7" />
+                                        <path d="m14 21 7-7" />
+                                    </svg>
                                 </div>
-                                {en.note && <p className="ex-note">{en.note}</p>}
+                                <div className="ex-card-main">
+                                    <p className="ex-type">{en.type}</p>
+                                    <div className="ex-dots">
+                                        <span className="chip chip-burn">{fmt(en.caloriesBurned)} kcal</span>
+                                        {en.durationMin ? (
+                                            <span className="chip">{fmt(en.durationMin)} min</span>
+                                        ) : null}
+                                    </div>
+                                    {en.note && <p className="ex-note">{en.note}</p>}
+                                </div>
+                                <button
+                                    type="button"
+                                    className={
+                                        busyId === en._id
+                                            ? "btn btn-secondary btn-sm btn-loading"
+                                            : "btn btn-secondary btn-sm"
+                                    }
+                                    onClick={() => onRemove(en._id)}
+                                    disabled={busyId === en._id}
+                                    aria-busy={busyId === en._id}
+                                >
+                                    {busyId === en._id ? "Removing…" : "Remove"}
+                                </button>
                             </div>
-                            <button
-                                type="button"
-                                className="ex-remove"
-                                onClick={() => onRemove(en._id)}
-                                disabled={busyId === en._id}
-                            >
-                                {busyId === en._id ? "Removing…" : "Remove"}
-                            </button>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

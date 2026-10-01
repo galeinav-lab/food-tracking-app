@@ -5,6 +5,7 @@ import { foodService } from "../../services/food.service";
 import { ApiError } from "../../services/http-client";
 import { ISavedFood } from "../../models/saved-food";
 import { INutrition } from "../../models/nutrition";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./SavedFoodPicker.css";
 
 interface SavedFoodPickerProps {
@@ -98,7 +99,7 @@ function SavedFoodPicker({ date, onLogged }: SavedFoodPickerProps): JSX.Element 
         const preview = scale(picked.per100, valid ? num : 0);
 
         return (
-            <form className="sfp-amount" onSubmit={submit}>
+            <form className="sfp-amount rise-in" onSubmit={submit}>
                 <button
                     type="button"
                     className="sfp-back"
@@ -113,13 +114,13 @@ function SavedFoodPicker({ date, onLogged }: SavedFoodPickerProps): JSX.Element 
                     {fmt(picked.per100.calories)} kcal per 100 {picked.baseUnit}
                 </p>
 
-                <label className="sfp-label" htmlFor="sfp-amount">
+                <label className="field-label sfp-label" htmlFor="sfp-amount">
                     Amount ({picked.baseUnit})
                 </label>
                 <div className="sfp-amount-row">
                     <input
                         id="sfp-amount"
-                        className="sfp-input"
+                        className="input sfp-input"
                         type="number"
                         min="1"
                         step="1"
@@ -133,19 +134,32 @@ function SavedFoodPicker({ date, onLogged }: SavedFoodPickerProps): JSX.Element 
                 </div>
 
                 {/* Live preview of exactly what will be logged. */}
-                <div className="sfp-preview glass">
+                <div className="sfp-preview glass-inset">
                     <span className="sfp-preview-cal">{fmt(preview.calories)} kcal</span>
                     <div className="sfp-preview-macros">
-                        <span className="sfp-dot sfp-dot-p">P {fmt(preview.protein)}g</span>
-                        <span className="sfp-dot sfp-dot-c">C {fmt(preview.carbs)}g</span>
-                        <span className="sfp-dot sfp-dot-f">F {fmt(preview.fat)}g</span>
-                        <span className="sfp-dot">Fiber {fmt(preview.fiber)}g</span>
+                        <span className="chip chip-protein">P {fmt(preview.protein)}g</span>
+                        <span className="chip chip-carbs">C {fmt(preview.carbs)}g</span>
+                        <span className="chip chip-fat">F {fmt(preview.fat)}g</span>
+                        <span className="chip">Fiber {fmt(preview.fiber)}g</span>
                     </div>
                 </div>
 
-                {error && <p className="sfp-error">{error}</p>}
+                {error && (
+                    <p className="form-error sfp-error" role="alert">
+                        {error}
+                    </p>
+                )}
 
-                <button type="submit" className="sfp-submit" disabled={submitting || !valid}>
+                <button
+                    type="submit"
+                    className={
+                        submitting
+                            ? "btn btn-primary btn-block btn-loading sfp-submit"
+                            : "btn btn-primary btn-block sfp-submit"
+                    }
+                    disabled={submitting || !valid}
+                    aria-busy={submitting}
+                >
                     {submitting ? "Logging…" : `Log ${valid ? fmt(num) : ""} ${picked.baseUnit}`}
                 </button>
             </form>
@@ -156,7 +170,7 @@ function SavedFoodPicker({ date, onLogged }: SavedFoodPickerProps): JSX.Element 
     return (
         <div className="sfp">
             <input
-                className="sfp-search"
+                className="input sfp-search"
                 type="search"
                 placeholder="Search saved foods…"
                 value={query}
@@ -164,8 +178,18 @@ function SavedFoodPicker({ date, onLogged }: SavedFoodPickerProps): JSX.Element 
                 aria-label="Search saved foods"
             />
 
-            {loading && <p className="sfp-hint">Loading…</p>}
-            {error && <p className="sfp-error">{error}</p>}
+            {loading && (
+                <SkeletonGroup label="Loading saved foods" className="sfp-list">
+                    <Skeleton shape="block" height="62px" />
+                    <Skeleton shape="block" height="62px" />
+                    <Skeleton shape="block" height="62px" />
+                </SkeletonGroup>
+            )}
+            {error && (
+                <p className="form-error sfp-error" role="alert">
+                    {error}
+                </p>
+            )}
 
             {!loading && !error && foods.length === 0 && (
                 <div className="sfp-empty">
@@ -177,7 +201,7 @@ function SavedFoodPicker({ date, onLogged }: SavedFoodPickerProps): JSX.Element 
                                 No saved foods yet. Saved foods let you log a food again in
                                 seconds — no AI needed.
                             </p>
-                            <Link to="/saved-foods" className="sfp-empty-link">
+                            <Link to="/saved-foods" className="btn btn-primary sfp-empty-link">
                                 Create your first food
                             </Link>
                             <p className="sfp-hint sfp-hint-sm">
@@ -188,28 +212,30 @@ function SavedFoodPicker({ date, onLogged }: SavedFoodPickerProps): JSX.Element 
                 </div>
             )}
 
-            {!loading &&
-                !error &&
-                foods.map((food) => (
-                    <button
-                        type="button"
-                        className="sfp-item glass"
-                        key={food._id}
-                        onClick={() => pick(food)}
-                    >
-                        <span className="sfp-item-main">
-                            <span className="sfp-item-name">{food.name}</span>
-                            <span className="sfp-item-per">
-                                {fmt(food.per100.calories)} kcal · P {fmt(food.per100.protein)}g · C{" "}
-                                {fmt(food.per100.carbs)}g · F {fmt(food.per100.fat)}g
-                                <span className="sfp-item-unit"> / 100 {food.baseUnit}</span>
+            {!loading && !error && foods.length > 0 && (
+                <div className="sfp-list stagger">
+                    {foods.map((food) => (
+                        <button
+                            type="button"
+                            className="sfp-item glass-inset"
+                            key={food._id}
+                            onClick={() => pick(food)}
+                        >
+                            <span className="sfp-item-main">
+                                <span className="sfp-item-name">{food.name}</span>
+                                <span className="sfp-item-per">
+                                    {fmt(food.per100.calories)} kcal · P {fmt(food.per100.protein)}g · C{" "}
+                                    {fmt(food.per100.carbs)}g · F {fmt(food.per100.fat)}g
+                                    <span className="sfp-item-unit"> / 100 {food.baseUnit}</span>
+                                </span>
                             </span>
-                        </span>
-                        <span className="sfp-item-go" aria-hidden="true">
-                            ›
-                        </span>
-                    </button>
-                ))}
+                            <span className="sfp-item-go" aria-hidden="true">
+                                ›
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

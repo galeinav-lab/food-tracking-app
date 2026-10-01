@@ -1,8 +1,7 @@
+/* Surface = .glass; buttons/inputs = .btn-sm / .input-sm. */
 .water {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--card-bg);
-    padding: 16px;
+    border-radius: var(--r-card);
+    padding: var(--space-lg);
 }
 
 .water-head {
@@ -20,21 +19,23 @@
 .water-amount {
     font-size: 0.9rem;
     color: var(--muted);
+    font-variant-numeric: tabular-nums;
 }
 
 .water-bar {
     height: 10px;
-    background: var(--border);
-    border-radius: 999px;
-    overflow: hidden;
+    background: var(--ring-track);
+    border-radius: var(--r-pill);
+    overflow: hidden; /* rounds the fill's ends */
     margin-bottom: 12px;
 }
 
+/* Full width, scaled from the left edge (transform-only animation). */
 .water-fill {
     height: 100%;
     background: var(--water);
-    border-radius: 999px;
-    transition: width var(--dur-sweep) var(--ease-out);
+    transform-origin: left center;
+    transition: transform var(--dur-sweep) var(--ease-out);
 }
 
 .water-actions {
@@ -44,36 +45,6 @@
     align-items: center;
 }
 
-.water-btn {
-    padding: 8px 12px;
-    background: var(--surface-2);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
-        transform var(--dur-press) var(--ease-out);
-}
-
-.water-btn:active:not(:disabled) {
-    transform: scale(0.95);
-}
-
-.water-btn:hover:not(:disabled) {
-    border-color: var(--water);
-    color: var(--water);
-}
-
-.water-btn:disabled {
-    opacity: 0.6;
-    cursor: default;
-}
-
-.water-undo {
-    color: var(--muted);
-}
-
 .water-custom {
     display: flex;
     gap: 6px;
@@ -81,21 +52,9 @@
 }
 
 .water-input {
-    width: 80px;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: var(--text-input);
-    font-family: inherit;
-}
-
-.water-input:focus {
-    outline: none;
-    border-color: var(--water);
+    width: 84px;
 }
 
 .water-error {
-    color: var(--error);
-    font-size: 0.85rem;
-    margin: 10px 0 0;
+    margin-top: 10px;
 }

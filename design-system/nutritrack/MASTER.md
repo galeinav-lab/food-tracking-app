@@ -120,7 +120,7 @@ blurred card re-blur each frame. The glass look = translucent tint + light borde
 |---|---|---|
 | Card | `.glass` | `--glass-bg` tint + `--glass-border` + `--shadow-card, --glass-highlight`. No blur. |
 | Inset | `.glass-inset` | `--glass-inset-bg` — a recessed well *inside* a card (e.g. History's day detail). No blur. |
-| Float | + menu, sheets, toasts | Near-opaque, no blur (moves onto this tier in the dashboard/nav phase). |
+| Float | `.glass-float` | `--glass-bg-solid` + `--border-strong` + raised shadow, no blur. Used by `<ActionMenu>`; the + menu, sheets and toasts move onto it in the dashboard/nav phase. |
 | Nav | `.bottomnav` | **The only blurred surface:** `.72` tint + `blur(var(--glass-blur))` (10px), `--glass-bg-solid` fallback. Applied in the dashboard/nav phase; until then it is `.85` + 14px. |
 
 | Token | Value |
@@ -148,6 +148,7 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 | Type scale | `--text-xs .72` · `--text-sm .85` · `--text-base .95` · `--text-md 1.1` · `--text-lg 1.3` · `--text-display 2.8` (rem) |
 | Form controls | `--text-input 1rem` — every input/select/textarea is ≥16px (iOS Safari zooms on focus below that); outside the type scale on purpose |
 | Elevation / chrome | `--shadow-sheet` · `--scrim` · `--danger-soft` |
+| Tints | `--macro-protein-soft` · `--macro-carbs-soft` · `--macro-fat-soft` (14% chips/thumbs) · `--on-accent-soft` (badges on lime) |
 | Motion | `--ease-in-out` · `--dur-pulse` (skeleton loop) |
 
 **Shared building blocks — use these, never a per-screen copy:**
@@ -165,6 +166,11 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 - **Loading** — `<Skeleton shape="line|block|circle">` inside `<SkeletonGroup label>`
   (`components/skeleton/`) instead of "Loading…" text. Opacity-only pulse. A `block` is drawn as
   the glass card it stands in for.
+- **Lists & cards** — `.card-list` (vertical stack, `--space-md` gap) + `.stagger`; macro/duration
+  labels are `.chip` + `.chip-accent` / `-protein` / `-carbs` / `-fat` / `-burn`.
+- **Card actions** — `<ActionMenu label items busy>` (`components/action-menu/`): a `.btn-icon` "⋯"
+  trigger opening a float-tier menu; closes on outside tap / Escape / pick, spinner while busy.
+  Use it when inline buttons would squeeze a card's title. `.input-sm` pairs inputs with `.btn-sm`.
 - **Entrances** — `.rise-in` (one element) and `.stagger` (on a list: children cascade by
   `--stagger`, capped at the 8th child) using the shared `rise-in` keyframe (index.css). `.fade-in` is the opacity-only
   variant (step changes, scrims).

@@ -1,28 +1,14 @@
+/* One meal. Surface = .glass, entrance = the list's .stagger, actions = the
+   shared <ActionMenu>, chips = .chip, buttons/inputs = .btn / .input.
+   Only layout and type live here. */
 .meal-card {
-    border: 1px solid var(--border);
-    border-radius: var(--r-md);
+    position: relative; /* anchors the action menu's popover */
+    border-radius: var(--r-card);
     padding: 14px;
-    background: var(--card-bg);
-    margin-bottom: 12px;
-    box-shadow: var(--shadow-card);
-    /* New/refetched cards ease in — the logging-success confirmation. */
-    animation: card-in var(--dur-slow) var(--ease-out);
-}
-
-@keyframes card-in {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .meal-card-head {
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 12px;
@@ -32,7 +18,7 @@
     flex-shrink: 0;
     width: 46px;
     height: 46px;
-    border-radius: 12px;
+    border-radius: var(--r-control);
     background: var(--accent-soft);
     display: flex;
     align-items: center;
@@ -40,94 +26,28 @@
     color: var(--accent);
 }
 
+/* Takes every pixel the thumb and the ⋯ button leave. */
 .meal-head-main {
     flex: 1;
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    align-self: center;
 }
 
 .meal-desc {
     margin: 0;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--text-base);
+    line-height: 1.35;
     overflow-wrap: anywhere;
 }
 
-/* Chips sit inline and wrap only when the row genuinely runs out of width.
-   Lives directly on the card (not in .meal-head-main) so it gets the full width;
-   the head's margin-bottom supplies the space above it. */
+/* Chips sit inline and wrap only when the row genuinely runs out of width. */
 .meal-dots {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
     margin-bottom: 12px;
-}
-
-.meal-dot {
-    /* Shrink to content; never squeezed narrower than its text. */
-    flex: 0 0 auto;
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: var(--surface-2);
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-}
-
-.meal-dot-cal {
-    color: var(--accent);
-    background: var(--accent-soft);
-}
-
-.meal-dot-p {
-    color: var(--macro-protein);
-    background: rgba(251, 113, 133, 0.14);
-}
-
-.meal-dot-c {
-    color: var(--macro-carbs);
-    background: rgba(251, 191, 36, 0.14);
-}
-
-.meal-dot-f {
-    color: var(--macro-fat);
-    background: rgba(45, 212, 191, 0.14);
-}
-
-.meal-actions {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-.btn-mini {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    background: var(--surface-2);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
-        transform var(--dur-press) var(--ease-out);
-}
-
-.btn-mini:active:not(:disabled) {
-    transform: scale(0.95);
-}
-
-.btn-mini:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-}
-
-.btn-mini-danger:hover {
-    border-color: var(--error);
-    color: var(--error);
 }
 
 .meal-items {
@@ -158,7 +78,7 @@
 
 .meal-item-qty {
     color: var(--muted);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
 }
 
 .meal-item-macros {
@@ -170,12 +90,13 @@
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     font-weight: 600;
     border-top: 1px solid var(--border);
     padding-top: 10px;
 }
 
+/* Edit mode */
 .meal-edit-form {
     display: flex;
     flex-direction: column;
@@ -183,18 +104,7 @@
 }
 
 .meal-edit-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: var(--text-input);
-    font-family: inherit;
     resize: vertical;
-}
-
-.meal-edit-input:focus {
-    outline: none;
-    border-color: var(--accent);
 }
 
 .meal-edit-actions {
@@ -203,9 +113,7 @@
 }
 
 .meal-error {
-    color: var(--error);
-    font-size: 0.85rem;
-    margin: 10px 0 0;
+    margin-top: 10px;
 }
 
 /* Amount prompt shown when a logged meal's units are too vague to convert to
@@ -214,7 +122,6 @@
     margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid var(--border);
-    animation: card-in var(--dur-slow) var(--ease-out);
 }
 
 .meal-save-hint {
@@ -232,17 +139,4 @@
 
 .meal-save-input {
     width: 92px;
-    padding: 6px 10px;
-    font-size: var(--text-input);
-}
-
-.meal-save-input:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-.btn-mini-on {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    color: var(--accent);
 }

@@ -3,6 +3,7 @@ import { foodService } from "../../services/food.service";
 import { ApiError } from "../../services/http-client";
 import { IFoodLog } from "../../models/food-log";
 import MealCard from "../meal-card/MealCard";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./MealList.css";
 
 interface MealListProps {
@@ -45,17 +46,24 @@ function MealList({ date, refreshKey, onChanged }: MealListProps): JSX.Element {
         <div className="meal-list">
             <h2 className="meal-list-title">Meals</h2>
 
-            {loading && <p className="meal-list-hint">Loading…</p>}
+            {loading && (
+                <SkeletonGroup label="Loading meals" className="card-list">
+                    <Skeleton shape="block" height="132px" />
+                    <Skeleton shape="block" height="132px" />
+                </SkeletonGroup>
+            )}
             {error && <p className="meal-list-error">{error}</p>}
             {!loading && !error && logs.length === 0 && (
                 <p className="meal-list-hint">No meals logged for this day.</p>
             )}
 
-            {!loading &&
-                !error &&
-                logs.map((meal) => (
-                    <MealCard key={meal._id} meal={meal} onChanged={onChanged} />
-                ))}
+            {!loading && !error && logs.length > 0 && (
+                <div className="card-list stagger">
+                    {logs.map((meal) => (
+                        <MealCard key={meal._id} meal={meal} onChanged={onChanged} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

@@ -96,23 +96,24 @@ function SavedFoodForm({
         <form className="sff" onSubmit={submit}>
             <h2 className="sff-title">{title}</h2>
 
-            <label className="sff-label" htmlFor="sff-name">
+            <label className="field-label sff-label" htmlFor="sff-name">
                 Name
             </label>
             <input
                 id="sff-name"
-                className="sff-input"
+                className="input"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Greek yogurt 5%"
                 disabled={busy}
             />
 
-            <span className="sff-label">Base unit</span>
+            <span className="field-label sff-label">Base unit</span>
             <div className="sff-unit-toggle" role="group" aria-label="Base unit">
                 <button
                     type="button"
-                    className={baseUnit === "g" ? "sff-unit sff-unit-on" : "sff-unit"}
+                    className="btn btn-secondary sff-unit"
+                    aria-pressed={baseUnit === "g"}
                     onClick={() => setBaseUnit("g")}
                     disabled={busy}
                 >
@@ -120,7 +121,8 @@ function SavedFoodForm({
                 </button>
                 <button
                     type="button"
-                    className={baseUnit === "ml" ? "sff-unit sff-unit-on" : "sff-unit"}
+                    className="btn btn-secondary sff-unit"
+                    aria-pressed={baseUnit === "ml"}
                     onClick={() => setBaseUnit("ml")}
                     disabled={busy}
                 >
@@ -128,18 +130,18 @@ function SavedFoodForm({
                 </button>
             </div>
 
-            <span className="sff-label">Per 100 {baseUnit}</span>
+            <span className="field-label sff-label">Per 100 {baseUnit}</span>
             <div className="sff-macros">
                 {MACRO_FIELDS.map(({ key, label }) => {
                     const unread = unreadKeys.includes(key);
                     return (
                         <div className="sff-macro-field" key={key}>
-                            <label className="sff-macro-label" htmlFor={`sff-${key}`}>
+                            <label className="field-label sff-macro-label" htmlFor={`sff-${key}`}>
                                 {label}
                             </label>
                             <input
                                 id={`sff-${key}`}
-                                className={unread ? "sff-input sff-input-unread" : "sff-input"}
+                                className={unread ? "input sff-input-unread" : "input"}
                                 type="number"
                                 min="0"
                                 step="0.1"
@@ -155,13 +157,22 @@ function SavedFoodForm({
                 })}
             </div>
 
-            {(localError || error) && <p className="sff-error">{localError ?? error}</p>}
+            {(localError || error) && (
+                <p className="form-error sff-error" role="alert">
+                    {localError ?? error}
+                </p>
+            )}
 
             <div className="sff-actions">
-                <button type="submit" className="sff-save" disabled={busy}>
+                <button
+                    type="submit"
+                    className={busy ? "btn btn-primary btn-loading sff-save" : "btn btn-primary sff-save"}
+                    disabled={busy}
+                    aria-busy={busy}
+                >
                     {busy ? "Saving…" : submitLabel}
                 </button>
-                <button type="button" className="sff-cancel" onClick={onCancel} disabled={busy}>
+                <button type="button" className="btn btn-secondary" onClick={onCancel} disabled={busy}>
                     {cancelLabel}
                 </button>
             </div>

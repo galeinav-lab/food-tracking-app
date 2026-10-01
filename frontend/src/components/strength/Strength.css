@@ -1,5 +1,5 @@
-/* Strength list. Deliberately thin: the cards use the shared .glass surface and
-   .btn-mini actions (MealCard.css), and the editor reuses the .sheet-* modal. */
+/* Strength list. Deliberately thin: cards = shared .glass in a .card-list
+   .stagger, actions = .btn-sm, editor = the shared <Sheet>. */
 .st {
     display: flex;
     flex-direction: column;
@@ -15,25 +15,7 @@
 .st-title {
     margin: 0;
     font-family: var(--font-head);
-    font-size: 1.3rem;
-}
-
-.st-add {
-    flex-shrink: 0;
-    padding: 8px 14px;
-    border-radius: var(--r-pill);
-    border: none;
-    background: var(--accent);
-    color: var(--on-accent);
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform var(--dur-press) var(--ease-out);
-}
-
-.st-add:active {
-    transform: scale(0.95);
+    font-size: var(--text-lg);
 }
 
 .st-intro {
@@ -79,13 +61,14 @@
     font-weight: 600;
     white-space: nowrap;
     cursor: pointer;
-    transition: border-color var(--dur-fast) var(--ease-out),
-        background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
-        transform var(--dur-press) var(--ease-out);
+    -webkit-tap-highlight-color: transparent;
+    transition: transform var(--dur-press) var(--ease-out);
 }
 
-.st-tab:hover {
-    border-color: var(--border-strong);
+@media (hover: hover) {
+    .st-tab:hover {
+        border-color: var(--border-strong);
+    }
 }
 
 .st-tab:active {
@@ -109,27 +92,14 @@
 }
 
 .st-tab-on .st-tab-count {
-    background: rgba(22, 32, 10, 0.18);
+    background: var(--on-accent-soft);
     color: var(--on-accent);
 }
 
 /* ── Cards ──────────────────────────────────────────────────────────── */
 .st-card {
-    border-radius: var(--r-md);
+    border-radius: var(--r-card);
     padding: 14px;
-    margin-bottom: 12px;
-    animation: st-in var(--dur-slow) var(--ease-out);
-}
-
-@keyframes st-in {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .st-card-top {
@@ -144,7 +114,7 @@
     flex: 1;
     min-width: 0;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--text-base);
     overflow-wrap: anywhere;
 }
 
@@ -191,8 +161,8 @@
     font-size: 1.15rem;
     line-height: 1;
     cursor: pointer;
-    transition: background var(--dur-fast) var(--ease-out),
-        transform var(--dur-press) var(--ease-out);
+    -webkit-tap-highlight-color: transparent;
+    transition: transform var(--dur-press) var(--ease-out);
 }
 
 .st-step-btn:active:not(:disabled) {
@@ -237,8 +207,7 @@
     line-height: 1.5;
 }
 
+/* Look = .form-error (page and editor); spacing only. */
 .st-error {
-    color: var(--error);
-    font-size: 0.85rem;
     margin: 8px 0 0;
 }

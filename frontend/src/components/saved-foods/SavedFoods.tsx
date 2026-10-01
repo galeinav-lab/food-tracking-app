@@ -3,6 +3,7 @@ import { savedFoodService } from "../../services/saved-food.service";
 import { ApiError } from "../../services/http-client";
 import { ISavedFood } from "../../models/saved-food";
 import SavedFoodForm, { SavedFoodFormValues } from "../saved-food-form/SavedFoodForm";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./SavedFoods.css";
 
 const fmt = (n: number): string => Math.round(n).toLocaleString();
@@ -102,7 +103,7 @@ function SavedFoods(): JSX.Element {
         <div className="sf">
             <header className="sf-head">
                 <h1 className="sf-title">Saved foods</h1>
-                <button type="button" className="sf-add" onClick={openCreate}>
+                <button type="button" className="btn btn-primary btn-sm" onClick={openCreate}>
                     + New
                 </button>
             </header>
@@ -112,7 +113,7 @@ function SavedFoods(): JSX.Element {
             </p>
 
             <input
-                className="sf-search"
+                className="input sf-search"
                 type="search"
                 placeholder="Search your foods…"
                 value={query}
@@ -121,7 +122,7 @@ function SavedFoods(): JSX.Element {
             />
 
             {formOpen && (
-                <div className="sf-form glass">
+                <div className="sf-form glass rise-in">
                     {/* Same form component the label scanner uses for its confirm step. */}
                     <SavedFoodForm
                         key={editing?._id ?? "new"}
@@ -138,13 +139,23 @@ function SavedFoods(): JSX.Element {
                 </div>
             )}
 
-            {loading && <p className="sf-hint">Loading…</p>}
-            {error && <p className="sf-error">{error}</p>}
+            {loading && (
+                <SkeletonGroup label="Loading saved foods" className="card-list">
+                    <Skeleton shape="block" height="92px" />
+                    <Skeleton shape="block" height="92px" />
+                    <Skeleton shape="block" height="92px" />
+                </SkeletonGroup>
+            )}
+            {error && (
+                <p className="form-error sf-error" role="alert">
+                    {error}
+                </p>
+            )}
 
             {!loading && loadError && (
                 <div>
                     <p className="sf-hint">Couldn't load your saved foods.</p>
-                    <button type="button" className="btn-mini" onClick={() => void load(query)}>
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => void load(query)}>
                         Try again
                     </button>
                 </div>
@@ -158,42 +169,49 @@ function SavedFoods(): JSX.Element {
                 </p>
             )}
 
-            {!loading &&
-                !loadError &&
-                foods.map((food) => (
-                    <div className="sf-card glass" key={food._id}>
-                        <div className="sf-card-main">
-                            <p className="sf-name">{food.name}</p>
-                            <div className="sf-dots">
-                                <span className="sf-dot sf-dot-cal">
-                                    {fmt(food.per100.calories)} kcal
-                                </span>
-                                <span className="sf-dot">P {fmt(food.per100.protein)}g</span>
-                                <span className="sf-dot">C {fmt(food.per100.carbs)}g</span>
-                                <span className="sf-dot">F {fmt(food.per100.fat)}g</span>
+            {!loading && !loadError && foods.length > 0 && (
+                <div className="card-list stagger">
+                    {foods.map((food) => (
+                        <div className="sf-card glass" key={food._id}>
+                            <div className="sf-card-main">
+                                <p className="sf-name">{food.name}</p>
+                                <div className="sf-dots">
+                                    <span className="chip chip-accent">
+                                        {fmt(food.per100.calories)} kcal
+                                    </span>
+                                    <span className="chip chip-protein">P {fmt(food.per100.protein)}g</span>
+                                    <span className="chip chip-carbs">C {fmt(food.per100.carbs)}g</span>
+                                    <span className="chip chip-fat">F {fmt(food.per100.fat)}g</span>
+                                </div>
+                                <p className="sf-per">per 100 {food.baseUnit}</p>
                             </div>
-                            <p className="sf-per">per 100 {food.baseUnit}</p>
+                            <div className="sf-card-actions">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary btn-sm"
+                                    onClick={() => openEdit(food)}
+                                    disabled={busyId === food._id}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    type="button"
+                                    className={
+                                        busyId === food._id
+                                            ? "btn btn-secondary btn-sm btn-loading"
+                                            : "btn btn-secondary btn-sm"
+                                    }
+                                    onClick={() => onDelete(food)}
+                                    disabled={busyId === food._id}
+                                    aria-busy={busyId === food._id}
+                                >
+                                    {busyId === food._id ? "Deleting…" : "Delete"}
+                                </button>
+                            </div>
                         </div>
-                        <div className="sf-card-actions">
-                            <button
-                                type="button"
-                                className="btn-mini"
-                                onClick={() => openEdit(food)}
-                                disabled={busyId === food._id}
-                            >
-                                Edit
-                            </button>
-                            <button
-                                type="button"
-                                className="btn-mini btn-mini-danger"
-                                onClick={() => onDelete(food)}
-                                disabled={busyId === food._id}
-                            >
-                                {busyId === food._id ? "Deleting…" : "Delete"}
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

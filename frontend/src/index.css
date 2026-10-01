@@ -34,12 +34,17 @@
     --accent-disabled: #3F4A26;
     --accent-soft: rgba(163, 230, 53, 0.12);
     --on-accent: #16200A;
+    --on-accent-soft: rgba(22, 32, 10, 0.18); /* badges sitting on a lime fill */
 
     /* Macros (distinct from each other + the lime accent) */
     --macro-protein: #FB7185;
     --macro-carbs: #FBBF24;
     --macro-fat: #2DD4BF;
     --macro-fiber: #C084FC;
+    /* Soft macro tints for chips/thumbs (14% of the macro colour). */
+    --macro-protein-soft: rgba(251, 113, 133, 0.14);
+    --macro-carbs-soft: rgba(251, 191, 36, 0.14);
+    --macro-fat-soft: rgba(45, 212, 191, 0.14);
 
     /* Functional (success = spring green, deliberately NOT the lime accent) */
     --success: #4ADE80;
@@ -112,7 +117,7 @@
        every frame). The bottom nav is the only blurred surface. */
     --glass-bg: rgba(24, 31, 19, 0.55); /* card tier */
     --glass-inset-bg: rgba(16, 20, 13, 0.55); /* inset tier: recessed wells inside a card */
-    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* nav fallback when backdrop-filter is unsupported */
+    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* float tier; nav fallback without backdrop-filter */
     --glass-blur: 10px; /* nav only */
     --glass-border: rgba(214, 255, 170, 0.18);
     --glass-highlight: inset 0 1px 0 rgba(214, 255, 170, 0.12); /* top glass edge */
@@ -218,9 +223,59 @@ code {
     box-shadow: var(--shadow-card), var(--glass-highlight);
 }
 
-/* Inset tier: a recessed area INSIDE a glass card (never a card of its own). */
+/* Inset tier: a recessed area INSIDE a glass card or sheet (never a card of its own). */
 .glass-inset.glass-inset {
     background-color: var(--glass-inset-bg);
+}
+
+/* Float tier: surfaces that pop over content (menus, sheets, toasts). Near-opaque
+   so text behind never competes; no blur. */
+.glass-float.glass-float {
+    background-color: var(--glass-bg-solid);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-raised), var(--glass-highlight);
+}
+
+/* Vertical stack of cards (meals, exercises, lifts, saved foods). Pair with
+   .stagger for the cascade entrance. */
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Small pill label (macros, durations). Colour variants by macro. */
+.chip {
+    flex: 0 0 auto;
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.chip-accent {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.chip-protein {
+    background: var(--macro-protein-soft);
+    color: var(--macro-protein);
+}
+
+.chip-carbs {
+    background: var(--macro-carbs-soft);
+    color: var(--macro-carbs);
+}
+
+/* Teal: fat, and calories burned by exercise. */
+.chip-fat,
+.chip-burn {
+    background: var(--macro-fat-soft);
+    color: var(--macro-fat);
 }
 
 /* Shared entrance: fade + 6px rise. `backwards` hides an item during its delay
@@ -364,6 +419,14 @@ code {
     width: 100%;
 }
 
+/* Icon-only round button (e.g. a card's ⋯ menu). Label it with aria-label. */
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+}
+
 /* Toggle / choice buttons: set aria-pressed and the selected look follows. */
 .btn-secondary[aria-pressed="true"] {
     border-color: var(--accent);
@@ -423,6 +486,10 @@ code {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.input-sm {
+    padding: 5px 10px;
 }
 
 .input[aria-invalid="true"] {

@@ -1,3 +1,5 @@
+/* Saved-foods page. Cards = .glass in a .card-list .stagger; chips = .chip;
+   buttons/inputs = .btn / .input. Only layout and type live here. */
 .sf {
     display: flex;
     flex-direction: column;
@@ -13,65 +15,27 @@
 .sf-title {
     margin: 0;
     font-family: var(--font-head);
-    font-size: 1.3rem;
-}
-
-.sf-add {
-    flex-shrink: 0;
-    padding: 8px 14px;
-    border-radius: var(--r-pill);
-    border: none;
-    background: var(--accent);
-    color: var(--on-accent);
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform var(--dur-press) var(--ease-out);
-}
-
-.sf-add:active {
-    transform: scale(0.95);
+    font-size: var(--text-lg);
 }
 
 .sf-intro {
     margin: 6px 0 14px;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     color: var(--muted);
     line-height: 1.45;
 }
 
 .sf-search {
-    width: 100%;
-    padding: 11px 14px;
-    font-size: var(--text-input);
     margin-bottom: 16px;
 }
 
-.sf-search:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-/* ── Create / edit form ─────────────────────────────────────────────── */
+/* ── Create / edit form (a .glass card) ─────────────────────────────── */
 .sf-form {
     display: flex;
     flex-direction: column;
-    border-radius: var(--r-md);
+    border-radius: var(--r-card);
     padding: 16px;
     margin-bottom: 18px;
-    animation: sf-in var(--dur-slow) var(--ease-out);
-}
-
-@keyframes sf-in {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 /* ── List ───────────────────────────────────────────────────────────── */
@@ -79,10 +43,8 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    border-radius: var(--r-md);
+    border-radius: var(--r-card);
     padding: 14px;
-    margin-bottom: 12px;
-    animation: sf-in var(--dur-slow) var(--ease-out);
 }
 
 .sf-card-main {
@@ -93,7 +55,7 @@
 .sf-name {
     margin: 0 0 6px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--text-base);
     overflow-wrap: anywhere;
 }
 
@@ -101,21 +63,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-}
-
-.sf-dot {
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: var(--r-pill);
-    background: var(--surface-2);
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-}
-
-.sf-dot-cal {
-    color: var(--accent);
-    background: var(--accent-soft);
 }
 
 .sf-per {
@@ -138,7 +85,5 @@
 }
 
 .sf-error {
-    color: var(--error);
-    font-size: 0.85rem;
     margin: 8px 0 0;
 }

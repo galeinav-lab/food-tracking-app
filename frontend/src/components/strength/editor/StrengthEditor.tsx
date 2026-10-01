@@ -118,12 +118,12 @@ function StrengthEditor({
     return (
         <Sheet title={title} ariaLabel={title} onClose={onClose}>
             <form className="ste" onSubmit={submit}>
-                <label className="ste-label" htmlFor="ste-name">
+                <label className="field-label ste-label" htmlFor="ste-name">
                     Exercise
                 </label>
                 <input
                     id="ste-name"
-                    className="ste-input"
+                    className="input"
                     type="text"
                     value={name}
                     maxLength={80}
@@ -132,7 +132,7 @@ function StrengthEditor({
                     autoFocus={!isEdit}
                 />
 
-                <label className="ste-label" htmlFor="ste-weight">
+                <label className="field-label ste-label" htmlFor="ste-weight">
                     Weight (kg) — 0 for bodyweight
                 </label>
                 <div className="st-step ste-step-lg">
@@ -146,7 +146,7 @@ function StrengthEditor({
                     </button>
                     <input
                         id="ste-weight"
-                        className="ste-input ste-weight-input"
+                        className="ste-weight-input"
                         type="number"
                         inputMode="decimal"
                         min={0}
@@ -167,12 +167,12 @@ function StrengthEditor({
 
                 <div className="ste-pair">
                     <div className="ste-field">
-                        <label className="ste-label" htmlFor="ste-sets">
+                        <label className="field-label ste-label" htmlFor="ste-sets">
                             Sets
                         </label>
                         <input
                             id="ste-sets"
-                            className="ste-input"
+                            className="input"
                             type="number"
                             inputMode="numeric"
                             min={1}
@@ -182,12 +182,12 @@ function StrengthEditor({
                         />
                     </div>
                     <div className="ste-field">
-                        <label className="ste-label" htmlFor="ste-reps">
+                        <label className="field-label ste-label" htmlFor="ste-reps">
                             Reps
                         </label>
                         <input
                             id="ste-reps"
-                            className="ste-input"
+                            className="input"
                             type="number"
                             inputMode="numeric"
                             min={1}
@@ -198,12 +198,12 @@ function StrengthEditor({
                     </div>
                 </div>
 
-                <label className="ste-label" htmlFor="ste-group">
+                <label className="field-label ste-label" htmlFor="ste-group">
                     Muscle group
                 </label>
                 <select
                     id="ste-group"
-                    className="ste-input"
+                    className="input"
                     value={muscleGroup}
                     onChange={(e) => setMuscleGroup(e.target.value as MuscleGroup)}
                 >
@@ -214,13 +214,22 @@ function StrengthEditor({
                     ))}
                 </select>
 
-                {shown && <p className="st-error">{shown}</p>}
+                {shown && (
+                    <p className="form-error st-error" role="alert">
+                        {shown}
+                    </p>
+                )}
 
                 <div className="ste-actions">
-                    <button type="submit" className="ste-save" disabled={busy}>
+                    <button
+                        type="submit"
+                        className={busy ? "btn btn-primary btn-loading ste-save" : "btn btn-primary ste-save"}
+                        disabled={busy}
+                        aria-busy={busy}
+                    >
                         {busy ? "Saving…" : isEdit ? "Save changes" : "Add exercise"}
                     </button>
-                    <button type="button" className="ste-cancel" onClick={onClose} disabled={busy}>
+                    <button type="button" className="btn btn-secondary" onClick={onClose} disabled={busy}>
                         Cancel
                     </button>
                 </div>

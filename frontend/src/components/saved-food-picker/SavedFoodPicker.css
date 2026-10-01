@@ -6,7 +6,7 @@
 .sfp-search {
     width: 100%;
     padding: 11px 14px;
-    font-size: 0.95rem;
+    font-size: var(--text-input);
     margin-bottom: 12px;
 }
 

@@ -86,6 +86,9 @@
     --text-md: 1.1rem; /* section / sheet titles */
     --text-lg: 1.3rem; /* page titles */
     --text-display: 2.8rem; /* hero number */
+    /* Form controls never go below 16px: iOS Safari zooms the page when a focused
+       input/select/textarea is smaller. Separate from the type scale on purpose. */
+    --text-input: 1rem;
 
     /* Elevation — deep dark shadows + lime glow */
     --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -166,6 +169,7 @@ select {
 input,
 textarea,
 select {
+    font-size: var(--text-input); /* floor for controls without their own rule */
     color: var(--text);
     background-color: var(--surface-2);
     border: 1px solid var(--border);
@@ -412,7 +416,7 @@ code {
     background-color: var(--surface-2);
     color: var(--text);
     font-family: inherit;
-    font-size: var(--text-base);
+    font-size: var(--text-input);
 }
 
 .input:focus {

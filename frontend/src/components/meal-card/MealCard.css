@@ -187,7 +187,7 @@
     padding: 10px;
     border: 1px solid var(--border);
     border-radius: 6px;
-    font-size: 0.9rem;
+    font-size: var(--text-input);
     font-family: inherit;
     resize: vertical;
 }
@@ -233,7 +233,7 @@
 .meal-save-input {
     width: 92px;
     padding: 6px 10px;
-    font-size: 0.85rem;
+    font-size: var(--text-input);
 }
 
 .meal-save-input:focus {

@@ -85,7 +85,7 @@
     padding: 8px 10px;
     border: 1px solid var(--border);
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: var(--text-input);
     font-family: inherit;
 }
 

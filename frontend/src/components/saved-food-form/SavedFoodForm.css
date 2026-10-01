@@ -20,7 +20,7 @@
 .sff-input {
     width: 100%;
     padding: 10px 12px;
-    font-size: 0.95rem;
+    font-size: var(--text-input);
 }
 
 .sff-input:focus {

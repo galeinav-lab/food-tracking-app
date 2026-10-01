@@ -45,7 +45,7 @@
     border-radius: var(--r-control);
     background: var(--surface-2);
     color: var(--text);
-    font-size: 0.92rem;
+    font-size: var(--text-input);
     font-family: inherit;
     resize: vertical;
 }

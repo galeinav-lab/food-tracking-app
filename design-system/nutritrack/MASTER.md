@@ -146,6 +146,7 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 |---|---|
 | Radius roles | `--r-control` (=r-sm, inputs/buttons/chips) · `--r-card` (=r-md) · `--r-raised` (=r-lg, hero) · `--r-sheet` (=r-xl) |
 | Type scale | `--text-xs .72` · `--text-sm .85` · `--text-base .95` · `--text-md 1.1` · `--text-lg 1.3` · `--text-display 2.8` (rem) |
+| Form controls | `--text-input 1rem` — every input/select/textarea is ≥16px (iOS Safari zooms on focus below that); outside the type scale on purpose |
 | Elevation / chrome | `--shadow-sheet` · `--scrim` · `--danger-soft` |
 | Motion | `--ease-in-out` · `--dur-pulse` (skeleton loop) |
 

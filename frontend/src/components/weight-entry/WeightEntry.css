@@ -13,7 +13,7 @@
     padding: 10px 12px;
     border: 1px solid var(--border);
     border-radius: var(--r-control);
-    font-size: var(--text-base);
+    font-size: var(--text-input);
     font-family: inherit;
 }
 

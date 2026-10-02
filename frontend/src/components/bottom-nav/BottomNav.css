@@ -37,7 +37,7 @@
     align-items: center;
     gap: 3px;
     padding-top: 4px;
-    color: var(--text-dim);
+    color: var(--muted);
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
     transition: transform var(--dur-press) var(--ease-out);

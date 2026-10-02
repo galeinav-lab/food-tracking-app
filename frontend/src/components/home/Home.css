@@ -22,7 +22,7 @@
     background: radial-gradient(
         ellipse 75% 50% at 50% 32%,
         var(--ambient-bloom) 0%,
-        rgba(163, 230, 53, 0.22) 45%,
+        var(--ambient-bloom-mid) 45%,
         transparent 78%
     );
     transform-origin: 50% 32%;

@@ -108,7 +108,13 @@ Two fixed, full-screen decorative layers (`z-index: -1`, `pointer-events: none`,
 |---|---|
 | `--ambient-mid` | `#3F5A25` |
 | `--ambient-deep` | `#202D14` |
-| `--ambient-bloom` | `rgba(163, 230, 53, 0.55)` |
+| `--ambient-bloom` | `rgba(163, 230, 53, 0.30)` — bloom core |
+| `--ambient-bloom-mid` | `rgba(163, 230, 53, 0.12)` — bloom at 45% of its radius |
+
+**Bloom strength is capped by contrast.** At the bloom's brightest frame (opacity 1, scale 1.09),
+grey text on glass cards and directly on the gradient must stay ≥ 4.5:1. Measured with
+`tools/ui-check/audit.mjs`: .55/.22 → 3.82:1 (30 failures on Home), .42 → 4.23, .36 → 4.42,
+**.30/.12 → 4.61:1, 0 failures**. Don't raise it without re-running the audit.
 
 ### Glass tiers (index.css)
 Cards carry **no `backdrop-filter`**: over the smooth ambient gradient a blur is visually a no-op
@@ -137,10 +143,12 @@ Rules: doubled selectors (`.glass.glass`) so they beat component backgrounds reg
 order; radius/padding stay with the component.
 
 **Verified** (`audit.mjs`, 42 screen states at 375 and 412px — every route, the + menu, all four
-logging sheets, a toast): blurred layers = **1 (the nav)** on every in-app screen, 0 on auth.
-Contrast: removing blur doesn't change it (blur keeps average luminance). Muted text on a card is
-≈6.3:1 over the base gradient's brightest point; over the Home bloom core at full intensity it
-computes to ≈3.9:1 — pre-existing, addressed by a separate contrast pass.
+logging sheets, a toast): blurred layers = **1 (the nav)** on every in-app screen, 0 on auth; text
+contrast ≥ 4.5:1 everywhere (lowest 4.61, at the bloom's peak). Rules that keep it that way:
+- Chips layer their tint over an opaque `--surface`; `.btn-danger` has an opaque fill — nothing
+  translucent sits between coloured text and the glow.
+- `--text-dim` is for placeholders and disabled states only; real text (meta, nav labels,
+  counts) uses `--muted`.
 
 ## 3.6 — v3.2 additions: semantic tokens + shared building blocks
 

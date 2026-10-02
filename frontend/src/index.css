@@ -113,7 +113,11 @@
     /* v3.1 — Ambient gradient background (lime bloom center → dark olive edges) */
     --ambient-mid: #3F5A25; /* mid green around the bloom */
     --ambient-deep: #202D14; /* between mid and the dark edge (--bg) */
-    --ambient-bloom: rgba(163, 230, 53, 0.55); /* diffused lime core */
+    /* Bloom strength is capped by contrast: at its brightest frame, grey text on
+       glass cards and directly on the gradient must stay >= 4.5:1 (measured with
+       tools/ui-check/audit.mjs; .55 / .22 dropped it to 3.8:1). */
+    --ambient-bloom: rgba(163, 230, 53, 0.30); /* diffused lime core */
+    --ambient-bloom-mid: rgba(163, 230, 53, 0.12); /* bloom at 45% of its radius */
 
     /* v3.2 — Glass. The look is the translucent tint + light border + top
        highlight over the ambient gradient; cards carry NO backdrop blur (over a
@@ -255,32 +259,33 @@ code {
     flex: 0 0 auto;
     padding: 2px 8px;
     border-radius: var(--r-pill);
-    background: var(--surface-2);
+    background: var(--surface-2); /* opaque: contrast never depends on the backdrop */
     color: var(--muted);
     font-size: var(--text-xs);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
 }
 
+/* Colour variants: the soft tint is layered over an opaque --surface base. */
 .chip-accent {
-    background: var(--accent-soft);
+    background: linear-gradient(var(--accent-soft), var(--accent-soft)), var(--surface);
     color: var(--accent);
 }
 
 .chip-protein {
-    background: var(--macro-protein-soft);
+    background: linear-gradient(var(--macro-protein-soft), var(--macro-protein-soft)), var(--surface);
     color: var(--macro-protein);
 }
 
 .chip-carbs {
-    background: var(--macro-carbs-soft);
+    background: linear-gradient(var(--macro-carbs-soft), var(--macro-carbs-soft)), var(--surface);
     color: var(--macro-carbs);
 }
 
 /* Teal: fat, and calories burned by exercise. */
 .chip-fat,
 .chip-burn {
-    background: var(--macro-fat-soft);
+    background: linear-gradient(var(--macro-fat-soft), var(--macro-fat-soft)), var(--surface);
     color: var(--macro-fat);
 }
 
@@ -387,9 +392,10 @@ code {
     color: var(--text);
 }
 
-/* Outline in the error color — destructive actions (Log out, Delete). */
+/* Error-coloured text on the secondary fill — destructive actions (Log out). Opaque
+   on purpose: a transparent fill let the ambient glow drop the red below 4.5:1. */
 .btn-danger {
-    background: transparent;
+    background: var(--surface-2);
     border-color: var(--border);
     color: var(--error);
 }

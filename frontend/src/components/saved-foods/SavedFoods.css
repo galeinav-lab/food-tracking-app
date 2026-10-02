@@ -68,7 +68,7 @@
 .sf-per {
     margin: 6px 0 0;
     font-size: var(--text-xs);
-    color: var(--text-dim);
+    color: var(--muted);
 }
 
 .sf-card-actions {

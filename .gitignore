@@ -19,3 +19,6 @@ npm-debug.log*
 
 # Claude Code local config / memory (not part of the app)
 .claude/
+
+# Local design references (screenshots of other apps) — never commit
+design-refs/

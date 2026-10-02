@@ -258,7 +258,8 @@ upserts the summary (deletes it if zero logs). Every food **log/edit/delete** an
    `.card-list`/`.chip` (index.css), `<Sheet>` for any bottom sheet, `<ActionMenu>` for a card's
    actions, `<Skeleton>`/`<SkeletonGroup>` for loading (see `design-system/nutritrack/MASTER.md` §3.6).
 4. **Check it visually** — `tools/ui-check/` runs the frontend against a mock API (sample data, no
-   backend, no login) and screenshots routes/states at phone widths in headless Chrome. Dev-only:
+   backend, no login) and screenshots routes/states at phone widths in headless Chrome; `audit.mjs`
+   there checks text contrast against the rendered background and counts blurred layers. Dev-only:
    nothing in the app imports it. Usage and job format in `tools/ui-check/README.md`.
 
 **Gotchas:** use the shared date helpers (never `new Date("YYYY-MM-DD")`); keep deficit math server-side;

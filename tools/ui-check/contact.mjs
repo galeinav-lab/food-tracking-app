@@ -12,7 +12,7 @@ const cells = imgs.map((f) => {
     return `<figure style="margin:0"><figcaption style="margin-bottom:6px">${path.basename(f, ".png")}</figcaption><img src="${src}" style="width:${thumbW}px;display:block;border:1px solid #333"></figure>`;
 }).join("");
 const tmp = path.resolve(path.dirname(out), "contact-tmp.html");
-fs.writeFileSync(tmp, `<body style="margin:0;background:#0b0e09;color:#ddd;font:600 14px system-ui">
+fs.writeFileSync(tmp, `<meta charset="utf-8"><body style="margin:0;background:#0b0e09;color:#ddd;font:600 14px system-ui">
   <div style="display:grid;grid-template-columns:repeat(${cols},${thumbW}px);gap:18px;padding:18px;width:max-content">${cells}</div></body>`);
 
 await send("Page.navigate", { url: "file:///" + tmp.replace(/\\/g, "/") });

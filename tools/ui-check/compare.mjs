@@ -39,7 +39,7 @@ for (const p of prefixes) {
     report.push({ pair: p, ...stats });
 
     const w = stats.W / 2;
-    const html = `<body style="margin:0;background:#0b0e09;font:600 15px system-ui;color:#eee">
+    const html = `<meta charset="utf-8"><body style="margin:0;background:#0b0e09;font:600 15px system-ui;color:#eee">
       <div style="display:flex;gap:16px;padding:16px">
         ${[[`${p}-current`, a], [`${p}-proposed`, b]].map(([t, s]) =>
             `<div><div style="margin-bottom:8px">${t}</div><img src="${s}" style="width:${w}px;display:block;border:1px solid #333"></div>`).join("")}

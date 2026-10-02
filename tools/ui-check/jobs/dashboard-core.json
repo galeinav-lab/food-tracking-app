@@ -1,0 +1,186 @@
+[
+ {
+  "name": "375-home-top",
+  "width": 375,
+  "height": 812,
+  "path": "/"
+ },
+ {
+  "name": "375-home-macros",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "click": ".dash-hero"
+ },
+ {
+  "name": "375-home-scrolled",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": "text-under-nav"
+ },
+ {
+  "name": "375-plus-menu",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(600);"
+ },
+ {
+  "name": "375-sheet-meal",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-meal\"); await sleep(1300);"
+ },
+ {
+  "name": "375-sheet-workout",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-workout\"); await sleep(1300);"
+ },
+ {
+  "name": "375-sheet-saved",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1300);"
+ },
+ {
+  "name": "375-sheet-scan",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-scan\"); await sleep(1300);"
+ },
+ {
+  "name": "375-toast",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-photo\"); await sleep(600);"
+ },
+ {
+  "name": "375-weekly",
+  "width": 375,
+  "height": 812,
+  "path": "/weekly"
+ },
+ {
+  "name": "412-home-top",
+  "width": 412,
+  "height": 915,
+  "path": "/"
+ },
+ {
+  "name": "412-home-macros",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "click": ".dash-hero"
+ },
+ {
+  "name": "412-home-scrolled",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": "text-under-nav"
+ },
+ {
+  "name": "412-plus-menu",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(600);"
+ },
+ {
+  "name": "412-sheet-meal",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-meal\"); await sleep(1300);"
+ },
+ {
+  "name": "412-sheet-workout",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-workout\"); await sleep(1300);"
+ },
+ {
+  "name": "412-sheet-saved",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1300);"
+ },
+ {
+  "name": "412-sheet-scan",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-scan\"); await sleep(1300);"
+ },
+ {
+  "name": "412-toast",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-photo\"); await sleep(600);"
+ },
+ {
+  "name": "412-weekly",
+  "width": 412,
+  "height": 915,
+  "path": "/weekly"
+ },
+ {
+  "name": "375-home-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "375-sheet-meal-analyzing",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-meal\"); await sleep(1300);set(\".food-input\", \"2 eggs, toast with butter\"); await sleep(100); await slow(8000); click(\".food-btn\");",
+  "afterWait": 900
+ },
+ {
+  "name": "375-weekly-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/weekly",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "412-home-loading",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "412-sheet-meal-analyzing",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-meal\"); await sleep(1300);set(\".food-input\", \"2 eggs, toast with butter\"); await sleep(100); await slow(8000); click(\".food-btn\");",
+  "afterWait": 900
+ },
+ {
+  "name": "412-weekly-loading",
+  "width": 412,
+  "height": 915,
+  "path": "/weekly",
+  "slow": 8000,
+  "wait": 1500
+ }
+]

@@ -6,7 +6,7 @@ They are **not** imported by the app and not part of any build. Node 22+ (built-
 
 | File | What it does |
 |---|---|
-| `mock-api.mjs` | Mock NutriTrack API on `:5055` returning canned sample data in the `{ success, data }` envelope (goals, day view, deficit, summaries, water, exercise, weight, strength list, saved foods, onboarding). Login always answers 401 so the form's error state can be captured. `GET /__slow?ms=N` delays every response (loading states). |
+| `mock-api.mjs` | Mock NutriTrack API on `:5055` returning canned sample data in the `{ success, data }` envelope (goals, day view, deficit, summaries, water, exercise, weight, strength list, saved foods, onboarding). Login always answers 401 so the form's error state can be captured. `GET /__slow?ms=N` delays every response (loading states); `GET /__broken?on=1` sends meals without totals so a render crashes (ErrorBoundary screen). |
 | `shoot.mjs` | Opens the running frontend in headless Chrome, seeds a fake session in localStorage, runs each job (viewport, route, optional clicks/actions/scroll/CSS) and saves PNGs at 2× scale. |
 | `contact.mjs` | Builds a labelled grid ("contact sheet") from a list of PNGs. |
 | `compare.mjs` | Pixel-diffs `P-current.png` vs `P-proposed.png` pairs and writes side-by-side composites. |
@@ -49,6 +49,7 @@ or `CDP_PORT` via environment variables when the defaults don't fit.
 - `actions`: async JS run in the page with helpers `set(selector, value)` (fires React's input
   event), `click(selector, index?)`, `sleep(ms)`, `slow(ms)` (toggle the mock's delay mid-job).
 - `slow`: mock delay applied before the route loads (capture skeletons with a short `wait`).
+- `broken`: `true` makes the mock send meals without totals, so the page crashes into the ErrorBoundary.
 - `scroll`: a pixel offset, a CSS selector (that element is scrolled to the top of the screen),
   `"text-under-nav"` (meal rows behind the bottom nav), or `"keep"` (wherever `actions` scrolled).
 - `css`: injected after load (e.g. to A/B a style for `compare.mjs`).

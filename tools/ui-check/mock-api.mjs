@@ -73,6 +73,7 @@ const routes = [
 ];
 
 let delayMs = 0; // GET /__slow?ms=N to hold responses (skeleton screenshots)
+let broken = false; // GET /__broken?on=1: meals arrive without totals, so a render crashes (ErrorBoundary screen)
 http.createServer((req, res) => {
     const url = new URL(req.url, `http://localhost:${PORT}`);
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -80,6 +81,7 @@ http.createServer((req, res) => {
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
     if (req.method === "OPTIONS") return res.end();
     if (url.pathname === "/__slow") { delayMs = Number(url.searchParams.get("ms") ?? 0); return res.end("ok"); }
+    if (url.pathname === "/__broken") { broken = url.searchParams.get("on") === "1"; return res.end("ok"); }
     res.setHeader("Content-Type", "application/json");
     // Login always fails here — used only to screenshot the form's error state.
     if (url.pathname === "/api/auth/login") {
@@ -95,6 +97,7 @@ http.createServer((req, res) => {
         return setTimeout(() => res.end(JSON.stringify({ success: true, data })), delayMs);
     }
     const hit = routes.find(([re]) => re.test(url.pathname));
-    const data = hit ? hit[1](url) : [];
+    let data = hit ? hit[1](url) : [];
+    if (broken && /^\/api\/food\/day\//.test(url.pathname)) data = { ...data, logs: data.logs.map(({ totals, ...l }) => l) };
     setTimeout(() => res.end(JSON.stringify({ success: true, data })), delayMs);
 }).listen(PORT, () => console.log("mock api on " + PORT));

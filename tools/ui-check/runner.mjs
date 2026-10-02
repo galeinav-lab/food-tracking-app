@@ -38,6 +38,7 @@ export async function prepare({ send }) {
 export async function runJob({ send, evaluate }, job, { dpr = 2 } = {}) {
     await send("Emulation.setDeviceMetricsOverride", { width: job.width, height: job.height, deviceScaleFactor: dpr, mobile: true });
     await fetch(`${MOCK}/__slow?ms=${job.slow ?? 0}`);
+    await fetch(`${MOCK}/__broken?on=${job.broken ? 1 : 0}`); // ErrorBoundary screen
     await evaluate(sessionJs(job.session));
     await send("Page.navigate", { url: APP + job.path });
     await sleep(job.wait ?? 3500); // data + entrance animations settle

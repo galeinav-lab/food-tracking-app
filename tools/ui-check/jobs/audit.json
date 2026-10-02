@@ -326,5 +326,35 @@
   "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
   "session": "new",
   "wait": 1800
+ },
+ {
+  "name": "375-error-boundary",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "broken": true,
+  "wait": 2500
+ },
+ {
+  "name": "375-report-panel",
+  "width": 375,
+  "height": 812,
+  "path": "/settings",
+  "actions": "click(\".rp-fab\"); await sleep(700);"
+ },
+ {
+  "name": "412-error-boundary",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "broken": true,
+  "wait": 2500
+ },
+ {
+  "name": "412-report-panel",
+  "width": 412,
+  "height": 915,
+  "path": "/settings",
+  "actions": "click(\".rp-fab\"); await sleep(700);"
  }
 ]

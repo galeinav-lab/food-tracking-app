@@ -25,14 +25,13 @@
     color: var(--muted);
 }
 
+/* Water + this week, side by side at every width (both cards are compact). */
 .home-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
 }
 
-@media (max-width: 480px) {
-    .home-row {
-        grid-template-columns: 1fr;
-    }
+.home-row > * {
+    min-width: 0;
 }

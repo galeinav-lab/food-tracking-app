@@ -13,10 +13,10 @@
     color-scheme: light;
 
     /* Surfaces — a light grey canvas so white cards lift off it */
-    --bg: #F2F2F5;
+    --bg: #E9E9EE;
     --surface: #FFFFFF;
     --card-bg: #FFFFFF; /* legacy alias of --surface */
-    --surface-2: #F2F2F5; /* inputs, chips, secondary buttons */
+    --surface-2: #F2F2F5; /* inputs, chips, secondary buttons (inside white containers) */
     --surface-3: #E5E5EA; /* pressed fills, handles, tracks */
     --border: rgba(17, 18, 20, 0.08);
     --border-strong: rgba(17, 18, 20, 0.16);

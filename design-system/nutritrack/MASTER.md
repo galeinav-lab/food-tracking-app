@@ -15,7 +15,7 @@
 ### Surfaces
 | Token | Value | Use |
 |---|---|---|
-| `--bg` | `#F2F2F5` | Canvas — light grey, a step darker than white so cards lift off it |
+| `--bg` | `#E9E9EE` | Canvas — light grey, clearly darker than white so cards lift off it |
 | `--surface` / `--card-bg` | `#FFFFFF` | Cards, sheets, menus, fields placed directly on the canvas |
 | `--surface-2` | `#F2F2F5` | Inputs, chips, secondary buttons (inside white containers) |
 | `--surface-3` | `#E5E5EA` | Pressed fills, handles, stepper buttons |
@@ -133,6 +133,8 @@ Context rules:
 - **Card actions** — `<ActionMenu label items busy>`: "⋯" trigger, float-tier menu, WAI-ARIA menu
   keyboard pattern, focus returns to the trigger, opens upward near the nav.
 - **Entrances** — `.rise-in`, `.stagger` (cascade capped at the 8th child), `.fade-in` (opacity only).
+- **Toasts with an action** — `toastBus.show({ …, action: { label, onAction }, durationMs })` renders
+  a `.btn-sm` (e.g. "Undo" after adding water, 5s) that runs the action and dismisses.
 
 ---
 

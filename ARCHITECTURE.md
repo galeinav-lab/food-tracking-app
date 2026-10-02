@@ -179,6 +179,9 @@ upserts the summary (deletes it if zero logs). Every food **log/edit/delete** an
   (un-logged and exercise-only days are excluded, not treated as zero-intake). `projectedKg = weeklyDeficit/7700`.
   Week bounds via `getWeekRange` (`utils/date-tz.ts`). Maintenance source: persisted `user.maintenanceCalories`,
   else recomputed from profile via `energy.ts`.
+- **BMR / TDEE on Home** — the compact weekly card's info sheet (`components/energy-details/`) shows
+  BMR from `GET /api/auth/me` (the stored `user.bmr`) and TDEE as the deficit response's `maintenance`.
+  Both come from `energy.ts` on the backend; the frontend only displays them.
 
 ---
 

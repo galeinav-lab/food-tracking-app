@@ -1,14 +1,37 @@
-/* "This week so far" card on the dashboard. Surface = .glass; the ring itself is
-   a recharts Pie (colours from styles/colors.ts). Shape, layout and type only. */
+/* Compact "This week" card on Home (half of the row next to water). Surface =
+   .glass; the ring is a recharts Pie (colours from styles/colors.ts); details
+   (BMR / TDEE) open in <EnergyDetails>. Shape, layout and type only. */
 .ring {
+    display: flex;
+    flex-direction: column;
     border-radius: var(--r-card);
     padding: var(--space-lg);
 }
 
+.ring-compact {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ring-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin: -2px 0 var(--space-xs);
+}
+
 .ring-title {
-    margin: 0 0 var(--space-xs);
+    margin: 0;
     font-family: var(--font-head);
     font-size: var(--text-base);
+}
+
+/* Small round info button (the 36px .btn-icon, slimmed for the compact card). */
+.ring-info.btn-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--muted);
 }
 
 .ring-hint {
@@ -24,7 +47,7 @@
 /* Placeholder ring + caption while the week loads. */
 .ring-skel {
     align-items: center;
-    padding: var(--space-md) 0 var(--space-xs);
+    padding: var(--space-sm) 0 var(--space-xs);
     gap: var(--space-md);
 }
 
@@ -45,29 +68,24 @@
 
 .ring-num {
     font-family: var(--font-head);
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
     font-weight: 800;
+    letter-spacing: var(--tracking-tight);
     line-height: 1;
     font-variant-numeric: tabular-nums;
-    letter-spacing: var(--tracking-tight);
 }
 
 .ring-sub {
     font-size: var(--text-xs);
     color: var(--muted);
-    margin-top: 3px;
+    margin-top: 2px;
 }
 
 .ring-kg {
+    margin: var(--space-sm) 0 0;
     font-size: var(--text-sm);
     font-weight: 600;
-    margin-top: var(--space-sm);
     color: var(--accent-ink);
-}
-
-.ring-foot {
-    margin: var(--space-sm) 0 0;
-    font-size: var(--text-xs);
-    color: var(--muted);
     text-align: center;
+    font-variant-numeric: tabular-nums;
 }

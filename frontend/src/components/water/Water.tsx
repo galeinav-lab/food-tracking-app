@@ -1,12 +1,15 @@
-import { type FormEvent, type JSX, useEffect, useState } from "react";
+import { type JSX, useEffect, useState } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { waterService } from "../../services/water.service";
 import { ApiError } from "../../services/http-client";
+import { toastBus } from "../../services/toast-bus";
 import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./Water.css";
 
 const DEFAULT_TARGET_ML = 3000;
 const toL = (ml: number): string => (ml / 1000).toFixed(1);
+const GLASS_ML = 500; // the one quick-add amount
+const UNDO_MS = 5000; // how long the Undo toast stays
 
 interface WaterProps {
     // The dashboard's selected calendar day (YYYY-MM-DD, user tz).
@@ -20,7 +23,6 @@ function Water({ date, refreshKey }: WaterProps): JSX.Element {
     const [waterMl, setWaterMl] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [custom, setCustom] = useState("");
     const [busy, setBusy] = useState(false);
 
     useEffect(() => {
@@ -43,82 +45,67 @@ function Water({ date, refreshKey }: WaterProps): JSX.Element {
         };
     }, [date, refreshKey]);
 
-    const change = async (amountMl: number) => {
+    // Same POST /api/water for adding and undoing (negative amount). Resolves
+    // true on success so the add can offer an Undo.
+    const change = async (amountMl: number): Promise<boolean> => {
         setBusy(true);
         setError(null);
         try {
             // Attach to the selected day (defaults to today). Server clamps at 0.
             const r = await waterService.add({ amountMl, date });
             setWaterMl(r.waterMl); // server returns the clamped running total
+            return true;
         } catch (err) {
             setError(err instanceof ApiError ? err.message : "Failed to update water");
+            return false;
         } finally {
             setBusy(false);
         }
     };
 
-    const onCustom = async (e: FormEvent) => {
-        e.preventDefault();
-        const amt = Number(custom);
-        if (custom.trim() === "" || !Number.isFinite(amt) || amt <= 0 || amt > 5000) {
-            setError("Enter an amount between 1 and 5000 ml.");
-            return;
-        }
-        await change(Math.round(amt));
-        setCustom("");
+    // The card's only control: +500 ml, then a few seconds to take it back.
+    const addGlass = async (): Promise<void> => {
+        if (!(await change(GLASS_ML))) return;
+        toastBus.show({
+            kind: "success",
+            headline: `Added ${GLASS_ML} ml of water`,
+            action: { label: "Undo", onAction: () => void change(-GLASS_ML) },
+            durationMs: UNDO_MS,
+        });
     };
 
     const pct = target > 0 ? Math.min((waterMl / target) * 100, 100) : 0;
 
     return (
         <div className="water glass">
-            <div className="water-head">
-                <h2 className="water-title">Water</h2>
-                <span className="water-amount">
-                    {toL(waterMl)} / {toL(target)} L
-                </span>
-            </div>
+            <h2 className="water-title">Water</h2>
 
             {loading ? (
-                <SkeletonGroup label="Loading water">
-                    <Skeleton height="10px" />
-                    <Skeleton width="70%" height="30px" />
+                <SkeletonGroup label="Loading water" className="water-skel">
+                    <Skeleton width="60%" height="28px" />
+                    <Skeleton height="8px" />
+                    <Skeleton height="30px" />
                 </SkeletonGroup>
             ) : (
                 <>
+                    <p className="water-amount">
+                        <span className="water-num">{toL(waterMl)}</span>
+                        <span className="water-of"> / {toL(target)} L</span>
+                    </p>
+
                     <div className="water-bar">
                         {/* scaleX, not width: the fill animates on the compositor. */}
                         <div className="water-fill" style={{ transform: `scaleX(${pct / 100})` }} />
                     </div>
 
-                    <div className="water-actions">
-                        <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={() => change(250)}>
-                            +250 ml
-                        </button>
-                        <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={() => change(500)}>
-                            +500 ml
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-secondary btn-sm"
-                            disabled={busy}
-                            onClick={() => change(-250)}
-                        >
-                            −250 ml
-                        </button>
-                        <form className="water-custom" onSubmit={onCustom}>
-                            <input
-                                className="input input-sm water-input"
-                                type="number"
-                                placeholder="ml"
-                                value={custom}
-                                onChange={(e) => setCustom(e.target.value)}
-                            />
-                            <button type="submit" className="btn btn-secondary btn-sm" disabled={busy}>
-                                Add
-                            </button>
-                        </form>
-                    </div>
+                    <button
+                        type="button"
+                        className="btn btn-secondary btn-sm btn-block water-add"
+                        disabled={busy}
+                        onClick={() => void addGlass()}
+                    >
+                        +{GLASS_ML} ml
+                    </button>
                 </>
             )}
 

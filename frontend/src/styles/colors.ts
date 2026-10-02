@@ -22,6 +22,8 @@ export const colors = {
     // Faint white washes for chart interaction/empty states.
     chartCursor: "rgba(255,255,255,0.05)", // hovered column
     barTrack: "rgba(255,255,255,0.04)", // empty column behind a bar (day not logged)
+    tooltipBg: "#212B1A",
+    tooltipShadow: "0 8px 24px rgba(0,0,0,0.45)",
 } as const;
 
 // recharts animates in JS, so the CSS reduced-motion kill-switch can't reach it.
@@ -39,11 +41,11 @@ export const chartTheme = {
     axisTick: { fontSize: 11, fill: colors.muted },
     axisLine: { stroke: colors.border },
     tooltipContentStyle: {
-        background: "#212B1A",
+        background: colors.tooltipBg,
         border: `1px solid ${colors.border}`,
         borderRadius: 10,
         color: colors.text,
-        boxShadow: "0 8px 24px rgba(0,0,0,0.45)",
+        boxShadow: colors.tooltipShadow,
     },
     tooltipLabelStyle: { color: colors.muted },
     tooltipItemStyle: { color: colors.text },

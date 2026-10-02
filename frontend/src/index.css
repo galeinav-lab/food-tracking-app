@@ -35,6 +35,9 @@
     --accent-soft: rgba(163, 230, 53, 0.12);
     --on-accent: #16200A;
     --on-accent-soft: rgba(22, 32, 10, 0.18); /* badges sitting on a lime fill */
+    /* --accent is a FILL (backgrounds, rings, bars). Text, icons, outlines and
+       borders use --accent-ink, which a light background needs darker. */
+    --accent-ink: var(--accent);
 
     /* Macros (distinct from each other + the lime accent) */
     --macro-protein: #FB7185;
@@ -45,6 +48,10 @@
     --macro-protein-soft: rgba(251, 113, 133, 0.14);
     --macro-carbs-soft: rgba(251, 191, 36, 0.14);
     --macro-fat-soft: rgba(45, 212, 191, 0.14);
+    /* Macro hues as TEXT (chips, icons). Rings and bars keep the hues above. */
+    --macro-protein-ink: var(--macro-protein);
+    --macro-carbs-ink: var(--macro-carbs);
+    --macro-fat-ink: var(--macro-fat);
 
     /* Functional (success = spring green, deliberately NOT the lime accent) */
     --success: #4ADE80;
@@ -270,24 +277,24 @@ code {
 /* Colour variants: the soft tint is layered over an opaque --surface base. */
 .chip-accent {
     background: linear-gradient(var(--accent-soft), var(--accent-soft)), var(--surface);
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .chip-protein {
     background: linear-gradient(var(--macro-protein-soft), var(--macro-protein-soft)), var(--surface);
-    color: var(--macro-protein);
+    color: var(--macro-protein-ink);
 }
 
 .chip-carbs {
     background: linear-gradient(var(--macro-carbs-soft), var(--macro-carbs-soft)), var(--surface);
-    color: var(--macro-carbs);
+    color: var(--macro-carbs-ink);
 }
 
 /* Teal: fat, and calories burned by exercise. */
 .chip-fat,
 .chip-burn {
     background: linear-gradient(var(--macro-fat-soft), var(--macro-fat-soft)), var(--surface);
-    color: var(--macro-fat);
+    color: var(--macro-fat-ink);
 }
 
 /* Shared entrance: fade + 6px rise. `backwards` hides an item during its delay
@@ -362,7 +369,7 @@ code {
 }
 
 .btn:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: 2px;
 }
 
@@ -412,8 +419,8 @@ code {
     }
 
     .btn-secondary:hover:not(:disabled) {
-        border-color: var(--accent);
-        color: var(--accent);
+        border-color: var(--accent-ink);
+        color: var(--accent-ink);
     }
 
     .btn-danger:hover:not(:disabled) {
@@ -442,9 +449,9 @@ code {
 
 /* Toggle / choice buttons: set aria-pressed and the selected look follows. */
 .btn-secondary[aria-pressed="true"] {
-    border-color: var(--accent);
+    border-color: var(--accent-ink);
     background: var(--accent-soft);
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 /* Busy state for a submit that's waiting on the server: a small ring spins
@@ -497,7 +504,7 @@ code {
 
 .input:focus {
     outline: none;
-    border-color: var(--accent);
+    border-color: var(--accent-ink);
     box-shadow: 0 0 0 3px var(--accent-soft);
 }
 

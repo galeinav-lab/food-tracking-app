@@ -76,7 +76,7 @@
 }
 
 .settings-row:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: -2px;
 }
 
@@ -93,7 +93,7 @@
 
 @media (hover: hover) {
     .settings-row:hover .settings-chev {
-        stroke: var(--accent);
+        stroke: var(--accent-ink);
     }
 }
 

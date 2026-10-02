@@ -41,7 +41,7 @@
 }
 
 .dash-hero:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: 2px;
 }
 
@@ -58,7 +58,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .hero-chev {

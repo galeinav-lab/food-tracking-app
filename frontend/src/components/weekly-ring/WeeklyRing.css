@@ -61,7 +61,7 @@
     font-size: var(--text-sm);
     font-weight: 600;
     margin-top: var(--space-sm);
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .ring-foot {

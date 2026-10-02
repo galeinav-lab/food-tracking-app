@@ -44,7 +44,7 @@
 .eb-id span {
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .eb-actions {

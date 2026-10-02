@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 /* Takes every pixel the thumb and the ⋯ button leave. */

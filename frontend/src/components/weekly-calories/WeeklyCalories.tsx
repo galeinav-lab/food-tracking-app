@@ -149,8 +149,8 @@ function WeeklyCalories(): JSX.Element {
                                             key={d.date}
                                             fill={
                                                 d.deficit != null && d.deficit >= 0
-                                                    ? colors.success
-                                                    : colors.warning
+                                                    ? colors.barDeficit
+                                                    : colors.barSurplus
                                             }
                                         />
                                     ))}

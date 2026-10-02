@@ -2,6 +2,7 @@ import { User } from "../models/user";
 import { UnauthorizedError } from "../models/client-error";
 import { SetActivityLevelInput, SetWaterTargetInput } from "../types/user";
 import { calculateEnergy } from "../utils/energy";
+import { foodService } from "./food-service";
 
 class UserService {
 
@@ -13,6 +14,12 @@ class UserService {
     ): Promise<Record<string, unknown>> {
         const user = await User.findById(userId).exec();
         if (!user) throw new UnauthorizedError("User not found");
+
+        // A new activity level changes maintenance from today on: pin past days to
+        // the maintenance they were logged under before overwriting it.
+        if (typeof user.maintenanceCalories === "number" && user.maintenanceCalories > 0) {
+            await foodService.freezeTargetsBeforeToday(userId, user.maintenanceCalories);
+        }
 
         user.activityLevel = input.activityLevel;
 
@@ -33,6 +40,9 @@ class UserService {
         }
 
         await user.save();
+        if (typeof user.maintenanceCalories === "number") {
+            await foodService.applyTargetsToToday(userId, { maintenance: user.maintenanceCalories });
+        }
         return user.toSafeObject();
     }
 

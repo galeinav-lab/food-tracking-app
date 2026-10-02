@@ -15,6 +15,7 @@ export interface IDailySummary extends Document {
     logCount: number;
     exerciseBurned: number;
     goalSnapshot: Record<string, unknown>;
+    maintenanceSnapshot?: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -53,6 +54,12 @@ const DailySummarySchema = new Schema<IDailySummary>(
         // user's goals AS THEY WERE that day, so past days stay accurate even if the
         // user later changes their targets.
         goalSnapshot: { type: Schema.Types.Mixed, default: {} },
+        // The maintenance (TDEE) in force that day, so recalculating targets or
+        // changing activity level later never shifts a past day's deficit. Set once
+        // when the day's summary is created (like goalSnapshot); older summaries
+        // without it are frozen on the next target change (see foodService).
+        // No default on purpose: "missing" is how those older summaries are found.
+        maintenanceSnapshot: { type: Number },
     },
     { timestamps: true }
 );

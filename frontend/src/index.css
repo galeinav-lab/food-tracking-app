@@ -147,6 +147,11 @@
     box-sizing: border-box;
 }
 
+/* `hidden` always wins, even over a component's display: flex/grid. */
+[hidden] {
+    display: none !important;
+}
+
 /* The canvas colour lives on <html>; <body> stays transparent. */
 html {
     background: var(--bg);

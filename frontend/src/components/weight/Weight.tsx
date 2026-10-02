@@ -9,6 +9,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import { weightService } from "../../services/weight.service";
 import { ApiError } from "../../services/http-client";
@@ -20,11 +21,18 @@ import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import { colors, chartTheme } from "../../styles/colors";
 import "./Weight.css";
 
+const GOAL_LABEL: Record<"lose" | "maintain" | "gain", string> = {
+    lose: "Lose weight",
+    maintain: "Maintain weight",
+    gain: "Gain weight",
+};
+
 const ACTUAL_COLOR = colors.accentLine;
 const TARGET_COLOR = colors.muted;
 
 function Weight(): JSX.Element {
     const user = useAppSelector((state) => state.auth.user);
+    const navigate = useNavigate();
     const timeZone =
         user?.preferences.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
     const today = todayInTimeZone(timeZone);
@@ -79,6 +87,33 @@ function Weight(): JSX.Element {
 
             {/* The app's one weight form (components/weight-entry/). */}
             <WeightEntry onLogged={() => void loadEntries()} />
+
+            {/* The goal (type, target weight, timeframe) as stored on the user. Changing
+                it reruns the target calculation on the backend: the onboarding wizard in
+                update mode, opened on its goal step and returning here. */}
+            <section className="weight-goal glass" aria-label="Your goal">
+                <div className="weight-goal-main">
+                    <p className="weight-goal-label">Your goal</p>
+                    <p className="weight-goal-value">
+                        {user?.goalType ? GOAL_LABEL[user.goalType] : "No goal set yet"}
+                        {user?.goalType && user.goalType !== "maintain" && user.targetWeightKg
+                            ? ` · ${user.targetWeightKg} kg`
+                            : ""}
+                    </p>
+                    {user?.timeframeMonths && user.goalType !== "maintain" ? (
+                        <p className="weight-goal-sub">
+                            in {user.timeframeMonths} {user.timeframeMonths === 1 ? "month" : "months"}
+                        </p>
+                    ) : null}
+                </div>
+                <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => navigate("/settings/goals/recalculate?start=goal&from=weight")}
+                >
+                    Change
+                </button>
+            </section>
 
             {loading && (
                 <SkeletonGroup label="Loading weight" className="weight-skel">

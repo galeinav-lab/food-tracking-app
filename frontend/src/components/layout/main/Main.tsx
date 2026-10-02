@@ -50,6 +50,12 @@ function Main(): JSX.Element {
                             <Route path="/strength" element={<Strength />} />
                             <Route path="/settings" element={<Settings />} />
                             <Route path="/settings/goals" element={<GoalsEdit />} />
+                        {/* Recalculate targets: the onboarding wizard in update mode,
+                            for already-onboarded users (the /onboarding guard is untouched). */}
+                        <Route
+                            path="/settings/goals/recalculate"
+                            element={<OnboardingWizard mode="update" />}
+                        />
                         </Route>
                     </Route>
 

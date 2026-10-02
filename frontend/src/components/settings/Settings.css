@@ -35,15 +35,6 @@
     color: var(--error);
 }
 
-.settings-inline {
-    display: flex;
-    gap: var(--space-sm);
-}
-
-.settings-inline .settings-select {
-    flex: 1;
-}
-
 /* Grouped navigation rows (one glass card, hairline separators). */
 .settings-nav {
     display: flex;

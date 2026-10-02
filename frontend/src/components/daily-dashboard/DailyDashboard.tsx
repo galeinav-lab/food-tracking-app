@@ -9,6 +9,20 @@ import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./DailyDashboard.css";
 
 const ZERO: INutrition = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
+const NUTRIENTS: (keyof INutrition)[] = ["calories", "protein", "carbs", "fat", "fiber"];
+
+// Targets apply from the day they're set on: a day with food logged keeps the
+// goals it was logged under (the backend's goalSnapshot on its summary — today's
+// is updated whenever targets change). No snapshot -> the current goals.
+function goalsForDay(current: IGoal, snapshot: Record<string, unknown> | undefined): IGoal {
+    if (!snapshot) return current;
+    const merged = { ...current };
+    for (const k of NUTRIENTS) {
+        const v = snapshot[k];
+        if (typeof v === "number") merged[k] = v;
+    }
+    return merged;
+}
 const fmt = (n: number): string => Math.round(n).toLocaleString();
 
 // All four goal nutrients render as IDENTICAL rings in a 2×2 grid (fiber included).
@@ -47,7 +61,7 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
                 foodService.getDay(date),
             ]);
             if (id !== reqId.current) return;
-            setGoals(g);
+            setGoals(goalsForDay(g, day.summary?.goalSnapshot));
             setConsumed(day.summary?.totals ?? ZERO);
         } catch (err) {
             if (id !== reqId.current) return;

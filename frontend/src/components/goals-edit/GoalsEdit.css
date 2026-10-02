@@ -1,5 +1,12 @@
+/* Goals form, water target and recalculate cards stacked with even gaps. */
+.goals-edit {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
 .goals-title {
-    margin: 0 0 var(--space-lg);
+    margin: 0;
     font-size: var(--text-lg);
 }
 
@@ -34,4 +41,25 @@
     flex-wrap: wrap;
     gap: var(--space-md);
     margin-top: var(--space-sm);
+}
+
+.goals-recalc {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    border-radius: var(--r-card);
+}
+
+.goals-recalc-title {
+    margin: 0;
+    font-size: var(--text-md);
+}
+
+.goals-recalc-text {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--muted);
+    line-height: 1.5;
 }

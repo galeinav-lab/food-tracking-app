@@ -1,12 +1,10 @@
-import { type FormEvent, type JSX, useState } from "react";
+import { type JSX, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout, userUpdated } from "../../store/auth-slice";
 import { ActivityLevel, userService } from "../../services/user.service";
 import { ApiError } from "../../services/http-client";
 import "./Settings.css";
-
-const DEFAULT_WATER_TARGET_ML = 3000;
 
 const LEVELS: { value: ActivityLevel; label: string }[] = [
     { value: "sedentary", label: "Sedentary (little/no exercise)" },
@@ -30,14 +28,6 @@ function Settings(): JSX.Element {
     const [saved, setSaved] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Water target is edited in litres (converted to ml for storage).
-    const [waterL, setWaterL] = useState(
-        ((user?.waterTargetMl ?? DEFAULT_WATER_TARGET_ML) / 1000).toString()
-    );
-    const [waterSaving, setWaterSaving] = useState(false);
-    const [waterSaved, setWaterSaved] = useState(false);
-    const [waterError, setWaterError] = useState<string | null>(null);
-
     const onChange = async (level: ActivityLevel) => {
         setSaving(true);
         setSaved(false);
@@ -51,27 +41,6 @@ function Settings(): JSX.Element {
             setError(err instanceof ApiError ? err.message : "Failed to update activity level");
         } finally {
             setSaving(false);
-        }
-    };
-
-    const saveWater = async (e: FormEvent) => {
-        e.preventDefault();
-        const litres = Number(waterL);
-        if (waterL.trim() === "" || !Number.isFinite(litres) || litres <= 0 || litres > 20) {
-            setWaterError("Enter a target between 0.1 and 20 L.");
-            return;
-        }
-        setWaterError(null);
-        setWaterSaving(true);
-        setWaterSaved(false);
-        try {
-            const updated = await userService.setWaterTarget(Math.round(litres * 1000));
-            dispatch(userUpdated(updated));
-            setWaterSaved(true);
-        } catch (err) {
-            setWaterError(err instanceof ApiError ? err.message : "Failed to save water target");
-        } finally {
-            setWaterSaving(false);
         }
     };
 
@@ -96,34 +65,11 @@ function Settings(): JSX.Element {
                         </option>
                     ))}
                 </select>
-                <p className="settings-help">Changing this recalculates your maintenance calories.</p>
+                <p className="settings-help">Changing this recalculates your maintenance calories from today on.</p>
                 {saving && <p className="settings-help">Saving…</p>}
                 {saved && !saving && <p className="settings-saved">Saved.</p>}
                 {error && <p className="settings-error">{error}</p>}
             </div>
-
-            <form className="settings-section glass" onSubmit={saveWater}>
-                <label className="field-label settings-label" htmlFor="water-target">
-                    Daily water target (litres)
-                </label>
-                <div className="settings-inline">
-                    <input
-                        id="water-target"
-                        className="input settings-select"
-                        type="number"
-                        step="0.1"
-                        min="0.1"
-                        max="20"
-                        value={waterL}
-                        onChange={(e) => setWaterL(e.target.value)}
-                    />
-                    <button type="submit" className="btn btn-primary" disabled={waterSaving}>
-                        {waterSaving ? "Saving…" : "Save"}
-                    </button>
-                </div>
-                {waterSaved && !waterSaving && <p className="settings-saved">Saved.</p>}
-                {waterError && <p className="settings-error">{waterError}</p>}
-            </form>
 
             {/* Sub-pages as one grouped list of rows. Weight logging lives here
                 since it left the bottom nav; the /weight page itself is unchanged. */}

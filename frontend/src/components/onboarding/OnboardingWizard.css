@@ -147,3 +147,28 @@
 .onb-next {
     margin-left: auto;
 }
+
+/* Update mode: confirm before the current targets are replaced (inset well). */
+.onb-confirm {
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+}
+
+.onb-confirm-title {
+    margin: 0 0 var(--space-xs);
+    font-weight: 700;
+}
+
+/* Stacked full-width buttons, the confirming action on top (the DOM keeps
+   "Not now" first, so keyboard order reads cancel -> confirm). */
+.onb-confirm-nav {
+    flex-direction: column-reverse;
+    margin-top: var(--space-lg);
+}
+
+.onb-confirm-nav .btn {
+    width: 100%;
+    margin-left: 0;
+}

@@ -143,6 +143,7 @@
     --dur-press: 50ms;
     --dur-sweep: 550ms;
     --dur-pulse: 1100ms; /* skeleton loop (one direction) */
+    --dur-ambient: 22s; /* Home glow 'breathing' loop (one direction) */
     --stagger: 40ms;
 }
 
@@ -257,7 +258,7 @@ code {
 /* Small pill label (macros, durations). Colour variants by macro. */
 .chip {
     flex: 0 0 auto;
-    padding: 2px 8px;
+    padding: 2px var(--space-sm);
     border-radius: var(--r-pill);
     background: var(--surface-2); /* opaque: contrast never depends on the backdrop */
     color: var(--muted);
@@ -343,7 +344,7 @@ code {
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
-    padding: 11px var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
     border: 1px solid transparent;
     border-radius: var(--r-control);
     font-family: inherit;
@@ -423,7 +424,7 @@ code {
 
 /* Modifiers */
 .btn-sm {
-    padding: 5px 10px;
+    padding: 5px var(--space-md);
     font-size: var(--text-sm);
 }
 
@@ -475,7 +476,7 @@ code {
 .field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--space-sm);
 }
 
 .field-label {
@@ -485,7 +486,7 @@ code {
 
 .input {
     width: 100%;
-    padding: 10px 12px;
+    padding: var(--space-md);
     border: 1px solid var(--border);
     border-radius: var(--r-control);
     background-color: var(--surface-2);
@@ -501,7 +502,7 @@ code {
 }
 
 .input-sm {
-    padding: 5px 10px;
+    padding: 5px var(--space-md);
 }
 
 .input[aria-invalid="true"] {

@@ -106,11 +106,12 @@ function GoalsEdit(): JSX.Element {
 
             <form className="goals-form glass rise-in" onSubmit={handleSubmit}>
                 {FIELDS.map(({ key, label, unit }) => (
-                    <div className="goals-field" key={key}>
-                        <label htmlFor={`goal-${key}`}>
+                    <div className="field" key={key}>
+                        <label className="field-label" htmlFor={`goal-${key}`}>
                             {label} ({unit})
                         </label>
                         <input
+                            className="input"
                             id={`goal-${key}`}
                             type="number"
                             min="0"

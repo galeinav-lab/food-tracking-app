@@ -139,6 +139,7 @@ function WeeklyCalories(): JSX.Element {
                                     with no food logged shows an EMPTY track (no bar) —
                                     clearly "no data", never a zero that looks like fasting. */}
                                 <Bar
+                                    {...chartTheme.animation}
                                     dataKey="eaten"
                                     radius={[4, 4, 0, 0]}
                                     background={{ fill: colors.barTrack }}

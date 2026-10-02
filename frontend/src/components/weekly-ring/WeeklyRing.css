@@ -60,7 +60,7 @@
 .ring-kg {
     font-size: var(--text-sm);
     font-weight: 600;
-    margin-top: 6px;
+    margin-top: var(--space-sm);
     color: var(--accent);
 }
 

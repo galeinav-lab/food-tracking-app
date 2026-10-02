@@ -3,7 +3,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { foodService } from "../../services/food.service";
 import { ApiError } from "../../services/http-client";
 import { IWeeklyDeficit } from "../../models/deficit";
-import { colors } from "../../styles/colors";
+import { chartTheme, colors } from "../../styles/colors";
 import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./WeeklyRing.css";
 
@@ -87,9 +87,7 @@ function WeeklyRing({ date, refreshKey }: WeeklyRingProps): JSX.Element {
                             startAngle={90}
                             endAngle={-270}
                             stroke="none"
-                            isAnimationActive={true}
-                            animationDuration={550}
-                            animationEasing="ease-out"
+                            {...chartTheme.animation}
                         >
                             {ringData.map((d) => (
                                 <Cell key={d.name} fill={d.color} />

@@ -50,7 +50,7 @@ function WeightEntry({ onLogged, initialWeightKg = null, autoFocus = false }: We
         <>
             <form className="weight-form" onSubmit={(e) => void onSubmit(e)}>
                 <input
-                    className="weight-input"
+                    className="input weight-input"
                     type="number"
                     step="0.1"
                     min="20"

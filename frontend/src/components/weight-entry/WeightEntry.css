@@ -3,27 +3,18 @@
    load errors (this file is always bundled, so that keeps working). */
 .weight-form {
     display: flex;
-    gap: 10px;
-    margin-bottom: 6px;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
 }
 
+/* Look = .input; it just takes the row's spare width. */
 .weight-input {
     flex: 1;
     min-width: 0;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--r-control);
-    font-size: var(--text-input);
-    font-family: inherit;
-}
-
-.weight-input:focus {
-    outline: none;
-    border-color: var(--accent);
 }
 
 .weight-error {
     color: var(--error);
-    font-size: 0.9rem;
-    margin: 6px 0 0;
+    font-size: var(--text-sm);
+    margin: var(--space-sm) 0 0;
 }

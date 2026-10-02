@@ -1,5 +1,5 @@
 .weight-title {
-    margin: 0 0 18px;
+    margin: 0 0 var(--space-lg);
     font-size: var(--text-lg);
 }
 
@@ -12,27 +12,27 @@
 
 /* Loading placeholders sit where the chart card will. */
 .weight-skel {
-    margin-top: 20px;
+    margin-top: var(--space-xl);
 }
 
 /* Chart card — surface from .glass. */
 .weight-chart {
-    margin: 20px 0 12px;
+    margin: var(--space-xl) 0 var(--space-md);
     padding: var(--space-lg) var(--space-sm) var(--space-sm);
     border-radius: var(--r-card);
 }
 
 .weight-summary {
-    font-size: 0.9rem;
+    font-size: var(--text-base);
     color: var(--text);
     border-radius: var(--r-card);
-    padding: 12px 14px;
-    margin: 0 0 20px;
+    padding: var(--space-md) var(--space-lg);
+    margin: 0 0 var(--space-xl);
 }
 
 .weight-list-title {
-    font-size: 1rem;
-    margin: 0 0 12px;
+    font-size: var(--text-base);
+    margin: 0 0 var(--space-md);
 }
 
 .weight-list {
@@ -41,16 +41,16 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-sm);
 }
 
 .weight-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-md);
     border-radius: var(--r-card);
-    padding: 10px 10px 10px 14px;
-    font-size: 0.9rem;
+    padding: var(--space-md) var(--space-md) var(--space-md) var(--space-lg);
+    font-size: var(--text-base);
 }
 
 .weight-row-date {

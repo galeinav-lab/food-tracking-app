@@ -12,7 +12,7 @@
     right: 0;
     z-index: 20;
     min-width: 172px;
-    padding: 6px;
+    padding: var(--space-sm);
     display: flex;
     flex-direction: column;
     border-radius: var(--r-card);
@@ -41,7 +41,7 @@
 .amenu-item {
     display: block;
     width: 100%;
-    padding: 10px var(--space-md);
+    padding: var(--space-md);
     border: none;
     border-radius: var(--r-control);
     background: transparent;

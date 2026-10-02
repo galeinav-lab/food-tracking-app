@@ -32,7 +32,7 @@
 
 .onb-segs {
     display: flex;
-    gap: 6px;
+    gap: var(--space-sm);
 }
 
 .onb-seg {
@@ -59,7 +59,7 @@
 
 .onb-toggle {
     display: flex;
-    gap: 10px;
+    gap: var(--space-md);
 }
 
 .onb-opt {
@@ -87,11 +87,11 @@
 .onb-warning {
     color: var(--warning);
     font-size: var(--text-sm);
-    margin: 6px 0 0;
+    margin: var(--space-sm) 0 0;
 }
 
 .onb-error {
-    margin-top: 14px;
+    margin-top: var(--space-lg);
 }
 
 .onb-review {
@@ -100,7 +100,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-md);
 }
 
 .onb-review li,
@@ -108,7 +108,7 @@
     display: flex;
     justify-content: space-between;
     gap: var(--space-md);
-    font-size: 0.9rem;
+    font-size: var(--text-base);
     border-bottom: 1px solid var(--border);
     padding-bottom: var(--space-sm);
 }
@@ -140,7 +140,7 @@
 .onb-nav {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
+    gap: var(--space-md);
     margin-top: var(--space-xl);
 }
 

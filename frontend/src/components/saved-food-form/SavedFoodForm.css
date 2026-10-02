@@ -14,7 +14,7 @@
 
 .sff-label {
     display: block;
-    margin: 10px 0 6px;
+    margin: var(--space-md) 0 var(--space-sm);
 }
 
 /* A macro the AI couldn't read — nudge the user to fill it in. */
@@ -39,7 +39,7 @@
 .sff-macros {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: var(--space-md);
 }
 
 .sff-macro-field {
@@ -54,7 +54,7 @@
 
 .sff-actions {
     display: flex;
-    gap: 10px;
+    gap: var(--space-md);
     margin-top: var(--space-lg);
 }
 
@@ -63,5 +63,5 @@
 }
 
 .sff-error {
-    margin: 10px 0 0;
+    margin: var(--space-md) 0 0;
 }

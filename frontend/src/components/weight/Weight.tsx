@@ -130,6 +130,7 @@ function Weight(): JSX.Element {
                                     />
                                     <Legend wrapperStyle={{ fontSize: 12, color: colors.muted }} />
                                     <Line
+                                        {...chartTheme.animation}
                                         type="monotone"
                                         dataKey="actual"
                                         name="Actual"
@@ -139,6 +140,7 @@ function Weight(): JSX.Element {
                                         dot={{ r: 3 }}
                                     />
                                     <Line
+                                        {...chartTheme.animation}
                                         type="monotone"
                                         dataKey="target"
                                         name="Target"

@@ -1,5 +1,5 @@
 .history-title {
-    margin: 0 0 18px;
+    margin: 0 0 var(--space-lg);
     font-size: var(--text-lg);
 }
 
@@ -16,7 +16,7 @@
 .history-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-md);
 }
 
 /* Surface comes from .glass; shape only here. */
@@ -29,8 +29,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 14px 16px;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
     background: none;
     border: none;
     color: inherit;
@@ -62,7 +62,7 @@
 }
 
 .history-cals {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     color: var(--muted);
     font-variant-numeric: tabular-nums;
 }
@@ -70,7 +70,7 @@
 .history-row-sub {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-md);
 }
 
 .history-bar {
@@ -93,12 +93,12 @@
 
 .history-nogoal {
     flex: 1;
-    font-size: 0.8rem;
+    font-size: var(--text-sm);
     color: var(--muted);
 }
 
 .history-meals {
-    font-size: 0.8rem;
+    font-size: var(--text-sm);
     color: var(--muted);
     flex-shrink: 0;
 }
@@ -106,14 +106,14 @@
 /* Recessed well (.glass-inset) holding the day's meals. */
 .history-detail {
     border-top: 1px solid var(--border);
-    padding: 14px 16px;
+    padding: var(--space-lg);
 }
 
 .history-totals {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    gap: var(--space-md);
     font-size: var(--text-sm);
     font-weight: 600;
-    margin-top: 6px;
+    margin-top: var(--space-sm);
 }

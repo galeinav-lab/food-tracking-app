@@ -29,7 +29,8 @@ row in Settings (§6).
 ## 2. Tech stack
 
 - **Frontend:** Create React App + TypeScript, React 19, react-router v7, **Redux Toolkit (auth only)**,
-  **recharts** (charts/rings), axios. Dark-blue theme via CSS custom properties.
+  **recharts** (charts/rings), axios. Dark green + lime "ambient glass" theme via CSS custom properties
+  (`design-system/nutritrack/MASTER.md`).
 - **Backend:** Node + Express 5 + TypeScript (OOP, class-based), **Mongoose** (MongoDB), JWT auth,
   bcrypt, helmet, express-rate-limit, Joi validation.
 - **External:** **Anthropic API** (Claude) for food parsing + goal calculation.
@@ -62,7 +63,7 @@ food-track-project/
 │       ├── models/       TS interfaces mirroring backend responses
 │       ├── store/        Redux Toolkit (auth slice, typed hooks, store, auth-bridge)
 │       ├── context/      refresh-context.tsx (selectedDate + refresh signal — NOT Redux)
-│       ├── styles/       colors.ts (JS mirror of CSS tokens for recharts/SVG)
+│       ├── styles/       colors.ts (JS mirror of CSS tokens for recharts/SVG, incl. chart motion)
 │       └── utils/        date.ts (tz-safe dates, mirrors backend date-tz.ts)
 ├── design-system/    nutritrack/MASTER.md — tokens, glass tiers, shared UI blocks (source of truth)
 └── tools/ui-check/   Dev-only screenshot tooling (mock API + headless Chrome); not part of any build

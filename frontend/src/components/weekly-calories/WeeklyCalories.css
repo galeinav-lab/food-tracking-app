@@ -24,7 +24,7 @@
 /* Custom chart tooltip. */
 .wc-tip {
     border-radius: var(--r-control);
-    padding: var(--space-sm) 10px;
+    padding: var(--space-sm) var(--space-md);
     font-size: var(--text-sm);
     color: var(--text);
 }
@@ -57,11 +57,11 @@
 
 .weekly-summary {
     border-radius: var(--r-card);
-    padding: 14px var(--space-lg);
+    padding: var(--space-lg);
 }
 
 .weekly-line {
-    margin: 0 0 6px;
+    margin: 0 0 var(--space-sm);
     font-size: var(--text-base);
 }
 

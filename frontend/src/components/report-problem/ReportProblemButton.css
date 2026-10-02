@@ -1,30 +1,12 @@
-/* Sits above the bottom nav (which is ~64px tall + safe area). The panel itself
-   is the shared <Sheet> shell; only the FAB and the form content live here. */
+/* Testing-build "Report" button: a float-tier pill (.btn .btn-sm .glass-float)
+   parked above the bottom nav. The panel is the shared <Sheet>; the note field
+   is .field-label + .input. Placement and shape only here. */
 .rp-fab {
     position: fixed;
-    right: max(12px, env(safe-area-inset-right, 0px));
-    bottom: calc(78px + env(safe-area-inset-bottom));
+    right: max(var(--space-md), env(safe-area-inset-right, 0px));
+    bottom: calc(var(--nav-clearance) - var(--space-lg) + env(safe-area-inset-bottom));
     z-index: 1500;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 13px;
     border-radius: var(--r-pill);
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    color: var(--text);
-    font-size: 0.8rem;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    box-shadow: var(--shadow-card);
-    opacity: 0.92;
-}
-
-.rp-fab:hover {
-    opacity: 1;
-    border-color: var(--accent);
-    color: var(--accent);
 }
 
 .rp-fab-label {
@@ -33,31 +15,16 @@
 
 .rp-label {
     display: block;
-    margin-bottom: 6px;
-    font-size: var(--text-sm);
-    color: var(--muted);
+    margin-bottom: var(--space-sm);
 }
 
 .rp-textarea {
-    width: 100%;
-    padding: 11px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--r-control);
-    background: var(--surface-2);
-    color: var(--text);
-    font-size: var(--text-input);
-    font-family: inherit;
     resize: vertical;
 }
 
-.rp-textarea:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
 .rp-hint {
-    margin: 8px 0 14px;
-    font-size: 0.76rem;
+    margin: var(--space-sm) 0 var(--space-lg);
+    font-size: var(--text-xs);
     color: var(--muted);
 }
 

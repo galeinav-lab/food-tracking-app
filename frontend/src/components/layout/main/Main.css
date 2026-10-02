@@ -5,7 +5,7 @@
 .content {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding-top: calc(16px + env(safe-area-inset-top, 0px));
+    padding-top: calc(var(--space-lg) + env(safe-area-inset-top, 0px));
     padding-left: max(clamp(16px, 4vw, 28px), env(safe-area-inset-left, 0px));
     padding-right: max(clamp(16px, 4vw, 28px), env(safe-area-inset-right, 0px));
     padding-bottom: calc(var(--nav-clearance) + env(safe-area-inset-bottom, 0px));

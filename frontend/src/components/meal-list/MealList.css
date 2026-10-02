@@ -1,5 +1,5 @@
 .meal-list-title {
-    margin: 0 0 14px;
+    margin: 0 0 var(--space-lg);
     font-size: var(--text-md);
 }
 

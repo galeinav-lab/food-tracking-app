@@ -1,15 +1,15 @@
 /* Content of the logging sheet only — the shell (scrim, panel, handle, header)
    is the shared <Sheet> (sheet/Sheet.css). */
 .sheet-day {
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     font-weight: 500;
     color: var(--muted);
 }
 
 .sheet-section {
     border-top: 1px solid var(--border);
-    padding-top: 16px;
-    margin-top: 8px;
+    padding-top: var(--space-lg);
+    margin-top: var(--space-sm);
 }
 
 .sheet-section:first-child {

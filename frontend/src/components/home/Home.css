@@ -1,7 +1,7 @@
 .home {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: var(--space-lg);
 }
 
 /* ── Breathing lime bloom (dashboard only) ──────────────────────────────────
@@ -26,7 +26,7 @@
         transparent 78%
     );
     transform-origin: 50% 32%;
-    animation: ambient-breathe 22s var(--ease-in-out) infinite alternate;
+    animation: ambient-breathe var(--dur-ambient) var(--ease-in-out) infinite alternate;
     will-change: opacity, transform;
 }
 
@@ -57,7 +57,7 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    padding: 4px 2px 0;
+    padding: var(--space-xs) 2px 0;
 }
 
 .home-hi {

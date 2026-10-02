@@ -9,7 +9,7 @@
 .dash-msg {
     text-align: center;
     color: var(--muted);
-    padding: 28px;
+    padding: var(--space-2xl);
 }
 
 .dash-error {
@@ -26,7 +26,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-md);
     padding: var(--space-xl);
     width: 100%;
     font: inherit;

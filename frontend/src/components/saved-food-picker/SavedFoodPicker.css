@@ -14,7 +14,7 @@
     color: var(--muted);
     font-size: var(--text-sm);
     line-height: 1.5;
-    margin: 0 0 10px;
+    margin: 0 0 var(--space-md);
 }
 
 .sfp-hint-sm {
@@ -23,7 +23,7 @@
 }
 
 .sfp-error {
-    margin: 10px 0 0;
+    margin: var(--space-md) 0 0;
 }
 
 /* ── Empty state ────────────────────────────────────────────────────── */
@@ -46,10 +46,10 @@
 .sfp-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-md);
     width: 100%;
     text-align: left;
-    padding: var(--space-md) 14px;
+    padding: var(--space-md) var(--space-lg);
     border: 1px solid var(--border);
     border-radius: var(--r-card);
     color: var(--text);
@@ -137,25 +137,25 @@
 }
 
 .sfp-picked-per {
-    margin: var(--space-xs) 0 14px;
+    margin: var(--space-xs) 0 var(--space-lg);
     font-size: var(--text-sm);
     color: var(--muted);
 }
 
 .sfp-label {
-    margin-bottom: 6px;
+    margin-bottom: var(--space-sm);
 }
 
 .sfp-amount-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-md);
 }
 
 /* The amount is the point of this step: larger, in the heading face. */
 .sfp-input {
     flex: 1;
-    padding: var(--space-md) 14px;
+    padding: var(--space-md) var(--space-lg);
     font-size: var(--text-md);
     font-family: var(--font-head);
     font-variant-numeric: tabular-nums;
@@ -169,8 +169,8 @@
 
 /* Live preview of the scaled macros (inset well). */
 .sfp-preview {
-    margin-top: 14px;
-    padding: 14px;
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
     border: 1px solid var(--border);
     border-radius: var(--r-card);
     text-align: center;
@@ -190,8 +190,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 6px;
-    margin-top: 10px;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
 }
 
 .sfp-submit {

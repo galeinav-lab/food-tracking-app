@@ -36,7 +36,7 @@
 }
 
 .ls-tip {
-    margin: 10px 0 14px;
+    margin: var(--space-md) 0 var(--space-lg);
     font-size: var(--text-sm);
     color: var(--muted);
     text-align: center;
@@ -47,7 +47,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: var(--space-sm);
     padding: 0;
     background: none;
     border: none;
@@ -83,12 +83,12 @@
 }
 
 .ls-upload {
-    margin-top: 14px;
+    margin-top: var(--space-lg);
 }
 
 .ls-camera-error {
     margin: var(--space-xs) 0 0;
-    padding: 14px;
+    padding: var(--space-lg);
     border-radius: var(--r-card);
     border: 1px solid var(--border);
     color: var(--muted);
@@ -129,7 +129,7 @@
 .ls-reading-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: var(--space-md);
 }
 
 /* ── Serving-size prompt ────────────────────────────────────────────── */
@@ -145,7 +145,7 @@
 }
 
 .ls-serving-hint {
-    margin: 0 0 14px;
+    margin: 0 0 var(--space-lg);
     font-size: var(--text-sm);
     color: var(--muted);
     line-height: 1.5;
@@ -154,13 +154,13 @@
 .ls-serving-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-md);
 }
 
 /* The serving size is the point of this step: larger, in the heading face. */
 .ls-input {
     flex: 1;
-    padding: var(--space-md) 14px;
+    padding: var(--space-md) var(--space-lg);
     font-size: var(--text-md);
     font-family: var(--font-head);
     font-variant-numeric: tabular-nums;
@@ -174,7 +174,7 @@
 
 .ls-serving-actions {
     display: flex;
-    gap: 10px;
+    gap: var(--space-md);
     margin-top: var(--space-lg);
 }
 
@@ -184,8 +184,8 @@
 
 /* ── Confirm ────────────────────────────────────────────────────────── */
 .ls-confirm-banner {
-    margin: 0 0 14px;
-    padding: 10px var(--space-md);
+    margin: 0 0 var(--space-lg);
+    padding: var(--space-md);
     border-radius: var(--r-control);
     background: var(--accent-soft);
     border: 1px solid var(--border);

@@ -53,7 +53,7 @@ function ReportProblemButton(): JSX.Element | null {
             {!open && (
                 <button
                     type="button"
-                    className="rp-fab"
+                    className="btn btn-secondary btn-sm glass-float rp-fab"
                     onClick={() => setOpen(true)}
                     aria-label="Report a problem"
                 >
@@ -71,12 +71,12 @@ function ReportProblemButton(): JSX.Element | null {
             {open && (
                 <Sheet title="Report a problem" ariaLabel="Report a problem" onClose={() => setOpen(false)}>
                     <form onSubmit={submit}>
-                        <label className="rp-label" htmlFor="rp-note">
+                        <label className="field-label rp-label" htmlFor="rp-note">
                             What were you doing?
                         </label>
                         <textarea
                             id="rp-note"
-                            className="rp-textarea"
+                            className="input rp-textarea"
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
                             rows={4}

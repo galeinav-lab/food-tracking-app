@@ -80,12 +80,12 @@ function Settings(): JSX.Element {
             <h1 className="settings-title">Settings</h1>
 
             <div className="settings-section glass">
-                <label className="settings-label" htmlFor="activity-level">
+                <label className="field-label settings-label" htmlFor="activity-level">
                     Activity level
                 </label>
                 <select
                     id="activity-level"
-                    className="settings-select"
+                    className="input settings-select"
                     value={current}
                     disabled={saving}
                     onChange={(e) => onChange(e.target.value as ActivityLevel)}
@@ -103,13 +103,13 @@ function Settings(): JSX.Element {
             </div>
 
             <form className="settings-section glass" onSubmit={saveWater}>
-                <label className="settings-label" htmlFor="water-target">
+                <label className="field-label settings-label" htmlFor="water-target">
                     Daily water target (litres)
                 </label>
                 <div className="settings-inline">
                     <input
                         id="water-target"
-                        className="settings-select"
+                        className="input settings-select"
                         type="number"
                         step="0.1"
                         min="0.1"

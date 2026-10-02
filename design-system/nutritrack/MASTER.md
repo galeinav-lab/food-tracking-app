@@ -1,10 +1,12 @@
-# NutriTrack Design System — v3.1 "Dark Lime — Ambient Glass" (MASTER)
+# NutriTrack Design System — v3.2 "Dark Lime — Ambient Glass" (MASTER)
 
-> Source of truth for all UI styling. Palette-only revision of v2 (archived as
+> Source of truth for all UI styling. v3.1 was a palette-only revision of v2 (archived as
 > `MASTER-v2-light-olive.md`; v1 dark navy as `MASTER-v1-dark-navy.md`).
-> **Everything except color is inherited from v2 unchanged:** typography (Lora + Raleway),
-> radii, spacing, the entire motion system (§4 of v2 — sweeps, spring fan-out,
-> press-compress, ease tokens), component structure.
+> **v3.2 (the ui-refresh branch)** keeps the palette and adds the system on top: semantic
+> radius/type/spacing tokens, glass tiers with blur on the nav only, shared building blocks
+> (`.btn`, `.field`/`.input`, `<Sheet>`, `<Skeleton>`, `<ActionMenu>`, `.chip`, `.card-list`), the
+> motion rules and a measured contrast floor. **§3.5 and §3.6 supersede earlier sections where
+> they differ.** Typography (Lora + Raleway) and the base motion system are inherited from v2.
 > Style base: ui-ux-pro-max **"Dark Mode (OLED)"** — dark surfaces, vibrant neon accent,
 > minimal glow, high contrast, `color-scheme: dark`. All pairs below AA-checked.
 
@@ -72,7 +74,8 @@ grid/track `rgba(214,255,170,0.08)` · axis text `#B4BFA4` · tooltip bg `#212B1
 - **Motion system:** `--ease-out cubic-bezier(0.22,1,0.36,1)`, `--ease-in`, `--ease-spring`,
   durations fast 150 / base 200 / slow 250 / press 50 / sweep 550, stagger 40ms; press-compress
   on every tappable; ring/bar sweeps; spring fan-out with quick ease-in close; reduced-motion collapse.
-- **Structure rules:** tokens only (index.css + colors.ts mirror), transform/opacity-only animation.
+- **Structure rules:** tokens only (index.css + colors.ts mirror), transform/opacity-only animation
+  (one documented exception: the Ring sweep, §3.6).
 
 ### Dark-theme deltas (shadows & chrome)
 | Token | Value |
@@ -162,7 +165,7 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 | Form controls | `--text-input 1rem` — every input/select/textarea is ≥16px (iOS Safari zooms on focus below that); outside the type scale on purpose |
 | Elevation / chrome | `--shadow-sheet` · `--scrim` · `--danger-soft` |
 | Tints | `--macro-protein-soft` · `--macro-carbs-soft` · `--macro-fat-soft` (14% chips/thumbs) · `--on-accent-soft` (badges on lime) |
-| Motion | `--ease-in-out` · `--dur-pulse` (skeleton loop) |
+| Motion | `--ease-in-out` · `--dur-pulse` (skeleton loop) · `--dur-ambient` (22s glow loop) |
 
 **Shared building blocks — use these, never a per-screen copy:**
 - **Buttons** — `.btn` + one variant `.btn-primary` / `.btn-secondary` / `.btn-danger`, optional
@@ -189,9 +192,13 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
   `--stagger`, capped at the 8th child) using the shared `rise-in` keyframe (index.css). `.fade-in` is the opacity-only
   variant (step changes, scrims).
 
-Spacing: components use the `--space-*` tokens where a value is on the 4/8/12/16/24/32 scale.
-Off-scale values (2/3/6/10/14/18/28px) still exist app-wide, including the shared `.field`; they
-are normalised in one app-wide pass (phase 5) so screens never disagree with each other.
+Spacing: padding/margin/gap use the `--space-*` scale (4/8/12/16/24/32) everywhere. Snapped once,
+app-wide: 6→8, 10/11→12, 14/18→16, 20→24, 28→32. Allowed literals: optical micro-spacing ≤ 5px
+inside chips/steppers/badges, negative optical offsets, and the fluid `clamp()` page gutters.
+
+Literals policy: no hex/rgb or ms literals outside `index.css` (`styles/colors.ts` is the JS mirror
+for recharts). Literal px remain only for dimensions (icon/thumb/button sizes), 1px borders, 2px
+focus outlines, the + menu's fan coordinates, and the micro/optical cases above.
 
 Page transition: `Main` keys a wrapper by pathname with `.fade-in` (opacity only, no held
 fill-mode, so the page's fixed layers — Home's glow, the strength editor sheet — are never captured
@@ -199,6 +206,15 @@ by a transformed ancestor).
 
 Motion rule: entrance keyframes never use `animation-fill-mode: forwards/both` — a held
 `transform` on an ancestor turns it into the containing block for `position: fixed` children.
+
+**Allowed exception:** the shared `Ring` fills by transitioning `stroke-dashoffset`
+(`--dur-sweep`, `--ease-out`) — paint, not transform/opacity. Kept on purpose: a small SVG arc that
+animates once per value change; a transform-based rewrite isn't worth it. Nothing else animates a
+paint or layout property.
+
+Charts: recharts animates in JS, outside CSS. `chartTheme.animation` (styles/colors.ts) mirrors
+`--dur-sweep` / `--ease-out` for every series (Weight lines, Weekly bars, the weekly ring) and turns
+animation off under `prefers-reduced-motion`, which the CSS kill-switch can't reach.
 
 ## 4. Anti-patterns (do not)
 - Pure black `#000` canvas or neutral-gray darks (the green undertone is the identity).

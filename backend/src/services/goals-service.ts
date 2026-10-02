@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import { Goal, IGoal } from "../models/goal";
 import { SetGoalsInput } from "../types/goals";
 import { BaseService } from "./base-service";
+import { foodService } from "./food-service";
 
 class GoalsService extends BaseService<IGoal> {
 
@@ -23,6 +24,9 @@ class GoalsService extends BaseService<IGoal> {
             { $set: { ...input, userId: uid } },
             { new: true, upsert: true, setDefaultsOnInsert: true }
         ).exec();
+        // New goals apply from today on: today's summary (if any) takes them; past
+        // days keep the goalSnapshot they were logged under.
+        await foodService.applyTargetsToToday(userId, { goals: updated!.toObject() as unknown as Record<string, unknown> });
         return updated!;
     }
 

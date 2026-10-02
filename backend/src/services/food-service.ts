@@ -318,7 +318,10 @@ class FoodService extends BaseService<IFoodLog> {
             const logged = Boolean(summary && summary.logCount > 0);
             days.push({
                 date,
-                maintenance,
+                // The maintenance in force that day (snapshotted on the summary), so
+                // a later target/activity change never shifts a past day's deficit.
+                // Un-logged days and pre-snapshot summaries use the current value.
+                maintenance: summary?.maintenanceSnapshot ?? maintenance,
                 exerciseCalories: exerciseByDate.get(date) ?? 0,
                 caloriesEaten: logged && summary ? summary.totals?.calories ?? 0 : null,
             });
@@ -349,6 +352,56 @@ class FoodService extends BaseService<IFoodLog> {
         throw new ValidationError(
             "Maintenance calories are not available yet — complete onboarding first."
         );
+    }
+
+    // ── Targets apply from today on ─────────────────────────────────────────
+    // Goals and maintenance live in ONE current document each (Goal, User), but
+    // every day's summary keeps the values it was logged under. Callers that
+    // change targets (onboarding/recalculate, goal edits, activity level) call
+    // freezeTargetsBeforeToday BEFORE overwriting and applyTargetsToToday AFTER.
+
+    // Past summaries that predate maintenanceSnapshot get the OLD maintenance
+    // pinned, so the coming change can't shift their deficit. Idempotent: only
+    // fills summaries that don't have one yet.
+    public async freezeTargetsBeforeToday(userId: string, oldMaintenance: number): Promise<void> {
+        const timezone = await this.getUserTimezone(userId);
+        const today = toDateStringInTz(new Date(), timezone);
+        const filter: AnyFilter = {
+            userId: new Types.ObjectId(userId),
+            date: { $lt: today },
+            maintenanceSnapshot: { $exists: false },
+        };
+        const update: AnyUpdate = { $set: { maintenanceSnapshot: oldMaintenance } };
+        await DailySummary.updateMany(filter, update).exec();
+    }
+
+    // Today's summary (if food is already logged today) takes the NEW targets,
+    // so "from today on" includes today. Never creates a summary.
+    public async applyTargetsToToday(
+        userId: string,
+        targets: { goals?: Record<string, unknown>; maintenance?: number }
+    ): Promise<void> {
+        const set: Record<string, unknown> = {};
+        if (targets.goals) set.goalSnapshot = targets.goals;
+        if (typeof targets.maintenance === "number") set.maintenanceSnapshot = targets.maintenance;
+        if (Object.keys(set).length === 0) return;
+        const timezone = await this.getUserTimezone(userId);
+        const today = toDateStringInTz(new Date(), timezone);
+        const filter: AnyFilter = { userId: new Types.ObjectId(userId), date: today };
+        const update: AnyUpdate = { $set: set };
+        await DailySummary.updateOne(filter, update).exec();
+    }
+
+    // The user's current maintenance, or null when it can't be known yet
+    // (e.g. before onboarding) — snapshotting must never block logging food.
+    private async currentMaintenanceOrNull(userId: string): Promise<number | null> {
+        const user = await User.findById(userId, "maintenanceCalories activityLevel profile").lean().exec();
+        if (!user) return null;
+        try {
+            return this.resolveMaintenance(user);
+        } catch {
+            return null;
+        }
     }
 
     private async getUserTimezone(userId: string): Promise<string> {
@@ -412,6 +465,7 @@ class FoodService extends BaseService<IFoodLog> {
 
         const goalFilter: AnyFilter = { userId: uid };
         const goal = await Goal.findOne(goalFilter).lean().exec();
+        const maintenance = await this.currentMaintenanceOrNull(userId);
 
         // Sum the day's exercise burn (stored on the summary for food-logged days).
         const exFilter: AnyFilter = { userId: uid, date: dateString };
@@ -421,7 +475,10 @@ class FoodService extends BaseService<IFoodLog> {
         const filter: AnyFilter = { userId: uid, date: dateString };
         const update: AnyUpdate = {
             $set: { totals, logCount: logs.length, exerciseBurned },
-            $setOnInsert: { goalSnapshot: goal ?? {} },
+            $setOnInsert: {
+                goalSnapshot: goal ?? {},
+                ...(maintenance !== null ? { maintenanceSnapshot: maintenance } : {}),
+            },
         };
         await DailySummary.updateOne(filter, update, { upsert: true });
     }

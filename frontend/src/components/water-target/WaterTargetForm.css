@@ -1,0 +1,25 @@
+/* Water target card on the Daily Goals page. Surface = .glass; field and button
+   are the shared .field-label / .input / .btn. Layout only. */
+.wt {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    border-radius: var(--r-card);
+}
+
+.wt-row {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.wt-row .input {
+    flex: 1;
+    min-width: 0;
+}
+
+.wt-saved {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--success);
+}

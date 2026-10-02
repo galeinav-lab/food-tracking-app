@@ -1,7 +1,10 @@
-import { type JSX, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { type JSX, useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { GoalType, IOnboardingInput, IOnboardingResult, Sex } from "../../models/onboarding";
 import { onboardingService } from "../../services/onboarding.service";
+import { authService } from "../../services/auth.service";
+import { goalsService } from "../../services/goals.service";
+import { IGoal } from "../../models/goal";
 import { ApiError } from "../../services/http-client";
 import { useAppDispatch } from "../../store/hooks";
 import { userUpdated } from "../../store/auth-slice";
@@ -24,8 +27,22 @@ const GOAL_LABELS: Record<GoalType, string> = {
     gain: "Gain weight",
 };
 
-function OnboardingWizard(): JSX.Element {
-    const [step, setStep] = useState(0);
+interface OnboardingWizardProps {
+    // "onboarding" (default): first-run setup. "update": an onboarded user
+    // recalculating their targets — prefilled with their current details, a
+    // confirm step before anything is overwritten, then back where they came from.
+    mode?: "onboarding" | "update";
+}
+
+// Update-mode entry points: ?start=goal opens on the goal step (from the Weight
+// page), ?from=weight returns there; default return is the Daily Goals page.
+const RETURN_TO: Record<string, string> = { weight: "/weight" };
+
+function OnboardingWizard({ mode = "onboarding" }: OnboardingWizardProps): JSX.Element {
+    const isUpdate = mode === "update";
+    const [params] = useSearchParams();
+    const returnTo = RETURN_TO[params.get("from") ?? ""] ?? "/settings/goals";
+    const [step, setStep] = useState(isUpdate && params.get("start") === "goal" ? 1 : 0);
 
     // Kept as strings (raw input); parsed/validated per step.
     const [weightKg, setWeightKg] = useState("");
@@ -44,6 +61,40 @@ function OnboardingWizard(): JSX.Element {
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [result, setResult] = useState<IOnboardingResult | null>(null);
+
+    // Update mode: prefill from the backend's current copy of the user (fresh, not
+    // the login-time snapshot) and keep the current targets for the confirm step.
+    const [prefilling, setPrefilling] = useState(isUpdate);
+    const [prefillError, setPrefillError] = useState(false);
+    const [currentGoals, setCurrentGoals] = useState<IGoal | null>(null);
+    const [confirming, setConfirming] = useState(false);
+
+    useEffect(() => {
+        if (!isUpdate) return;
+        let active = true;
+        Promise.all([authService.me(), goalsService.getGoals()])
+            .then(([u, g]) => {
+                if (!active) return;
+                const p = u.profile;
+                if (p?.weightKg) setWeightKg(String(p.weightKg));
+                if (p?.heightCm) setHeightCm(String(p.heightCm));
+                if (p?.age) setAge(String(p.age));
+                if (p?.sex) setSex(p.sex);
+                if (u.goalType) setGoalType(u.goalType);
+                if (u.targetWeightKg) setTargetWeightKg(String(u.targetWeightKg));
+                if (u.timeframeMonths) setTimeframeMonths(String(u.timeframeMonths));
+                setCurrentGoals(g);
+            })
+            .catch(() => {
+                if (active) setPrefillError(true);
+            })
+            .finally(() => {
+                if (active) setPrefilling(false);
+            });
+        return () => {
+            active = false;
+        };
+    }, [isUpdate]);
 
     const isMaintain = goalType === "maintain";
 
@@ -111,6 +162,7 @@ function OnboardingWizard(): JSX.Element {
 
     const back = () => {
         setError(null);
+        setConfirming(false);
         setStep((s) => Math.max(s - 1, 0));
     };
 
@@ -150,18 +202,55 @@ function OnboardingWizard(): JSX.Element {
 
     const goToApp = () => {
         if (!result) return;
-        // Update the auth user so the routing gate now lets them into the app.
+        // Update the auth user so the routing gate now lets them into the app (and,
+        // in update mode, so Weight/Settings show the new goal right away).
         dispatch(userUpdated(result.user));
-        navigate("/", { replace: true });
+        navigate(isUpdate ? returnTo : "/", { replace: true });
     };
+
+    if (prefilling) {
+        return (
+            <div className="onboarding">
+                <SkeletonGroup label="Loading your details" className="onb-card glass">
+                    <Skeleton width="40%" />
+                    <Skeleton shape="block" height="48px" />
+                    <Skeleton shape="block" height="48px" />
+                    <Skeleton shape="block" height="48px" />
+                </SkeletonGroup>
+            </div>
+        );
+    }
+
+    if (prefillError) {
+        return (
+            <div className="onboarding">
+                <div className="onb-card glass">
+                    <h1 className="onb-title">Recalculate my targets</h1>
+                    <p className="onb-note">Couldn't load your current details.</p>
+                    <div className="onb-nav">
+                        <button type="button" className="btn btn-secondary" onClick={() => navigate(returnTo)}>
+                            Back
+                        </button>
+                        <button type="button" className="btn btn-primary onb-next" onClick={() => window.location.reload()}>
+                            Try again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     // Success screen: shown after a successful submit (before entering the app).
     if (result) {
         return (
             <div className="onboarding">
                 <div className="onb-card glass rise-in">
-                    <h1 className="onb-title">You're all set!</h1>
-                    <p className="onb-note">Your recommended daily goals:</p>
+                    <h1 className="onb-title">{isUpdate ? "Your new daily targets" : "You're all set!"}</h1>
+                    <p className="onb-note">
+                        {isUpdate
+                            ? "They apply from today on; past days keep theirs."
+                            : "Your recommended daily goals:"}
+                    </p>
 
                     <ul className="onb-review">
                         <li>
@@ -194,7 +283,7 @@ function OnboardingWizard(): JSX.Element {
 
                     <div className="onb-nav">
                         <button type="button" className="btn btn-primary onb-next" onClick={goToApp}>
-                            Go to dashboard
+                            {isUpdate ? "Done" : "Go to dashboard"}
                         </button>
                     </div>
                 </div>
@@ -207,7 +296,7 @@ function OnboardingWizard(): JSX.Element {
             <div className="onb-card glass rise-in">
                 <div className="onb-progress">
                     <p className="onb-progress-text">
-                        Step {step + 1} of {STEPS.length}
+                        {isUpdate ? "Recalculate · " : ""}Step {step + 1} of {STEPS.length}
                     </p>
                     <div className="onb-segs" aria-hidden="true">
                         {STEPS.map((label, i) => (
@@ -405,11 +494,38 @@ function OnboardingWizard(): JSX.Element {
                     </p>
                 )}
 
-                <div className="onb-nav">
-                    {step > 0 && (
+                {/* Update mode: confirm before the current targets are replaced. */}
+                {isUpdate && confirming && !submitting && (
+                    <div className="onb-confirm glass-inset" role="alertdialog" aria-labelledby="onb-confirm-title">
+                        <p id="onb-confirm-title" className="onb-confirm-title">
+                            Replace your daily targets?
+                        </p>
+                        <p className="onb-note">
+                            {currentGoals ? `Your current target is ${fmt(currentGoals.calories)} kcal a day. ` : ""}
+                            New targets apply from today on; past days keep theirs.
+                        </p>
+                        <div className="onb-nav onb-confirm-nav">
+                            <button type="button" className="btn btn-secondary" onClick={() => setConfirming(false)}>
+                                Not now
+                            </button>
+                            <button type="button" className="btn btn-primary onb-next" onClick={handleFinish}>
+                                Yes, recalculate
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                <div className="onb-nav" hidden={isUpdate && confirming && !submitting}>
+                    {step > 0 ? (
                         <button type="button" className="btn btn-secondary" onClick={back} disabled={submitting}>
                             Back
                         </button>
+                    ) : (
+                        isUpdate && (
+                            <button type="button" className="btn btn-secondary" onClick={() => navigate(returnTo)}>
+                                Cancel
+                            </button>
+                        )
                     )}
                     {step < STEPS.length - 1 ? (
                         <button type="button" className="btn btn-primary onb-next" onClick={next}>
@@ -419,11 +535,11 @@ function OnboardingWizard(): JSX.Element {
                         <button
                             type="button"
                             className={submitting ? "btn btn-primary btn-loading onb-next" : "btn btn-primary onb-next"}
-                            onClick={handleFinish}
+                            onClick={isUpdate ? () => setConfirming(true) : handleFinish}
                             disabled={submitting}
                             aria-busy={submitting}
                         >
-                            {submitting ? "Calculating…" : "Finish"}
+                            {submitting ? "Calculating…" : isUpdate ? "Recalculate" : "Finish"}
                         </button>
                     )}
                 </div>

@@ -11,6 +11,7 @@ const user = {
     goals: { calories: 2000, protein: 150, carbs: 200, fat: 65, fiber: 30 },
     preferences: { units: "metric", timezone: "Asia/Jerusalem" },
     onboardingCompleted: true, waterTargetMl: 2500, maintenanceCalories: 2300,
+    goalType: "lose", targetWeightKg: 74, timeframeMonths: 6,
     createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z",
 };
 

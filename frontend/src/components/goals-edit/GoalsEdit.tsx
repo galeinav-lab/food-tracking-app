@@ -4,6 +4,7 @@ import { goalsService } from "../../services/goals.service";
 import { ApiError } from "../../services/http-client";
 import { INutrition } from "../../models/nutrition";
 import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
+import WaterTargetForm from "../water-target/WaterTargetForm";
 import "./GoalsEdit.css";
 
 const FIELDS: { key: keyof INutrition; label: string; unit: string }[] = [
@@ -134,6 +135,25 @@ function GoalsEdit(): JSX.Element {
                     </button>
                 </div>
             </form>
+
+            <WaterTargetForm />
+
+            {/* Reruns the setup questions (prefilled) and lets the backend compute
+                new targets — the same onboarding calculation, never frontend maths. */}
+            <section className="goals-recalc glass rise-in">
+                <h2 className="goals-recalc-title">Recalculate my targets</h2>
+                <p className="goals-recalc-text">
+                    Update your body stats and goal and get new daily targets. They apply from
+                    today on; past days keep theirs.
+                </p>
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => navigate("/settings/goals/recalculate")}
+                >
+                    Recalculate my targets
+                </button>
+            </section>
         </div>
     );
 }

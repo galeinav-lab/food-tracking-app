@@ -10,6 +10,43 @@
     font-size: var(--text-sm);
 }
 
+/* Goal card: label + value on the left, Change on the right. Surface = .glass. */
+.weight-goal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--r-card);
+}
+
+.weight-goal-main {
+    min-width: 0;
+}
+
+.weight-goal-label {
+    margin: 0;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+}
+
+.weight-goal-value {
+    margin: 2px 0 0;
+    font-size: var(--text-md);
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
+}
+
+.weight-goal-sub {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--muted);
+}
+
 /* Loading placeholders sit where the chart card will. */
 .weight-skel {
     margin-top: var(--space-xl);

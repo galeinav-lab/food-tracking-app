@@ -117,7 +117,7 @@ any of name/sets/reps/weightKg/muscleGroup, `DELETE /:id` removes. Ownership use
 | **User** | `users` | Account + `preferences.timezone` (default `Asia/Jerusalem`), onboarding `profile` (weightKg/heightCm/age/sex), `goalType`, `targetWeightKg`, `timeframeMonths`, `activityLevel`, computed `bmr` + `maintenanceCalories`, `waterTargetMl`, `onboardingCompleted`. `passwordHash` is **`select:false`** (never returned unless explicitly asked). `toSafeObject()` strips the hash. ⚠️ The embedded **`goals`** field is **vestigial** — real goals live in the `Goal` collection (see below). |
 | **Goal** | `goals` | **The source of truth for daily targets** (calories/protein/carbs/fat/fiber). One per user (`userId` unique). Onboarding + Settings write here via `goalsService`; the dashboard reads here. |
 | **FoodLog** | `food_logs` | One logged meal: `description`, `items[]` (AI-parsed, `_id:false` subdocs), `totals` (nutrition), `date` (**Date/instant**). Compound index `{userId, date:-1}`. |
-| **DailySummary** | `daily_summaries` | **Pre-computed per-user/day rollup**: `totals`, `logCount`, `exerciseBurned`, `goalSnapshot`. `date` is a **`YYYY-MM-DD` string** (calendar day, not instant). Exists only for days **with food logs** — that's the "logged day" signal. Rebuilt from source (never hand-edited) — see recompute below. |
+| **DailySummary** | `daily_summaries` | **Pre-computed per-user/day rollup**: `totals`, `logCount`, `exerciseBurned`, plus the targets in force that day: `goalSnapshot` and `maintenanceSnapshot` (both set once on insert). `date` is a **`YYYY-MM-DD` string** (calendar day, not instant). Exists only for days **with food logs** — that's the "logged day" signal. Rebuilt from source (never hand-edited) — see recompute below. |
 | **SavedFood** | `saved_foods` | A reusable food the user can re-log without an AI call: macros stored **per 100** units of its `baseUnit` (`g`/`ml`), scaled by `amount / 100` when logged. `source` records the origin (`manual` / `ai` from a parsed log / `label` from a scanned nutrition label). Index `{userId, name}`. |
 | **NutritionCache** | `nutrition_caches` | Caches AI food results by a normalized key. `unique` key; **TTL index** auto-deletes after 90 days; `hitCount`. |
 | **ExerciseEntry** | `exercise_entries` | ⚠️ The calorie-**BURN** log (not the strength list): `type`, `caloriesBurned`, optional `durationMin`/`note`, `date` (`YYYY-MM-DD` string). Multiple per day allowed. Feeds `DailySummary` + the deficit. |
@@ -155,6 +155,11 @@ upserts the summary (deletes it if zero logs). Every food **log/edit/delete** an
 - **Onboarding goal calc** — `services/onboarding-service.ts`: AI computes goals (`aiService.calculateGoals`,
   clamped server-side to safe bounds), profile saved on User, deterministic BMR/maintenance computed via
   `energy.ts`, goals written to the **Goal collection** via `goalsService.setGoals`.
+- **Recalculate targets / change goal** — the same `POST /api/onboarding`, reached from the frontend through
+  `OnboardingWizard mode="update"` at **`/settings/goals/recalculate`** (under `RequireOnboarding`, so the
+  `/onboarding` first-run guard is untouched). It prefills from `GET /api/auth/me`, confirms before
+  overwriting, and returns to Daily Goals (or `/weight` with `?start=goal&from=weight`, the Weight page's
+  **Change goal**). The water target is edited on the **Daily Goals** page (`PUT /api/user/water-target`).
 - **Strength list** — `services/strength-service.ts` is plain CRUD over `strength_exercises` and
   nothing else: no dates, no recompute, no energy math (§7.2). `GET /api/strength` returns all of a
   user's lifts sorted `createdAt` **asc**, so the list keeps the order they built it in and editing a
@@ -205,6 +210,12 @@ upserts the summary (deletes it if zero logs). Every food **log/edit/delete** an
    via `getWeekRange`; both sides must use it so the strip and deficit always agree. Default tz `Asia/Jerusalem`.
 5. **BMR/maintenance formula exists in exactly one place** (`utils/energy.ts`). Never re-implement it.
 6. **Goals live in the `Goal` collection**, read/written via `goalsService`. Don't read `User.goals`.
+   **Targets apply from today on.** `Goal` and `User.maintenanceCalories` hold only the *current* targets;
+   each day's `DailySummary` keeps the `goalSnapshot` / `maintenanceSnapshot` it was logged under. Anything that
+   changes targets calls `foodService.freezeTargetsBeforeToday` (pins pre-snapshot past days to the old
+   maintenance) before overwriting and `applyTargetsToToday` after (`goalsService.setGoals`, onboarding /
+   recalculate, activity level already do). The weekly deficit uses each day's `maintenanceSnapshot`; Home shows
+   a day's `goalSnapshot` when it has one.
 7. **Only auth is in Redux.** Server data (day, summaries, deficit, water, exercise) is fetched **on demand**
    in components; the day/refresh signal lives in `refresh-context` (`selectedDate` + `refreshKey`, not Redux).
 8. **Ownership checks** on edit/delete: services verify the doc's `userId === req.user._id` (403 otherwise).

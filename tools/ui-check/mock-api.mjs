@@ -47,6 +47,7 @@ const summaries = days.map((d, i) => ({
 const routes = [
     [/^\/api\/auth\/me$/, () => ({ user: { _id: "u1", firstName: "Dana", lastName: "Test", email: "mock@example.test",
         preferences: { units: "metric", timezone: "Asia/Jerusalem" }, onboardingCompleted: true, activityLevel: "moderate",
+        profile: { weightKg: 79.5, heightCm: 178, age: 30, sex: "male" }, goalType: "lose", targetWeightKg: 74, timeframeMonths: 6,
         bmr: 1690, maintenanceCalories: 2300, waterTargetMl: 2500, createdAt: ts, updatedAt: ts } })],
     [/^\/api\/goals$/, () => ({ _id: "g1", userId: "u1", ...n(2000, 150, 200, 65, 30), createdAt: ts, updatedAt: ts })],
     [/^\/api\/food\/day\//, () => ({ logs, summary: { ...summaries[4], totals: dayTotals, logCount: logs.length } })],

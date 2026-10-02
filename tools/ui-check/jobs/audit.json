@@ -346,5 +346,97 @@
   "height": 915,
   "path": "/",
   "actions": "click(\".ring-info\"); await sleep(1200);"
+ },
+ {
+  "name": "375-goals-page",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals"
+ },
+ {
+  "name": "375-goals-page-lower",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals",
+  "scroll": ".wt"
+ },
+ {
+  "name": "375-recalc-step1",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals/recalculate"
+ },
+ {
+  "name": "375-recalc-review",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals/recalculate",
+  "actions": "for (let i = 0; i < 3; i++) { click(\".onb-next\"); await sleep(350); }"
+ },
+ {
+  "name": "375-recalc-confirm",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals/recalculate",
+  "actions": "for (let i = 0; i < 3; i++) { click(\".onb-next\"); await sleep(350); } click(\".onb-next\"); await sleep(400);"
+ },
+ {
+  "name": "375-recalc-done",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals/recalculate",
+  "actions": "for (let i = 0; i < 3; i++) { click(\".onb-next\"); await sleep(350); } click(\".onb-next\"); await sleep(400); click(\".onb-confirm .onb-next\"); await sleep(1500);"
+ },
+ {
+  "name": "375-recalc-from-weight",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals/recalculate?start=goal&from=weight"
+ },
+ {
+  "name": "412-goals-page",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals"
+ },
+ {
+  "name": "412-goals-page-lower",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals",
+  "scroll": ".wt"
+ },
+ {
+  "name": "412-recalc-step1",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals/recalculate"
+ },
+ {
+  "name": "412-recalc-review",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals/recalculate",
+  "actions": "for (let i = 0; i < 3; i++) { click(\".onb-next\"); await sleep(350); }"
+ },
+ {
+  "name": "412-recalc-confirm",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals/recalculate",
+  "actions": "for (let i = 0; i < 3; i++) { click(\".onb-next\"); await sleep(350); } click(\".onb-next\"); await sleep(400);"
+ },
+ {
+  "name": "412-recalc-done",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals/recalculate",
+  "actions": "for (let i = 0; i < 3; i++) { click(\".onb-next\"); await sleep(350); } click(\".onb-next\"); await sleep(400); click(\".onb-confirm .onb-next\"); await sleep(1500);"
+ },
+ {
+  "name": "412-recalc-from-weight",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals/recalculate?start=goal&from=weight"
  }
 ]

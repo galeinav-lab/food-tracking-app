@@ -86,7 +86,7 @@
     border: 4px solid var(--bg);
     background: var(--accent);
     color: var(--on-accent);
-    box-shadow: var(--glow-accent);
+    box-shadow: var(--shadow-accent);
     cursor: pointer;
     display: flex;
     align-items: center;

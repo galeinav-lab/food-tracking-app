@@ -25,8 +25,8 @@ function Main(): JSX.Element {
         <main className="content">
             {/* Page transition: keyed by path so each new page fades in. Opacity only
                 and no held fill-mode — a transform here would turn this wrapper into
-                the containing block for the pages' position: fixed layers (Home's
-                glow, the strength editor sheet). */}
+                the containing block for the pages' position: fixed layers (e.g. the
+                strength editor sheet). */}
             <div key={pathname} className="fade-in">
                 <Routes>
                     {/* Public */}

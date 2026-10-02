@@ -24,7 +24,6 @@
     /* Text (near-black; all >= 4.5:1 on the canvas and on white) */
     --text: #111214;
     --muted: #575B63;
-    --text-muted: #575B63; /* alias */
     --text-dim: #8B9099; /* placeholders + disabled ONLY — not for real text */
 
     /* Accent — lime as a FILL. Lime is light, so anything ON a lime fill is dark
@@ -56,7 +55,6 @@
     /* Functional (text-safe on white; success is NOT the lime accent) */
     --success: #15803D;
     --error: #B91C1C;
-    --danger: #B91C1C;
     --warning: #B45309;
     --water: #0EA5E9;
     --ring-track: rgba(17, 18, 20, 0.07);
@@ -114,7 +112,7 @@
     --shadow-raised: 0 2px 6px rgba(17, 18, 20, 0.06), 0 16px 40px rgba(17, 18, 20, 0.12);
     --shadow-nav: 0 -1px 0 rgba(17, 18, 20, 0.05);
     --shadow-sheet: 0 -8px 32px rgba(17, 18, 20, 0.12);
-    --glow-accent: 0 6px 16px rgba(101, 163, 13, 0.30); /* under lime fills (+ button) */
+    --shadow-accent: 0 6px 16px rgba(101, 163, 13, 0.30); /* soft lime shadow under lime fills (+ button, shutter) */
 
     /* Scrim behind sheets and the + fan. */
     --scrim: rgba(17, 18, 20, 0.32);

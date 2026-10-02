@@ -25,8 +25,10 @@
     line-height: 1.45;
 }
 
+/* Sits on the canvas, not in a card: white fill so it reads as a field. */
 .sf-search {
     margin-bottom: var(--space-lg);
+    background-color: var(--surface);
 }
 
 /* ── Create / edit form (a .glass card) ─────────────────────────────── */

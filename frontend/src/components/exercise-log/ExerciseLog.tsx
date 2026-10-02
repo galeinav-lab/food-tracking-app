@@ -63,36 +63,45 @@ function ExerciseLog({ date, onLogged }: ExerciseLogProps): JSX.Element {
         <div className="exercise-log">
             <form className="exercise-form" onSubmit={onSubmit}>
                 <input
-                    className="exercise-input exercise-type"
+                    className="input exercise-input exercise-type"
                     placeholder="Type (e.g. run)"
                     value={type}
                     onChange={(e) => setType(e.target.value)}
                 />
                 <input
-                    className="exercise-input"
+                    className="input exercise-input"
                     type="number"
                     placeholder="kcal"
                     value={calories}
                     onChange={(e) => setCalories(e.target.value)}
                 />
                 <input
-                    className="exercise-input"
+                    className="input exercise-input"
                     type="number"
                     placeholder="min"
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
                 />
                 <input
-                    className="exercise-input exercise-note"
+                    className="input exercise-input exercise-note"
                     placeholder="note (optional)"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                 />
-                <button className="exercise-btn" type="submit" disabled={submitting}>
+                <button
+                    className={submitting ? "btn btn-primary btn-loading" : "btn btn-primary"}
+                    type="submit"
+                    disabled={submitting}
+                    aria-busy={submitting}
+                >
                     {submitting ? "Saving…" : "Add workout"}
                 </button>
             </form>
-            {formError && <p className="exercise-error">{formError}</p>}
+            {formError && (
+                <p className="form-error exercise-error" role="alert">
+                    {formError}
+                </p>
+            )}
         </div>
     );
 }

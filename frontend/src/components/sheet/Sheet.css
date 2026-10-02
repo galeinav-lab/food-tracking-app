@@ -1,5 +1,6 @@
 /* The app's ONE bottom-sheet shell (scrim + slide-up panel + handle + header).
-   Every sheet/panel renders <Sheet>; its content styles live with the feature. */
+   Every sheet/panel renders <Sheet>; its content styles live with the feature.
+   The panel is the float tier (.glass-float): near-opaque, no blur. */
 .sheet-backdrop {
     position: fixed;
     inset: 0;
@@ -16,12 +17,18 @@
     max-width: var(--content-max);
     max-height: 88vh;
     overflow-y: auto;
-    background: var(--surface);
     border-top-left-radius: var(--r-sheet);
     border-top-right-radius: var(--r-sheet);
-    padding: 10px 18px calc(24px + env(safe-area-inset-bottom, 0px));
-    box-shadow: var(--shadow-sheet);
+    padding: 10px 18px calc(var(--space-xl) + env(safe-area-inset-bottom, 0px));
     animation: sheet-up var(--dur-slow) var(--ease-out);
+}
+
+/* Float tier, but a bottom sheet throws its shadow upward and sits on the screen
+   edge (no bottom border). Same specificity as .glass-float.glass-float, later
+   in the bundle, so these win. */
+.sheet.glass-float {
+    border-bottom: none;
+    box-shadow: var(--shadow-sheet), var(--glass-highlight);
 }
 
 .sheet-handle {
@@ -42,7 +49,7 @@
 
 .sheet-title {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: var(--text-md);
 }
 
 .sheet-close {

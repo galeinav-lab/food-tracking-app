@@ -80,8 +80,8 @@ grid/track `rgba(214,255,170,0.08)` · axis text `#B4BFA4` · tooltip bg `#212B1
 | `--shadow-card` | `0 8px 24px rgba(0, 0, 0, 0.45)` |
 | `--shadow-raised` | `0 10px 28px rgba(0, 0, 0, 0.55)` |
 | `--shadow-nav` | `0 -6px 24px rgba(0, 0, 0, 0.5)` |
-| Bottom nav | `rgba(24, 31, 19, 0.85)` + blur(14px) |
-| Scrims (sheet/fan backdrop) | `rgba(6, 8, 4, 0.55)` |
+| Bottom nav | `--glass-nav-bg` (.72) + blur(10px) — see §3.5 |
+| Scrims (sheet/fan backdrop) | `--scrim` = `rgba(6, 8, 4, 0.55)` |
 | `color-scheme` | `dark` (native controls, autofill, scrollbars re-dark) |
 
 ---
@@ -98,8 +98,7 @@ grid/track `rgba(214,255,170,0.08)` · axis text `#B4BFA4` · tooltip bg `#212B1
 
 ### Ambient background
 Two fixed, full-screen decorative layers (`z-index: -1`, `pointer-events: none`, `aria-hidden`):
-- **Base (static, every in-app page):** `.ambient` in Layout.css, rendered once by `Layout` when the
-  app shell shows. `radial-gradient(ellipse at 50% 32%, --ambient-mid → --ambient-deep → --bg)`.
+- **Base (static, every screen):** `.ambient` in Layout.css, rendered once by `Layout`. `radial-gradient(ellipse at 50% 32%, --ambient-mid → --ambient-deep → --bg)`.
   Never animated. The glass cards read as glass only because this shows through their tint.
 - **Bloom (animated, dashboard only):** `.home-ambient` / `.home-ambient-bloom` in Home.css, on top
   of the base. A lime radial that "breathes" (22s alternate loop, **only `opacity` + `transform:
@@ -120,13 +119,14 @@ blurred card re-blur each frame. The glass look = translucent tint + light borde
 |---|---|---|
 | Card | `.glass` | `--glass-bg` tint + `--glass-border` + `--shadow-card, --glass-highlight`. No blur. |
 | Inset | `.glass-inset` | `--glass-inset-bg` — a recessed well *inside* a card (e.g. History's day detail). No blur. |
-| Float | `.glass-float` | `--glass-float-bg` (.98 — at .94 bright text behind ghosted through) + `--border-strong` + raised shadow, no blur. Used by `<ActionMenu>`; the + menu, sheets and toasts move onto it in the dashboard/nav phase. |
-| Nav | `.bottomnav` | **The only blurred surface:** `.72` tint + `blur(var(--glass-blur))` (10px), `--glass-bg-solid` fallback. Applied in the dashboard/nav phase; until then it is `.85` + 14px. |
+| Float | `.glass-float` | `--glass-float-bg` (.98 — at .94 bright text behind ghosted through) + `--border-strong` + raised shadow, no blur. `<ActionMenu>`, the + menu, `<Sheet>` (upward `--shadow-sheet`, no bottom border), toasts, chart tooltips. |
+| Nav | `.bottomnav` | **The only blurred surface:** `--glass-nav-bg` (.72) + `blur(var(--glass-blur))` (10px); `--glass-bg-solid` when `backdrop-filter` is unsupported. |
 
 | Token | Value |
 |---|---|
 | `--glass-bg` | `rgba(24, 31, 19, 0.55)` |
 | `--glass-inset-bg` | `rgba(16, 20, 13, 0.55)` |
+| `--glass-nav-bg` | `rgba(24, 31, 19, 0.72)` (nav, over its blur) |
 | `--glass-bg-solid` | `rgba(24, 31, 19, 0.94)` (nav fallback) |
 | `--glass-float-bg` | `rgba(24, 31, 19, 0.98)` (float tier) |
 | `--glass-blur` | `10px` (nav only) |
@@ -134,10 +134,13 @@ blurred card re-blur each frame. The glass look = translucent tint + light borde
 | `--glass-highlight` | `inset 0 1px 0 rgba(214, 255, 170, 0.12)` |
 
 Rules: doubled selectors (`.glass.glass`) so they beat component backgrounds regardless of bundle
-order; radius/padding stay with the component. Max blurred layers on any screen: **1** (the nav).
+order; radius/padding stay with the component.
+
+**Verified** (`audit.mjs`, 42 screen states at 375 and 412px — every route, the + menu, all four
+logging sheets, a toast): blurred layers = **1 (the nav)** on every in-app screen, 0 on auth.
 Contrast: removing blur doesn't change it (blur keeps average luminance). Muted text on a card is
 ≈6.3:1 over the base gradient's brightest point; over the Home bloom core at full intensity it
-computes to ≈3.9:1 — pre-existing, to fix with the dashboard phase.
+computes to ≈3.9:1 — pre-existing, addressed by a separate contrast pass.
 
 ## 3.6 — v3.2 additions: semantic tokens + shared building blocks
 
@@ -181,6 +184,10 @@ Values above are unchanged; v3.2 adds names for ROLES so components stop picking
 Spacing: components use the `--space-*` tokens where a value is on the 4/8/12/16/24/32 scale.
 Off-scale values (2/3/6/10/14/18/28px) still exist app-wide, including the shared `.field`; they
 are normalised in one app-wide pass (phase 5) so screens never disagree with each other.
+
+Page transition: `Main` keys a wrapper by pathname with `.fade-in` (opacity only, no held
+fill-mode, so the page's fixed layers — Home's glow, the strength editor sheet — are never captured
+by a transformed ancestor).
 
 Motion rule: entrance keyframes never use `animation-fill-mode: forwards/both` — a held
 `transform` on an ancestor turns it into the containing block for `position: fixed` children.

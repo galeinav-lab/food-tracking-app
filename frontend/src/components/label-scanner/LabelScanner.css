@@ -1,3 +1,6 @@
+/* Nutrition-label scanner (inside the logging sheet). Buttons = .btn, input =
+   .input, errors = .form-error, the AI wait = Skeleton; the confirm step is the
+   shared SavedFoodForm. Camera chrome, layout and type live here. */
 .ls {
     display: flex;
     flex-direction: column;
@@ -10,7 +13,7 @@
     width: 100%;
     aspect-ratio: 3 / 4;
     max-height: 46vh;
-    border-radius: var(--r-md);
+    border-radius: var(--r-card);
     overflow: hidden;
     background: var(--surface-3);
 }
@@ -26,18 +29,20 @@
 .ls-frame {
     position: absolute;
     inset: 12% 8%;
-    border: 2px dashed rgba(163, 230, 53, 0.75);
-    border-radius: var(--r-sm);
+    border: 2px dashed var(--accent);
+    border-radius: var(--r-control);
+    opacity: 0.75;
     pointer-events: none;
 }
 
 .ls-tip {
     margin: 10px 0 14px;
-    font-size: 0.8rem;
+    font-size: var(--text-sm);
     color: var(--muted);
     text-align: center;
 }
 
+/* Big round shutter (camera idiom, not a .btn). */
 .ls-shutter {
     display: flex;
     flex-direction: column;
@@ -48,11 +53,18 @@
     border: none;
     cursor: pointer;
     font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
     transition: transform var(--dur-press) var(--ease-out);
 }
 
 .ls-shutter:active {
     transform: scale(0.94);
+}
+
+.ls-shutter:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: var(--r-control);
 }
 
 .ls-shutter-ring {
@@ -65,40 +77,28 @@
 }
 
 .ls-shutter-label {
-    font-size: 0.8rem;
+    font-size: var(--text-sm);
     font-weight: 700;
     color: var(--accent);
 }
 
 .ls-upload {
     margin-top: 14px;
-    padding: 10px 16px;
-    border-radius: var(--r-pill);
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    color: var(--text);
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
 }
 
 .ls-camera-error {
-    margin: 4px 0 0;
+    margin: var(--space-xs) 0 0;
     padding: 14px;
-    border-radius: var(--r-md);
-    background: var(--surface-2);
+    border-radius: var(--r-card);
     border: 1px solid var(--border);
     color: var(--muted);
-    font-size: 0.88rem;
+    font-size: var(--text-sm);
     line-height: 1.5;
     text-align: center;
 }
 
 .ls-error {
-    color: var(--error);
-    font-size: 0.85rem;
-    margin: 12px 0 0;
+    margin-top: var(--space-md);
     text-align: center;
 }
 
@@ -106,44 +106,30 @@
 .ls-reading {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 16px;
-    text-align: center;
-}
-
-.ls-spinner {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 3px solid var(--ring-track);
-    border-top-color: var(--accent);
-    animation: ls-spin 800ms linear infinite;
-}
-
-@keyframes ls-spin {
-    to {
-        transform: rotate(360deg);
-    }
+    padding: var(--space-sm) 0 var(--space-lg);
 }
 
 .ls-reading-text {
-    margin: 16px 0 4px;
+    margin: 0 0 var(--space-xs);
     font-family: var(--font-head);
-    font-size: 1.05rem;
+    font-size: var(--text-md);
     font-weight: 600;
 }
 
 .ls-reading-sub {
-    margin: 0;
-    font-size: 0.82rem;
+    margin: 0 0 var(--space-lg);
+    font-size: var(--text-sm);
     color: var(--muted);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .ls-spinner {
-        animation-duration: 2s;
-    }
+.ls-reading-skel {
+    gap: var(--space-md);
+}
+
+.ls-reading-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
 /* ── Serving-size prompt ────────────────────────────────────────────── */
@@ -153,14 +139,14 @@
 }
 
 .ls-serving-title {
-    margin: 0 0 8px;
+    margin: 0 0 var(--space-sm);
     font-family: var(--font-head);
-    font-size: 1.1rem;
+    font-size: var(--text-md);
 }
 
 .ls-serving-hint {
     margin: 0 0 14px;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     color: var(--muted);
     line-height: 1.5;
 }
@@ -171,21 +157,17 @@
     gap: 10px;
 }
 
+/* The serving size is the point of this step: larger, in the heading face. */
 .ls-input {
     flex: 1;
-    padding: 12px 14px;
-    font-size: 1.05rem;
+    padding: var(--space-md) 14px;
+    font-size: var(--text-md);
     font-family: var(--font-head);
     font-variant-numeric: tabular-nums;
 }
 
-.ls-input:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
 .ls-serving-unit {
-    font-size: 0.95rem;
+    font-size: var(--text-base);
     font-weight: 600;
     color: var(--muted);
 }
@@ -193,61 +175,21 @@
 .ls-serving-actions {
     display: flex;
     gap: 10px;
-    margin-top: 16px;
+    margin-top: var(--space-lg);
 }
 
-.ls-primary {
+.ls-continue {
     flex: 1;
-    padding: 12px 16px;
-    border-radius: var(--r-sm);
-    border: none;
-    background: var(--accent);
-    color: var(--on-accent);
-    font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform var(--dur-press) var(--ease-out);
-}
-
-.ls-primary:active {
-    transform: scale(0.98);
-}
-
-.ls-secondary {
-    padding: 12px 16px;
-    border-radius: var(--r-sm);
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    color: var(--text);
-    font-family: inherit;
-    font-size: 0.95rem;
-    cursor: pointer;
 }
 
 /* ── Confirm ────────────────────────────────────────────────────────── */
-.ls-confirm {
-    animation: ls-in var(--dur-slow) var(--ease-out);
-}
-
-@keyframes ls-in {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 .ls-confirm-banner {
     margin: 0 0 14px;
-    padding: 10px 12px;
-    border-radius: var(--r-sm);
+    padding: 10px var(--space-md);
+    border-radius: var(--r-control);
     background: var(--accent-soft);
     border: 1px solid var(--border);
-    font-size: 0.82rem;
+    font-size: var(--text-sm);
     color: var(--muted);
     line-height: 1.5;
 }

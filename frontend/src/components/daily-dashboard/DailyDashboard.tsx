@@ -5,6 +5,7 @@ import { IGoal } from "../../models/goal";
 import { INutrition } from "../../models/nutrition";
 import Ring from "../ring/Ring";
 import { colors } from "../../styles/colors";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./DailyDashboard.css";
 
 const ZERO: INutrition = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
@@ -61,7 +62,13 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
         void load();
     }, [load, refreshKey]);
 
-    if (loading) return <div className="card glass dash-msg">Loading…</div>;
+    if (loading) {
+        return (
+            <SkeletonGroup label="Loading today" className="dash">
+                <Skeleton shape="block" height="296px" className="dash-skel-hero" />
+            </SkeletonGroup>
+        );
+    }
     if (loadError) {
         return (
             <div className="card glass dash-msg">
@@ -117,7 +124,7 @@ function DailyDashboard({ date, refreshKey }: DailyDashboardProps): JSX.Element 
             </button>
 
             {showDetails && (
-                <div id="dash-details" className="dash-details">
+                <div id="dash-details" className="dash-details rise-in">
                     <div className="dash-macros">
                         {MACROS.map(({ key, label, color }) => {
                             const c = consumed[key];

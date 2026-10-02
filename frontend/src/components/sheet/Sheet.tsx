@@ -17,7 +17,7 @@ function Sheet({ title, ariaLabel, onClose, children }: SheetProps): JSX.Element
 
     return (
         <div className="sheet-backdrop" onClick={onClose}>
-            <div className="sheet" role="dialog" aria-modal="true" aria-label={ariaLabel} onClick={stop}>
+            <div className="sheet glass-float" role="dialog" aria-modal="true" aria-label={ariaLabel} onClick={stop}>
                 <div className="sheet-handle" aria-hidden="true" />
                 <div className="sheet-head">
                     <h2 className="sheet-title">{title}</h2>

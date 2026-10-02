@@ -123,6 +123,7 @@
     --glass-inset-bg: rgba(16, 20, 13, 0.55); /* inset tier: recessed wells inside a card */
     --glass-bg-solid: rgba(24, 31, 19, 0.94); /* nav fallback without backdrop-filter */
     --glass-float-bg: rgba(24, 31, 19, 0.98); /* float tier: bright text behind must not ghost through */
+    --glass-nav-bg: rgba(24, 31, 19, 0.72); /* the bottom nav, over its blur */
     --glass-blur: 10px; /* nav only */
     --glass-border: rgba(214, 255, 170, 0.18);
     --glass-highlight: inset 0 1px 0 rgba(214, 255, 170, 0.12); /* top glass edge */
@@ -214,7 +215,7 @@ code {
 .card {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: var(--r-md);
+    border-radius: var(--r-card);
     box-shadow: var(--shadow-card);
 }
 

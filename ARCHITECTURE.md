@@ -270,13 +270,14 @@ respect Express route order; call the recompute helper on any change to a day's 
 
 ## 10. Known gaps / TODOs (intentionally incomplete)
 
-- **No automated tests.** Only CRA's default `App.test.tsx`; no backend tests. Pure functions in
+- **No automated tests.** Only CRA's default `App.test.tsx` (still the template's "learn react" check,
+  so it fails against this app); no backend tests. Pure functions in
   `energy.ts`/`date-tz.ts` are the easiest first targets.
 - **Crash-reporting is a testing-phase feature** behind `REACT_APP_TESTING` + `ADMIN_REPORT_KEY`; turn off
   for real production.
 - **`User.goals` is vestigial** — the `Goal` collection is authoritative; the embedded field could be removed.
-- **Orphaned files:** `components/layout/header/` (the top Header, replaced by the bottom nav) still
-  exists and is imported nowhere; `mysql2` sits in backend deps as an unused template leftover.
+- **Unused dependency:** `mysql2` sits in backend deps as a template leftover. (The orphaned top
+  Header and CRA's `App.css` were deleted on the ui-refresh branch.)
 - **Comments:** most files carry explanatory + concept ("learning") comments; a one-time "strip all comments"
   request did not fully run, so comments remain.
 - **Weekly components** (`WeeklyRing`, `WeeklyCalories`) already migrated to the `/deficit` endpoint (no local

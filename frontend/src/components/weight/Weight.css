@@ -1,32 +1,38 @@
 .weight-title {
-    margin: 0 0 18px;
-    font-size: 1.3rem;
+    margin: 0 0 var(--space-lg);
+    font-size: var(--text-lg);
 }
 
-/* The logging form's rules (.weight-form / -input / -btn / -error) moved to
-   weight-entry/WeightEntry.css when the form was extracted for reuse. */
+/* The logging form's rules (.weight-form / -input / -error) live in
+   weight-entry/WeightEntry.css; its button is the shared .btn. */
 .weight-hint {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
 }
 
+/* Loading placeholders sit where the chart card will. */
+.weight-skel {
+    margin-top: var(--space-xl);
+}
+
+/* Chart card — surface from .glass. */
 .weight-chart {
-    margin: 20px 0 10px;
+    margin: var(--space-xl) 0 var(--space-md);
+    padding: var(--space-lg) var(--space-sm) var(--space-sm);
+    border-radius: var(--r-card);
 }
 
 .weight-summary {
-    font-size: 0.9rem;
+    font-size: var(--text-base);
     color: var(--text);
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 14px;
-    margin: 0 0 20px;
+    border-radius: var(--r-card);
+    padding: var(--space-md) var(--space-lg);
+    margin: 0 0 var(--space-xl);
 }
 
 .weight-list-title {
-    font-size: 1rem;
-    margin: 0 0 12px;
+    font-size: var(--text-base);
+    margin: 0 0 var(--space-md);
 }
 
 .weight-list {
@@ -35,18 +41,16 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-sm);
 }
 
 .weight-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-    background: var(--card-bg);
-    font-size: 0.9rem;
+    gap: var(--space-md);
+    border-radius: var(--r-card);
+    padding: var(--space-md) var(--space-md) var(--space-md) var(--space-lg);
+    font-size: var(--text-base);
 }
 
 .weight-row-date {
@@ -56,19 +60,5 @@
 
 .weight-row-kg {
     font-weight: 600;
-}
-
-.weight-remove {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    background: var(--surface-2);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.weight-remove:hover {
-    border-color: var(--error);
-    color: var(--error);
+    font-variant-numeric: tabular-nums;
 }

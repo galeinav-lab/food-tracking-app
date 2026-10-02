@@ -16,6 +16,7 @@ import { IWeightEntry } from "../../models/weight";
 import { formatDateLabel, formatDateShort, todayInTimeZone } from "../../utils/date";
 import { buildWeightChart } from "../../utils/weight-chart";
 import WeightEntry from "../weight-entry/WeightEntry";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import { colors, chartTheme } from "../../styles/colors";
 import "./Weight.css";
 
@@ -79,13 +80,19 @@ function Weight(): JSX.Element {
             {/* The app's one weight form (components/weight-entry/). */}
             <WeightEntry onLogged={() => void loadEntries()} />
 
-            {loading && <p className="weight-hint">Loading…</p>}
+            {loading && (
+                <SkeletonGroup label="Loading weight" className="weight-skel">
+                    <Skeleton shape="block" height="292px" />
+                    <Skeleton shape="block" height="46px" />
+                    <Skeleton shape="block" height="46px" />
+                </SkeletonGroup>
+            )}
             {error && <p className="weight-error">{error}</p>}
 
             {!loading && loadError && (
                 <div>
                     <p className="weight-hint">Couldn't load your weight data.</p>
-                    <button type="button" className="btn-mini" onClick={() => void loadEntries()}>
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => void loadEntries()}>
                         Try again
                     </button>
                 </div>
@@ -94,7 +101,7 @@ function Weight(): JSX.Element {
             {!loading && !loadError && (
                 <>
                     {chartData.length > 0 && (
-                        <div className="weight-chart">
+                        <div className="weight-chart glass rise-in">
                             <ResponsiveContainer width="100%" height={260}>
                                 <LineChart data={chartData} margin={{ top: 8, right: 12, left: -8, bottom: 4 }}>
                                     <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
@@ -123,6 +130,7 @@ function Weight(): JSX.Element {
                                     />
                                     <Legend wrapperStyle={{ fontSize: 12, color: colors.muted }} />
                                     <Line
+                                        {...chartTheme.animation}
                                         type="monotone"
                                         dataKey="actual"
                                         name="Actual"
@@ -132,6 +140,7 @@ function Weight(): JSX.Element {
                                         dot={{ r: 3 }}
                                     />
                                     <Line
+                                        {...chartTheme.animation}
                                         type="monotone"
                                         dataKey="target"
                                         name="Target"
@@ -145,20 +154,20 @@ function Weight(): JSX.Element {
                         </div>
                     )}
 
-                    {summary && <p className="weight-summary">{summary}</p>}
+                    {summary && <p className="weight-summary glass rise-in">{summary}</p>}
 
                     <h2 className="weight-list-title">Recent entries</h2>
                     {recent.length === 0 ? (
                         <p className="weight-hint">No weight logged yet.</p>
                     ) : (
-                        <ul className="weight-list">
+                        <ul className="weight-list stagger">
                             {recent.map((en) => (
-                                <li className="weight-row" key={en._id}>
+                                <li className="weight-row glass" key={en._id}>
                                     <span className="weight-row-date">{formatDateLabel(en.date)}</span>
                                     <span className="weight-row-kg">{en.weightKg.toFixed(1)} kg</span>
                                     <button
                                         type="button"
-                                        className="weight-remove"
+                                        className="btn btn-secondary btn-sm"
                                         onClick={() => onRemove(en._id)}
                                     >
                                         Remove

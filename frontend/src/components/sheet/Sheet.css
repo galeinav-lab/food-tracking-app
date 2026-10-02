@@ -1,0 +1,82 @@
+/* The app's ONE bottom-sheet shell (scrim + slide-up panel + handle + header).
+   Every sheet/panel renders <Sheet>; its content styles live with the feature.
+   The panel is the float tier (.glass-float): near-opaque, no blur. */
+.sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: var(--scrim);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fade-in var(--dur-base) var(--ease-out);
+}
+
+.sheet {
+    width: 100%;
+    max-width: var(--content-max);
+    max-height: 88vh;
+    overflow-y: auto;
+    border-top-left-radius: var(--r-sheet);
+    border-top-right-radius: var(--r-sheet);
+    padding: var(--space-md) var(--space-lg) calc(var(--space-xl) + env(safe-area-inset-bottom, 0px));
+    animation: sheet-up var(--dur-slow) var(--ease-out);
+}
+
+/* Float tier, but a bottom sheet throws its shadow upward and sits on the screen
+   edge (no bottom border). Same specificity as .glass-float.glass-float, later
+   in the bundle, so these win. */
+.sheet.glass-float {
+    border-bottom: none;
+    box-shadow: var(--shadow-sheet), var(--glass-highlight);
+}
+
+.sheet-handle {
+    width: 40px;
+    height: 4px;
+    border-radius: var(--r-pill);
+    background: var(--surface-3);
+    margin: var(--space-xs) auto var(--space-md);
+}
+
+.sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
+}
+
+.sheet-title {
+    margin: 0;
+    font-size: var(--text-md);
+}
+
+.sheet-close {
+    flex-shrink: 0;
+    background: var(--surface-3);
+    border: none;
+    color: var(--text);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.sheet-close:active {
+    transform: scale(0.92);
+}
+
+/* No fill-mode: once the slide ends the panel is back to transform: none. */
+@keyframes sheet-up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}

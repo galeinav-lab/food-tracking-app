@@ -1,0 +1,360 @@
+[
+ {
+  "name": "375-home-y0",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "scroll": 0
+ },
+ {
+  "name": "375-home-y700",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "scroll": 700
+ },
+ {
+  "name": "375-home-y1400",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "scroll": 1400
+ },
+ {
+  "name": "375-home-y2100",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "scroll": 2100
+ },
+ {
+  "name": "375-home-macros",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "click": ".dash-hero"
+ },
+ {
+  "name": "375-home-plus-menu",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(600);"
+ },
+ {
+  "name": "375-sheet-meal",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-meal\"); await sleep(1200);"
+ },
+ {
+  "name": "375-sheet-workout",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-workout\"); await sleep(1200);"
+ },
+ {
+  "name": "375-sheet-saved",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1200);"
+ },
+ {
+  "name": "375-sheet-scan",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-scan\"); await sleep(1200);"
+ },
+ {
+  "name": "375-toast",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-photo\"); await sleep(500);"
+ },
+ {
+  "name": "375-history",
+  "width": 375,
+  "height": 812,
+  "path": "/history",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "375-weight",
+  "width": 375,
+  "height": 812,
+  "path": "/weight",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "375-weekly",
+  "width": 375,
+  "height": 812,
+  "path": "/weekly",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "375-saved-foods",
+  "width": 375,
+  "height": 812,
+  "path": "/saved-foods",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "375-strength",
+  "width": 375,
+  "height": 812,
+  "path": "/strength",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "375-settings",
+  "width": 375,
+  "height": 812,
+  "path": "/settings",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "375-goals",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "375-login",
+  "width": 375,
+  "height": 812,
+  "path": "/login",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "375-register",
+  "width": 375,
+  "height": 812,
+  "path": "/register",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "375-onboarding",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "session": "new",
+  "wait": 1800
+ },
+ {
+  "name": "412-home-y0",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "scroll": 0
+ },
+ {
+  "name": "412-home-y700",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "scroll": 700
+ },
+ {
+  "name": "412-home-y1400",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "scroll": 1400
+ },
+ {
+  "name": "412-home-y2100",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "scroll": 2100
+ },
+ {
+  "name": "412-home-macros",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "click": ".dash-hero"
+ },
+ {
+  "name": "412-home-plus-menu",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(600);"
+ },
+ {
+  "name": "412-sheet-meal",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-meal\"); await sleep(1200);"
+ },
+ {
+  "name": "412-sheet-workout",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-workout\"); await sleep(1200);"
+ },
+ {
+  "name": "412-sheet-saved",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1200);"
+ },
+ {
+  "name": "412-sheet-scan",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-scan\"); await sleep(1200);"
+ },
+ {
+  "name": "412-toast",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-photo\"); await sleep(500);"
+ },
+ {
+  "name": "412-history",
+  "width": 412,
+  "height": 915,
+  "path": "/history",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "412-weight",
+  "width": 412,
+  "height": 915,
+  "path": "/weight",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "412-weekly",
+  "width": 412,
+  "height": 915,
+  "path": "/weekly",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "412-saved-foods",
+  "width": 412,
+  "height": 915,
+  "path": "/saved-foods",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "412-strength",
+  "width": 412,
+  "height": 915,
+  "path": "/strength",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "412-settings",
+  "width": 412,
+  "height": 915,
+  "path": "/settings",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "412-goals",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "412-login",
+  "width": 412,
+  "height": 915,
+  "path": "/login",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "412-register",
+  "width": 412,
+  "height": 915,
+  "path": "/register",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "412-onboarding",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}",
+  "session": "new",
+  "wait": 1800
+ },
+ {
+  "name": "375-error-boundary",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "broken": true,
+  "wait": 2500
+ },
+ {
+  "name": "375-report-panel",
+  "width": 375,
+  "height": 812,
+  "path": "/settings",
+  "actions": "click(\".rp-fab\"); await sleep(700);"
+ },
+ {
+  "name": "412-error-boundary",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "broken": true,
+  "wait": 2500
+ },
+ {
+  "name": "412-report-panel",
+  "width": 412,
+  "height": 915,
+  "path": "/settings",
+  "actions": "click(\".rp-fab\"); await sleep(700);"
+ }
+]

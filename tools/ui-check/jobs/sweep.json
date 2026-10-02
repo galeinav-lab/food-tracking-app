@@ -1,0 +1,294 @@
+[
+ {
+  "name": "375-home-top",
+  "width": 375,
+  "height": 812,
+  "path": "/"
+ },
+ {
+  "name": "375-home-scrolled",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": "text-under-nav"
+ },
+ {
+  "name": "375-history-expanded",
+  "width": 375,
+  "height": 812,
+  "path": "/history",
+  "click": ".history-row"
+ },
+ {
+  "name": "375-weight",
+  "width": 375,
+  "height": 812,
+  "path": "/weight"
+ },
+ {
+  "name": "375-weekly",
+  "width": 375,
+  "height": 812,
+  "path": "/weekly"
+ },
+ {
+  "name": "375-settings",
+  "width": 375,
+  "height": 812,
+  "path": "/settings"
+ },
+ {
+  "name": "375-goals",
+  "width": 375,
+  "height": 812,
+  "path": "/settings/goals"
+ },
+ {
+  "name": "375-saved-foods",
+  "width": 375,
+  "height": 812,
+  "path": "/saved-foods"
+ },
+ {
+  "name": "375-saved-foods-form",
+  "width": 375,
+  "height": 812,
+  "path": "/saved-foods",
+  "actions": "click(\".sf-head .btn\");",
+  "afterWait": 900
+ },
+ {
+  "name": "375-strength",
+  "width": 375,
+  "height": 812,
+  "path": "/strength"
+ },
+ {
+  "name": "375-strength-editor",
+  "width": 375,
+  "height": 812,
+  "path": "/strength",
+  "actions": "click(\".st-card .btn-secondary\", 0);",
+  "afterWait": 900
+ },
+ {
+  "name": "375-login",
+  "width": 375,
+  "height": 812,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "375-register",
+  "width": 375,
+  "height": 812,
+  "path": "/register",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "375-onboarding",
+  "width": 375,
+  "height": 812,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800
+ },
+ {
+  "name": "375-plus-menu",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(600);"
+ },
+ {
+  "name": "375-sheet-meal",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-meal\"); await sleep(1300);"
+ },
+ {
+  "name": "375-sheet-workout",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-workout\"); await sleep(1300);"
+ },
+ {
+  "name": "375-sheet-saved",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1300);"
+ },
+ {
+  "name": "375-sheet-scan",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-scan\"); await sleep(1300);"
+ },
+ {
+  "name": "375-report-panel",
+  "width": 375,
+  "height": 812,
+  "path": "/settings",
+  "actions": "click(\".rp-fab\"); await sleep(700);"
+ },
+ {
+  "name": "375-error-boundary",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "broken": true,
+  "wait": 2500
+ },
+ {
+  "name": "412-home-top",
+  "width": 412,
+  "height": 915,
+  "path": "/"
+ },
+ {
+  "name": "412-home-scrolled",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": "text-under-nav"
+ },
+ {
+  "name": "412-history-expanded",
+  "width": 412,
+  "height": 915,
+  "path": "/history",
+  "click": ".history-row"
+ },
+ {
+  "name": "412-weight",
+  "width": 412,
+  "height": 915,
+  "path": "/weight"
+ },
+ {
+  "name": "412-weekly",
+  "width": 412,
+  "height": 915,
+  "path": "/weekly"
+ },
+ {
+  "name": "412-settings",
+  "width": 412,
+  "height": 915,
+  "path": "/settings"
+ },
+ {
+  "name": "412-goals",
+  "width": 412,
+  "height": 915,
+  "path": "/settings/goals"
+ },
+ {
+  "name": "412-saved-foods",
+  "width": 412,
+  "height": 915,
+  "path": "/saved-foods"
+ },
+ {
+  "name": "412-saved-foods-form",
+  "width": 412,
+  "height": 915,
+  "path": "/saved-foods",
+  "actions": "click(\".sf-head .btn\");",
+  "afterWait": 900
+ },
+ {
+  "name": "412-strength",
+  "width": 412,
+  "height": 915,
+  "path": "/strength"
+ },
+ {
+  "name": "412-strength-editor",
+  "width": 412,
+  "height": 915,
+  "path": "/strength",
+  "actions": "click(\".st-card .btn-secondary\", 0);",
+  "afterWait": 900
+ },
+ {
+  "name": "412-login",
+  "width": 412,
+  "height": 915,
+  "path": "/login",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "412-register",
+  "width": 412,
+  "height": 915,
+  "path": "/register",
+  "session": "none",
+  "wait": 1800
+ },
+ {
+  "name": "412-onboarding",
+  "width": 412,
+  "height": 915,
+  "path": "/onboarding",
+  "session": "new",
+  "wait": 1800
+ },
+ {
+  "name": "412-plus-menu",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(600);"
+ },
+ {
+  "name": "412-sheet-meal",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-meal\"); await sleep(1300);"
+ },
+ {
+  "name": "412-sheet-workout",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-workout\"); await sleep(1300);"
+ },
+ {
+  "name": "412-sheet-saved",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1300);"
+ },
+ {
+  "name": "412-sheet-scan",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-scan\"); await sleep(1300);"
+ },
+ {
+  "name": "412-report-panel",
+  "width": 412,
+  "height": 915,
+  "path": "/settings",
+  "actions": "click(\".rp-fab\"); await sleep(700);"
+ },
+ {
+  "name": "412-error-boundary",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "broken": true,
+  "wait": 2500
+ }
+]

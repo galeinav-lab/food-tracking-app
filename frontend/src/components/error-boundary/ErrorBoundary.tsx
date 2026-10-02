@@ -54,7 +54,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
         return (
             <div className="eb">
-                <div className="eb-card">
+                {/* Layout (and its gradient) unmounted with the crash: bring the backdrop. */}
+                <div className="ambient" aria-hidden="true" />
+                <div className="eb-card glass rise-in">
                     <div className="eb-emoji" aria-hidden="true">😕</div>
                     <h1 className="eb-title">Something went wrong</h1>
                     <p className="eb-text">
@@ -68,10 +70,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                     )}
 
                     <div className="eb-actions">
-                        <button type="button" className="eb-btn eb-btn-primary" onClick={this.handleTryAgain}>
+                        <button type="button" className="btn btn-primary" onClick={this.handleTryAgain}>
                             Try again
                         </button>
-                        <button type="button" className="eb-btn" onClick={this.handleReload}>
+                        <button type="button" className="btn btn-secondary" onClick={this.handleReload}>
                             Reload app
                         </button>
                     </div>

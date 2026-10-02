@@ -5,6 +5,7 @@ import { onboardingService } from "../../services/onboarding.service";
 import { ApiError } from "../../services/http-client";
 import { useAppDispatch } from "../../store/hooks";
 import { userUpdated } from "../../store/auth-slice";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./OnboardingWizard.css";
 
 const fmt = (n: number): string => Math.round(n).toLocaleString();
@@ -158,7 +159,7 @@ function OnboardingWizard(): JSX.Element {
     if (result) {
         return (
             <div className="onboarding">
-                <div className="onb-card">
+                <div className="onb-card glass rise-in">
                     <h1 className="onb-title">You're all set!</h1>
                     <p className="onb-note">Your recommended daily goals:</p>
 
@@ -192,7 +193,7 @@ function OnboardingWizard(): JSX.Element {
                     )}
 
                     <div className="onb-nav">
-                        <button type="button" className="onb-next" onClick={goToApp}>
+                        <button type="button" className="btn btn-primary onb-next" onClick={goToApp}>
                             Go to dashboard
                         </button>
                     </div>
@@ -203,182 +204,226 @@ function OnboardingWizard(): JSX.Element {
 
     return (
         <div className="onboarding">
-            <div className="onb-card">
-                <p className="onb-progress">
-                    Step {step + 1} of {STEPS.length}
-                </p>
-                <h1 className="onb-title">{STEPS[step]}</h1>
-
-                {step === 0 && (
-                    <div className="onb-fields">
-                        <div className="onb-field">
-                            <label htmlFor="onb-weight">Weight (kg)</label>
-                            <input
-                                id="onb-weight"
-                                type="number"
-                                min="0"
-                                value={weightKg}
-                                onChange={(e) => setWeightKg(e.target.value)}
-                            />
-                        </div>
-                        <div className="onb-field">
-                            <label htmlFor="onb-height">Height (cm)</label>
-                            <input
-                                id="onb-height"
-                                type="number"
-                                min="0"
-                                value={heightCm}
-                                onChange={(e) => setHeightCm(e.target.value)}
-                            />
-                        </div>
-                        <div className="onb-field">
-                            <label htmlFor="onb-age">Age</label>
-                            <input
-                                id="onb-age"
-                                type="number"
-                                min="0"
-                                value={age}
-                                onChange={(e) => setAge(e.target.value)}
-                            />
-                        </div>
-                        <div className="onb-field">
-                            <span className="onb-label">Sex</span>
-                            <div className="onb-toggle">
-                                <button
-                                    type="button"
-                                    className={sex === "male" ? "onb-opt onb-opt-active" : "onb-opt"}
-                                    onClick={() => setSex("male")}
-                                >
-                                    Male
-                                </button>
-                                <button
-                                    type="button"
-                                    className={sex === "female" ? "onb-opt onb-opt-active" : "onb-opt"}
-                                    onClick={() => setSex("female")}
-                                >
-                                    Female
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {step === 1 && (
-                    <div className="onb-goals">
-                        {GOAL_OPTIONS.map(([val, label]) => (
-                            <button
-                                key={val}
-                                type="button"
-                                className={goalType === val ? "onb-goal onb-goal-active" : "onb-goal"}
-                                onClick={() => setGoalType(val)}
-                            >
-                                {label}
-                            </button>
+            <div className="onb-card glass rise-in">
+                <div className="onb-progress">
+                    <p className="onb-progress-text">
+                        Step {step + 1} of {STEPS.length}
+                    </p>
+                    <div className="onb-segs" aria-hidden="true">
+                        {STEPS.map((label, i) => (
+                            <span key={label} className={i <= step ? "onb-seg onb-seg-on" : "onb-seg"} />
                         ))}
                     </div>
-                )}
+                </div>
 
-                {step === 2 && (
-                    <div className="onb-fields">
-                        {!isMaintain ? (
-                            <div className="onb-field">
-                                <label htmlFor="onb-target">Target weight (kg)</label>
+                {/* Keyed by step so each step's content fades in (opacity only). */}
+                <div key={step} className="fade-in">
+                    <h1 className="onb-title">{STEPS[step]}</h1>
+
+                    {step === 0 && (
+                        <div className="onb-fields">
+                            <div className="field">
+                                <label className="field-label" htmlFor="onb-weight">Weight (kg)</label>
                                 <input
-                                    id="onb-target"
+                                    className="input"
+                                    id="onb-weight"
                                     type="number"
                                     min="0"
-                                    value={targetWeightKg}
-                                    onChange={(e) => setTargetWeightKg(e.target.value)}
+                                    value={weightKg}
+                                    onChange={(e) => setWeightKg(e.target.value)}
                                 />
                             </div>
-                        ) : (
-                            <p className="onb-note">
-                                Maintaining your current weight ({weightKg || "—"} kg). No target needed.
-                            </p>
-                        )}
-
-                        <div className="onb-field">
-                            <label htmlFor="onb-timeframe">
-                                Timeframe (months, 1–12){isMaintain ? " — optional" : ""}
-                            </label>
-                            <input
-                                id="onb-timeframe"
-                                type="number"
-                                min="1"
-                                max="12"
-                                value={timeframeMonths}
-                                onChange={(e) => setTimeframeMonths(e.target.value)}
-                            />
+                            <div className="field">
+                                <label className="field-label" htmlFor="onb-height">Height (cm)</label>
+                                <input
+                                    className="input"
+                                    id="onb-height"
+                                    type="number"
+                                    min="0"
+                                    value={heightCm}
+                                    onChange={(e) => setHeightCm(e.target.value)}
+                                />
+                            </div>
+                            <div className="field">
+                                <label className="field-label" htmlFor="onb-age">Age</label>
+                                <input
+                                    className="input"
+                                    id="onb-age"
+                                    type="number"
+                                    min="0"
+                                    value={age}
+                                    onChange={(e) => setAge(e.target.value)}
+                                />
+                            </div>
+                            <div className="field">
+                                <span className="field-label">Sex</span>
+                                <div className="onb-toggle">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary onb-opt"
+                                        aria-pressed={sex === "male"}
+                                        onClick={() => setSex("male")}
+                                    >
+                                        Male
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary onb-opt"
+                                        aria-pressed={sex === "female"}
+                                        onClick={() => setSex("female")}
+                                    >
+                                        Female
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                    )}
 
-                        {warning && <p className="onb-warning">{warning}</p>}
-                    </div>
-                )}
+                    {step === 1 && (
+                        <div className="onb-goals">
+                            {GOAL_OPTIONS.map(([val, label]) => (
+                                <button
+                                    key={val}
+                                    type="button"
+                                    className="btn btn-secondary onb-goal"
+                                    aria-pressed={goalType === val}
+                                    onClick={() => setGoalType(val)}
+                                >
+                                    {label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
 
-                {step === 3 && (
-                    <>
-                        <ul className="onb-review">
-                            <li>
-                                <span>Weight</span>
-                                <span>{weightKg} kg</span>
-                            </li>
-                            <li>
-                                <span>Height</span>
-                                <span>{heightCm} cm</span>
-                            </li>
-                            <li>
-                                <span>Age</span>
-                                <span>{age}</span>
-                            </li>
-                            <li>
-                                <span>Sex</span>
-                                <span>{sex}</span>
-                            </li>
-                            <li>
-                                <span>Goal</span>
-                                <span>{goalType ? GOAL_LABELS[goalType] : "—"}</span>
-                            </li>
-                            {!isMaintain && (
-                                <li>
-                                    <span>Target weight</span>
-                                    <span>{targetWeightKg} kg</span>
-                                </li>
+                    {step === 2 && (
+                        <div className="onb-fields">
+                            {!isMaintain ? (
+                                <div className="field">
+                                    <label className="field-label" htmlFor="onb-target">Target weight (kg)</label>
+                                    <input
+                                        className="input"
+                                        id="onb-target"
+                                        type="number"
+                                        min="0"
+                                        value={targetWeightKg}
+                                        onChange={(e) => setTargetWeightKg(e.target.value)}
+                                    />
+                                </div>
+                            ) : (
+                                <p className="onb-note">
+                                    Maintaining your current weight ({weightKg || "—"} kg). No target needed.
+                                </p>
                             )}
-                            <li>
-                                <span>Timeframe</span>
-                                <span>
-                                    {isMaintain && timeframeMonths.trim() === ""
-                                        ? "1 (default)"
-                                        : timeframeMonths}{" "}
-                                    month(s)
-                                </span>
-                            </li>
-                        </ul>
-                        {warning && <p className="onb-warning">{warning}</p>}
-                    </>
-                )}
 
-                {error && <p className="onb-error">{error}</p>}
-                {submitError && <p className="onb-error">{submitError}</p>}
+                            <div className="field">
+                                <label className="field-label" htmlFor="onb-timeframe">
+                                    Timeframe (months, 1–12){isMaintain ? " — optional" : ""}
+                                </label>
+                                <input
+                                    className="input"
+                                    id="onb-timeframe"
+                                    type="number"
+                                    min="1"
+                                    max="12"
+                                    value={timeframeMonths}
+                                    onChange={(e) => setTimeframeMonths(e.target.value)}
+                                />
+                            </div>
+
+                            {warning && <p className="onb-warning">{warning}</p>}
+                        </div>
+                    )}
+
+                    {step === 3 && submitting && (
+                        <>
+                            <p className="onb-note" aria-hidden="true">
+                                Calculating your recommended daily goals…
+                            </p>
+                            <SkeletonGroup label="Calculating your goals" className="onb-review onb-calc">
+                                {[0, 1, 2, 3, 4].map((i) => (
+                                    <div className="onb-skel-row" key={i}>
+                                        <Skeleton width="34%" />
+                                        <Skeleton width="22%" />
+                                    </div>
+                                ))}
+                            </SkeletonGroup>
+                        </>
+                    )}
+
+                    {step === 3 && !submitting && (
+                        <>
+                            <ul className="onb-review">
+                                <li>
+                                    <span>Weight</span>
+                                    <span>{weightKg} kg</span>
+                                </li>
+                                <li>
+                                    <span>Height</span>
+                                    <span>{heightCm} cm</span>
+                                </li>
+                                <li>
+                                    <span>Age</span>
+                                    <span>{age}</span>
+                                </li>
+                                <li>
+                                    <span>Sex</span>
+                                    <span>{sex}</span>
+                                </li>
+                                <li>
+                                    <span>Goal</span>
+                                    <span>{goalType ? GOAL_LABELS[goalType] : "—"}</span>
+                                </li>
+                                {!isMaintain && (
+                                    <li>
+                                        <span>Target weight</span>
+                                        <span>{targetWeightKg} kg</span>
+                                    </li>
+                                )}
+                                <li>
+                                    <span>Timeframe</span>
+                                    <span>
+                                        {isMaintain && timeframeMonths.trim() === ""
+                                            ? "1 (default)"
+                                            : timeframeMonths}{" "}
+                                        month(s)
+                                    </span>
+                                </li>
+                            </ul>
+                            {warning && <p className="onb-warning">{warning}</p>}
+                        </>
+                    )}
+                </div>
+
+                {error && (
+                    <p className="form-error onb-error" role="alert">
+                        {error}
+                    </p>
+                )}
+                {submitError && (
+                    <p className="form-error onb-error" role="alert">
+                        {submitError}
+                    </p>
+                )}
 
                 <div className="onb-nav">
                     {step > 0 && (
-                        <button type="button" className="onb-back" onClick={back} disabled={submitting}>
+                        <button type="button" className="btn btn-secondary" onClick={back} disabled={submitting}>
                             Back
                         </button>
                     )}
                     {step < STEPS.length - 1 ? (
-                        <button type="button" className="onb-next" onClick={next}>
+                        <button type="button" className="btn btn-primary onb-next" onClick={next}>
                             Next
                         </button>
                     ) : (
                         <button
                             type="button"
-                            className="onb-next"
+                            className={submitting ? "btn btn-primary btn-loading onb-next" : "btn btn-primary onb-next"}
                             onClick={handleFinish}
                             disabled={submitting}
+                            aria-busy={submitting}
                         >
-                            {submitting ? "Calculating your goals…" : "Finish"}
+                            {submitting ? "Calculating…" : "Finish"}
                         </button>
                     )}
                 </div>

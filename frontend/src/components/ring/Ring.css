@@ -7,14 +7,11 @@
     display: block;
 }
 
+/* The fill sweeps by animating stroke-dashoffset — paint, not transform/opacity.
+   The one allowed exception to the motion rule (MASTER.md): a small SVG arc, once
+   per value change. Reduced motion: the global kill-switch in index.css. */
 .uiring-arc {
     transition: stroke-dashoffset var(--dur-sweep) var(--ease-out);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .uiring-arc {
-        transition: none;
-    }
 }
 
 .uiring-center {

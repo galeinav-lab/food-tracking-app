@@ -1,31 +1,20 @@
+/* Create/edit form for a saved food (Saved foods page + label scanner's confirm
+   step). Fields = .field-label / .input, unit choice = .btn-secondary with
+   aria-pressed, actions = .btn, error = .form-error. Layout only here. */
 .sff {
     display: flex;
     flex-direction: column;
 }
 
 .sff-title {
-    margin: 0 0 12px;
+    margin: 0 0 var(--space-md);
     font-family: var(--font-head);
-    font-size: 1.05rem;
+    font-size: var(--text-md);
 }
 
 .sff-label {
     display: block;
-    margin: 10px 0 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--muted);
-}
-
-.sff-input {
-    width: 100%;
-    padding: 10px 12px;
-    font-size: 0.95rem;
-}
-
-.sff-input:focus {
-    outline: none;
-    border-color: var(--accent);
+    margin: var(--space-md) 0 var(--space-sm);
 }
 
 /* A macro the AI couldn't read — nudge the user to fill it in. */
@@ -34,99 +23,45 @@
 }
 
 .sff-unread {
-    font-size: 0.68rem;
+    font-size: var(--text-xs);
     color: var(--warning);
 }
 
 .sff-unit-toggle {
     display: flex;
-    gap: 8px;
+    gap: var(--space-sm);
 }
 
 .sff-unit {
     flex: 1;
-    padding: 10px;
-    border-radius: var(--r-sm);
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    color: var(--muted);
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: border-color var(--dur-fast) var(--ease-out),
-        color var(--dur-fast) var(--ease-out), transform var(--dur-press) var(--ease-out);
-}
-
-.sff-unit:active:not(:disabled) {
-    transform: scale(0.97);
-}
-
-.sff-unit-on {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    color: var(--accent);
 }
 
 .sff-macros {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: var(--space-md);
 }
 
 .sff-macro-field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-xs);
 }
 
 .sff-macro-label {
-    font-size: 0.74rem;
-    color: var(--muted);
+    font-size: var(--text-xs);
 }
 
 .sff-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 16px;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
 }
 
 .sff-save {
     flex: 1;
-    padding: 11px 16px;
-    border-radius: var(--r-sm);
-    border: none;
-    background: var(--accent);
-    color: var(--on-accent);
-    font-family: inherit;
-    font-size: 0.92rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform var(--dur-press) var(--ease-out);
-}
-
-.sff-save:active:not(:disabled) {
-    transform: scale(0.98);
-}
-
-.sff-save:disabled {
-    background: var(--accent-disabled);
-    cursor: default;
-}
-
-.sff-cancel {
-    padding: 11px 16px;
-    border-radius: var(--r-sm);
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    color: var(--text);
-    font-family: inherit;
-    font-size: 0.92rem;
-    cursor: pointer;
 }
 
 .sff-error {
-    color: var(--error);
-    font-size: 0.85rem;
-    margin: 10px 0 0;
+    margin: var(--space-md) 0 0;
 }

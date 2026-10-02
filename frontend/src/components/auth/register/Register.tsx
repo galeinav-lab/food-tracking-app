@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { clearAuthError, register } from "../../../store/auth-slice";
-import "./Register.css";
+import "../Auth.css";
 
 function Register(): JSX.Element {
     const dispatch = useAppDispatch();
@@ -33,13 +33,14 @@ function Register(): JSX.Element {
 
     return (
         <div className="auth-container">
-            <form className="card" onSubmit={handleSubmit}>
+            <form className="card glass rise-in" onSubmit={handleSubmit}>
                 <h1 className="form-title">Create account</h1>
 
                 <div className="form-row">
-                    <div className="form-field">
-                        <label htmlFor="register-first">First name</label>
+                    <div className="field">
+                        <label className="field-label" htmlFor="register-first">First name</label>
                         <input
+                            className="input"
                             id="register-first"
                             type="text"
                             value={firstName}
@@ -51,9 +52,10 @@ function Register(): JSX.Element {
                         />
                     </div>
 
-                    <div className="form-field">
-                        <label htmlFor="register-last">Last name</label>
+                    <div className="field">
+                        <label className="field-label" htmlFor="register-last">Last name</label>
                         <input
+                            className="input"
                             id="register-last"
                             type="text"
                             value={lastName}
@@ -66,9 +68,10 @@ function Register(): JSX.Element {
                     </div>
                 </div>
 
-                <div className="form-field">
-                    <label htmlFor="register-email">Email</label>
+                <div className="field">
+                    <label className="field-label" htmlFor="register-email">Email</label>
                     <input
+                        className="input"
                         id="register-email"
                         type="email"
                         value={email}
@@ -78,9 +81,10 @@ function Register(): JSX.Element {
                     />
                 </div>
 
-                <div className="form-field">
-                    <label htmlFor="register-password">Password</label>
+                <div className="field">
+                    <label className="field-label" htmlFor="register-password">Password</label>
                     <input
+                        className="input"
                         id="register-password"
                         type="password"
                         value={password}
@@ -91,9 +95,18 @@ function Register(): JSX.Element {
                     />
                 </div>
 
-                {error && <p className="error-text">{error}</p>}
+                {error && (
+                    <p className="form-error" role="alert">
+                        {error}
+                    </p>
+                )}
 
-                <button className="btn" type="submit" disabled={loading}>
+                <button
+                    className={loading ? "btn btn-primary btn-block btn-loading" : "btn btn-primary btn-block"}
+                    type="submit"
+                    disabled={loading}
+                    aria-busy={loading}
+                >
                     {loading ? "Creating account…" : "Create account"}
                 </button>
 

@@ -16,6 +16,7 @@ import { ApiError } from "../../services/http-client";
 import { IDeficitDay, IWeeklyDeficit } from "../../models/deficit";
 import { formatDateLabel, formatDateShort } from "../../utils/date";
 import { colors, chartTheme } from "../../styles/colors";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./WeeklyCalories.css";
 
 const fmt = (n: number): string => Math.round(n).toLocaleString();
@@ -29,7 +30,7 @@ function DayTooltip({ active, payload }: TipProps): JSX.Element | null {
     if (!active || !payload || payload.length === 0) return null;
     const d = payload[0].payload;
     return (
-        <div className="wc-tip">
+        <div className="wc-tip glass-float">
             <div className="wc-tip-date">{formatDateLabel(d.date)}</div>
             {d.logged && d.eaten != null && d.deficit != null ? (
                 <>
@@ -79,8 +80,18 @@ function WeeklyCalories(): JSX.Element {
         <div className="weekly">
             <h1 className="weekly-title">This week so far</h1>
 
-            {loading && <p className="weekly-hint">Loading…</p>}
-            {error && <p className="weekly-error">{error}</p>}
+            {loading && (
+                <SkeletonGroup label="Loading this week" className="weekly-skel">
+                    <Skeleton width="55%" />
+                    <Skeleton shape="block" height="292px" />
+                    <Skeleton shape="block" height="96px" />
+                </SkeletonGroup>
+            )}
+            {error && (
+                <p className="form-error" role="alert">
+                    {error}
+                </p>
+            )}
 
             {!loading && !error && data && (
                 <>
@@ -89,7 +100,7 @@ function WeeklyCalories(): JSX.Element {
                         {formatDateShort(data.weekEnd)}
                     </p>
 
-                    <div className="weekly-chart">
+                    <div className="weekly-chart glass rise-in">
                         <ResponsiveContainer width="100%" height={260}>
                             <BarChart
                                 data={data.perDay}
@@ -111,7 +122,7 @@ function WeeklyCalories(): JSX.Element {
                                 />
                                 <Tooltip
                                     content={<DayTooltip />}
-                                    cursor={{ fill: "rgba(255,255,255,0.05)" }}
+                                    cursor={{ fill: colors.chartCursor }}
                                 />
                                 <ReferenceLine
                                     y={data.maintenance}
@@ -128,9 +139,10 @@ function WeeklyCalories(): JSX.Element {
                                     with no food logged shows an EMPTY track (no bar) —
                                     clearly "no data", never a zero that looks like fasting. */}
                                 <Bar
+                                    {...chartTheme.animation}
                                     dataKey="eaten"
                                     radius={[4, 4, 0, 0]}
-                                    background={{ fill: "rgba(255,255,255,0.04)" }}
+                                    background={{ fill: colors.barTrack }}
                                 >
                                     {data.perDay.map((d) => (
                                         <Cell
@@ -150,7 +162,7 @@ function WeeklyCalories(): JSX.Element {
                     {data.loggedDayCount === 0 ? (
                         <p className="weekly-hint">No food logged this week yet.</p>
                     ) : (
-                        <div className="weekly-summary">
+                        <div className="weekly-summary glass rise-in">
                             {data.weeklyDeficit >= 0 ? (
                                 <p className="weekly-line">
                                     Deficit so far:{" "}

@@ -8,6 +8,7 @@ import {
     MuscleGroup,
 } from "../../models/strength";
 import StrengthEditor, { StrengthFormValues } from "./editor/StrengthEditor";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./Strength.css";
 
 // Tab labels — the model's lowercase enum, title-cased for display.
@@ -219,7 +220,7 @@ function Strength(): JSX.Element {
         <div className="st">
             <header className="st-head">
                 <h1 className="st-title">Exercises</h1>
-                <button type="button" className="st-add" onClick={openCreate}>
+                <button type="button" className="btn btn-primary btn-sm" onClick={openCreate}>
                     + New
                 </button>
             </header>
@@ -246,15 +247,25 @@ function Strength(): JSX.Element {
                 ))}
             </div>
 
-            {loading && <p className="st-hint">Loading…</p>}
-            {error && <p className="st-error">{error}</p>}
+            {loading && (
+                <SkeletonGroup label="Loading exercises" className="card-list">
+                    <Skeleton shape="block" height="104px" />
+                    <Skeleton shape="block" height="104px" />
+                    <Skeleton shape="block" height="104px" />
+                </SkeletonGroup>
+            )}
+            {error && (
+                <p className="form-error st-error" role="alert">
+                    {error}
+                </p>
+            )}
 
             {/* Reuses the empty-state block so the failure reads like part of the
                 page rather than a raw stack of server text. */}
             {!loading && loadError && (
                 <div className="st-empty">
                     <p className="st-hint">Couldn't load your exercises.</p>
-                    <button type="button" className="btn-mini" onClick={() => void load()}>
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => void load()}>
                         Try again
                     </button>
                 </div>
@@ -265,72 +276,79 @@ function Strength(): JSX.Element {
                     <p className="st-hint">
                         No {GROUP_LABEL[group].toLowerCase()} exercises yet.
                     </p>
-                    <button type="button" className="st-add" onClick={openCreate}>
+                    <button type="button" className="btn btn-primary btn-sm" onClick={openCreate}>
                         + Add one
                     </button>
                 </div>
             )}
 
-            {!loading &&
-                !loadError &&
-                visible.map((ex) => (
-                    <div className="st-card glass" key={ex._id}>
-                        <div className="st-card-top">
-                            <p className="st-name">{ex.name}</p>
-                            <div className="st-actions">
-                                <button
-                                    type="button"
-                                    className="btn-mini"
-                                    onClick={() => openEdit(ex)}
-                                    disabled={busyId === ex._id}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn-mini btn-mini-danger"
-                                    onClick={() => void onDelete(ex)}
-                                    disabled={busyId === ex._id}
-                                >
-                                    {busyId === ex._id ? "Deleting…" : "Delete"}
-                                </button>
+            {!loading && !loadError && visible.length > 0 && (
+                <div className="card-list stagger">
+                    {visible.map((ex) => (
+                        <div className="st-card glass" key={ex._id}>
+                            <div className="st-card-top">
+                                <p className="st-name">{ex.name}</p>
+                                <div className="st-actions">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary btn-sm"
+                                        onClick={() => openEdit(ex)}
+                                        disabled={busyId === ex._id}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={
+                                            busyId === ex._id
+                                                ? "btn btn-secondary btn-sm btn-loading"
+                                                : "btn btn-secondary btn-sm"
+                                        }
+                                        onClick={() => void onDelete(ex)}
+                                        disabled={busyId === ex._id}
+                                        aria-busy={busyId === ex._id}
+                                    >
+                                        {busyId === ex._id ? "Deleting…" : "Delete"}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="st-card-bottom">
-                            <span className="st-meta">
-                                {ex.sets} × {ex.reps}
-                            </span>
-
-                            <div className="st-step">
-                                <button
-                                    type="button"
-                                    className="st-step-btn"
-                                    onClick={() => bumpWeight(ex, -STEP_KG)}
-                                    disabled={ex.weightKg === 0}
-                                    aria-label={`Decrease ${ex.name} weight by ${STEP_KG} kg`}
-                                >
-                                    −
-                                </button>
-                                <span
-                                    className={ex.weightKg === 0 ? "st-weight st-weight-bw" : "st-weight"}
-                                    aria-live="polite"
-                                >
-                                    {ex.weightKg === 0 ? "Bodyweight" : `${fmtKg(ex.weightKg)} kg`}
+                            <div className="st-card-bottom">
+                                <span className="st-meta">
+                                    {ex.sets} × {ex.reps}
                                 </span>
-                                <button
-                                    type="button"
-                                    className="st-step-btn"
-                                    onClick={() => bumpWeight(ex, STEP_KG)}
-                                    disabled={ex.weightKg >= MAX_KG}
-                                    aria-label={`Increase ${ex.name} weight by ${STEP_KG} kg`}
-                                >
-                                    +
-                                </button>
+
+                                <div className="st-step">
+                                    <button
+                                        type="button"
+                                        className="st-step-btn"
+                                        onClick={() => bumpWeight(ex, -STEP_KG)}
+                                        disabled={ex.weightKg === 0}
+                                        aria-label={`Decrease ${ex.name} weight by ${STEP_KG} kg`}
+                                    >
+                                        −
+                                    </button>
+                                    <span
+                                        className={ex.weightKg === 0 ? "st-weight st-weight-bw" : "st-weight"}
+                                        aria-live="polite"
+                                    >
+                                        {ex.weightKg === 0 ? "Bodyweight" : `${fmtKg(ex.weightKg)} kg`}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        className="st-step-btn"
+                                        onClick={() => bumpWeight(ex, STEP_KG)}
+                                        disabled={ex.weightKg >= MAX_KG}
+                                        aria-label={`Increase ${ex.name} weight by ${STEP_KG} kg`}
+                                    >
+                                        +
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+            )}
 
             {editorOpen && (
                 <StrengthEditor

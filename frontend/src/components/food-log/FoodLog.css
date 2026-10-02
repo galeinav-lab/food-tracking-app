@@ -1,53 +1,30 @@
-.food-log-title {
-    margin: 0 0 16px;
-    font-size: 1.3rem;
-}
-
+/* Meal logging (inside the logging sheet). Textarea = .input, submit = .btn,
+   error = .form-error; layout and the analyzing state only. */
 .food-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-md);
 }
 
 .food-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: inherit;
+    padding: var(--space-md);
     resize: vertical;
-}
-
-.food-input:focus {
-    outline: none;
-    border-color: var(--accent);
 }
 
 .food-btn {
     align-self: flex-start;
-    padding: 10px 18px;
-    background: var(--accent);
-    color: var(--on-accent);
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
 }
 
-.food-btn:disabled {
-    background: var(--accent-disabled);
-    cursor: default;
+.food-analyzing {
+    margin-top: var(--space-lg);
 }
 
-.hint {
+.food-hint {
+    margin: 0 0 var(--space-sm);
     color: var(--muted);
-    font-size: 0.9rem;
-    margin: 16px 0 0;
+    font-size: var(--text-sm);
 }
 
 .food-error {
-    color: var(--error);
-    font-size: 0.9rem;
-    margin: 16px 0 0;
+    margin-top: var(--space-lg);
 }

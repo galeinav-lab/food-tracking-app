@@ -1,28 +1,27 @@
 .history-title {
-    margin: 0 0 18px;
-    font-size: 1.3rem;
+    margin: 0 0 var(--space-lg);
+    font-size: var(--text-lg);
 }
 
 .history-hint {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
 }
 
 .history-error {
     color: var(--error);
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
 }
 
 .history-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-md);
 }
 
+/* Surface comes from .glass; shape only here. */
 .history-day {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--card-bg);
+    border-radius: var(--r-card);
     overflow: hidden;
 }
 
@@ -30,13 +29,25 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 14px 16px;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
     background: none;
     border: none;
+    color: inherit;
     cursor: pointer;
     text-align: left;
     font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.history-row:active {
+    transform: scale(0.98);
+}
+
+.history-row:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
 }
 
 .history-row-main {
@@ -47,32 +58,33 @@
 
 .history-date {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--text-base);
 }
 
 .history-cals {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     color: var(--muted);
+    font-variant-numeric: tabular-nums;
 }
 
 .history-row-sub {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-md);
 }
 
 .history-bar {
     flex: 1;
     height: 6px;
-    background: var(--border);
-    border-radius: 999px;
+    background: var(--ring-track);
+    border-radius: var(--r-pill);
     overflow: hidden;
 }
 
 .history-bar-fill {
     height: 100%;
     background: var(--accent);
-    border-radius: 999px;
+    border-radius: var(--r-pill);
 }
 
 .history-bar-fill.over {
@@ -81,27 +93,27 @@
 
 .history-nogoal {
     flex: 1;
-    font-size: 0.8rem;
+    font-size: var(--text-sm);
     color: var(--muted);
 }
 
 .history-meals {
-    font-size: 0.8rem;
+    font-size: var(--text-sm);
     color: var(--muted);
     flex-shrink: 0;
 }
 
+/* Recessed well (.glass-inset) holding the day's meals. */
 .history-detail {
     border-top: 1px solid var(--border);
-    padding: 14px 16px;
-    background: var(--bg);
+    padding: var(--space-lg);
 }
 
 .history-totals {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
-    font-size: 0.85rem;
+    gap: var(--space-md);
+    font-size: var(--text-sm);
     font-weight: 600;
-    margin-top: 6px;
+    margin-top: var(--space-sm);
 }

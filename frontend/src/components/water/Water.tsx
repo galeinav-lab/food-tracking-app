@@ -2,6 +2,7 @@ import { type FormEvent, type JSX, useEffect, useState } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { waterService } from "../../services/water.service";
 import { ApiError } from "../../services/http-client";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./Water.css";
 
 const DEFAULT_TARGET_ML = 3000;
@@ -79,23 +80,27 @@ function Water({ date, refreshKey }: WaterProps): JSX.Element {
             </div>
 
             {loading ? (
-                <p className="water-hint">Loading…</p>
+                <SkeletonGroup label="Loading water">
+                    <Skeleton height="10px" />
+                    <Skeleton width="70%" height="30px" />
+                </SkeletonGroup>
             ) : (
                 <>
                     <div className="water-bar">
-                        <div className="water-fill" style={{ width: `${pct}%` }} />
+                        {/* scaleX, not width: the fill animates on the compositor. */}
+                        <div className="water-fill" style={{ transform: `scaleX(${pct / 100})` }} />
                     </div>
 
                     <div className="water-actions">
-                        <button type="button" className="water-btn" disabled={busy} onClick={() => change(250)}>
+                        <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={() => change(250)}>
                             +250 ml
                         </button>
-                        <button type="button" className="water-btn" disabled={busy} onClick={() => change(500)}>
+                        <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={() => change(500)}>
                             +500 ml
                         </button>
                         <button
                             type="button"
-                            className="water-btn water-undo"
+                            className="btn btn-secondary btn-sm"
                             disabled={busy}
                             onClick={() => change(-250)}
                         >
@@ -103,13 +108,13 @@ function Water({ date, refreshKey }: WaterProps): JSX.Element {
                         </button>
                         <form className="water-custom" onSubmit={onCustom}>
                             <input
-                                className="water-input"
+                                className="input input-sm water-input"
                                 type="number"
                                 placeholder="ml"
                                 value={custom}
                                 onChange={(e) => setCustom(e.target.value)}
                             />
-                            <button type="submit" className="water-btn" disabled={busy}>
+                            <button type="submit" className="btn btn-secondary btn-sm" disabled={busy}>
                                 Add
                             </button>
                         </form>
@@ -117,7 +122,11 @@ function Water({ date, refreshKey }: WaterProps): JSX.Element {
                 </>
             )}
 
-            {error && <p className="water-error">{error}</p>}
+            {error && (
+                <p className="form-error water-error" role="alert">
+                    {error}
+                </p>
+            )}
         </div>
     );
 }

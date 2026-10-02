@@ -1,44 +1,20 @@
-/* Weight-logging form. These rules moved here verbatim from Weight.css when the
-   form was extracted for reuse — the class names are unchanged, so the Weight
-   page looks exactly as before. `.weight-error` is also used by the page for its
+/* Weight-logging form (the app's only one). The submit button is the shared
+   .btn .btn-primary. `.weight-error` is also used by the Weight page for its
    load errors (this file is always bundled, so that keeps working). */
 .weight-form {
     display: flex;
-    gap: 10px;
-    margin-bottom: 6px;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
 }
 
+/* Look = .input; it just takes the row's spare width. */
 .weight-input {
     flex: 1;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: inherit;
-}
-
-.weight-input:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-.weight-btn {
-    padding: 10px 18px;
-    background: var(--accent);
-    color: var(--on-accent);
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-}
-
-.weight-btn:disabled {
-    background: var(--accent-disabled);
-    cursor: default;
+    min-width: 0;
 }
 
 .weight-error {
     color: var(--error);
-    font-size: 0.9rem;
-    margin: 6px 0 0;
+    font-size: var(--text-sm);
+    margin: var(--space-sm) 0 0;
 }

@@ -34,12 +34,17 @@
     --accent-disabled: #3F4A26;
     --accent-soft: rgba(163, 230, 53, 0.12);
     --on-accent: #16200A;
+    --on-accent-soft: rgba(22, 32, 10, 0.18); /* badges sitting on a lime fill */
 
     /* Macros (distinct from each other + the lime accent) */
     --macro-protein: #FB7185;
     --macro-carbs: #FBBF24;
     --macro-fat: #2DD4BF;
     --macro-fiber: #C084FC;
+    /* Soft macro tints for chips/thumbs (14% of the macro colour). */
+    --macro-protein-soft: rgba(251, 113, 133, 0.14);
+    --macro-carbs-soft: rgba(251, 191, 36, 0.14);
+    --macro-fat-soft: rgba(45, 212, 191, 0.14);
 
     /* Functional (success = spring green, deliberately NOT the lime accent) */
     --success: #4ADE80;
@@ -57,6 +62,9 @@
        (fluid side padding); tablets get this cap + centering so cards never
        stretch into over-wide slabs. Shared by content, nav items, and sheets. */
     --content-max: 480px;
+    /* Bottom of the screen the fixed nav (incl. the raised + button) covers.
+       Content pads by this; popovers flip upward rather than land under it. */
+    --nav-clearance: 96px;
 
     /* Spacing */
     --space-xs: 4px;
@@ -73,23 +81,54 @@
     --r-xl: 28px;
     --r-pill: 999px;
 
+    /* v3.2 — Semantic radii. Components pick a ROLE, never a raw px value. */
+    --r-control: var(--r-sm); /* inputs, buttons, chips */
+    --r-card: var(--r-md); /* standard cards */
+    --r-raised: var(--r-lg); /* hero / prominent cards */
+    --r-sheet: var(--r-xl); /* bottom sheets */
+
+    /* v3.2 — Type scale (rem). Headings use --font-head, everything else --font-body. */
+    --text-xs: 0.72rem; /* chips, foot notes */
+    --text-sm: 0.85rem; /* hints, secondary labels */
+    --text-base: 0.95rem; /* body, inputs, buttons */
+    --text-md: 1.1rem; /* section / sheet titles */
+    --text-lg: 1.3rem; /* page titles */
+    --text-xl: 1.75rem; /* secondary big numbers (previews, rings) */
+    --text-display: 2.8rem; /* hero number */
+    /* Form controls never go below 16px: iOS Safari zooms the page when a focused
+       input/select/textarea is smaller. Separate from the type scale on purpose. */
+    --text-input: 1rem;
+
     /* Elevation — deep dark shadows + lime glow */
     --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
     --shadow-raised: 0 10px 28px rgba(0, 0, 0, 0.55);
     --shadow-nav: 0 -6px 24px rgba(0, 0, 0, 0.5);
+    --shadow-sheet: 0 -10px 40px rgba(0, 0, 0, 0.55);
     --glow-accent: 0 6px 20px rgba(163, 230, 53, 0.35);
+
+    /* Scrim behind sheets and the + fan (deep olive-black). */
+    --scrim: rgba(6, 8, 4, 0.55);
+    --danger-soft: rgba(248, 113, 113, 0.1);
 
     /* v3.1 — Ambient gradient background (lime bloom center → dark olive edges) */
     --ambient-mid: #3F5A25; /* mid green around the bloom */
     --ambient-deep: #202D14; /* between mid and the dark edge (--bg) */
-    --ambient-bloom: rgba(163, 230, 53, 0.55); /* diffused lime core */
+    /* Bloom strength is capped by contrast: at its brightest frame, grey text on
+       glass cards and directly on the gradient must stay >= 4.5:1 (measured with
+       tools/ui-check/audit.mjs; .55 / .22 dropped it to 3.8:1). */
+    --ambient-bloom: rgba(163, 230, 53, 0.30); /* diffused lime core */
+    --ambient-bloom-mid: rgba(163, 230, 53, 0.12); /* bloom at 45% of its radius */
 
-    /* v3.1 — Frosted-glass cards. Semi-opaque tint + modest blur (many live
-       blur layers on screen — don't crank the blur). Tint is translucent enough
-       for the glow to visibly bleed through. */
-    --glass-bg: rgba(24, 31, 19, 0.55);
-    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* fallback when backdrop-filter unsupported */
-    --glass-blur: 10px;
+    /* v3.2 — Glass. The look is the translucent tint + light border + top
+       highlight over the ambient gradient; cards carry NO backdrop blur (over a
+       smooth gradient it's invisible, and the animated bloom forced a re-blur
+       every frame). The bottom nav is the only blurred surface. */
+    --glass-bg: rgba(24, 31, 19, 0.55); /* card tier */
+    --glass-inset-bg: rgba(16, 20, 13, 0.55); /* inset tier: recessed wells inside a card */
+    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* nav fallback without backdrop-filter */
+    --glass-float-bg: rgba(24, 31, 19, 0.98); /* float tier: bright text behind must not ghost through */
+    --glass-nav-bg: rgba(24, 31, 19, 0.72); /* the bottom nav, over its blur */
+    --glass-blur: 10px; /* nav only */
     --glass-border: rgba(214, 255, 170, 0.18);
     --glass-highlight: inset 0 1px 0 rgba(214, 255, 170, 0.12); /* top glass edge */
 
@@ -97,11 +136,14 @@
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-in: cubic-bezier(0.4, 0, 1, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1); /* looping pulses */
     --dur-fast: 150ms;
     --dur-base: 200ms;
     --dur-slow: 250ms;
     --dur-press: 50ms;
     --dur-sweep: 550ms;
+    --dur-pulse: 1100ms; /* skeleton loop (one direction) */
+    --dur-ambient: 22s; /* Home glow 'breathing' loop (one direction) */
     --stagger: 40ms;
 }
 
@@ -143,6 +185,7 @@ select {
 input,
 textarea,
 select {
+    font-size: var(--text-input); /* floor for controls without their own rule */
     color: var(--text);
     background-color: var(--surface-2);
     border: 1px solid var(--border);
@@ -177,26 +220,303 @@ code {
 .card {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: var(--r-md);
+    border-radius: var(--r-card);
     box-shadow: var(--shadow-card);
 }
 
-/* Frosted-glass card treatment (v3.1). The doubled selector wins over each
-   component's own background/border regardless of CSS bundle order. Base rule =
-   the graceful fallback (solid semi-opaque tint — never a transparent mess);
-   @supports upgrades it to a real backdrop blur. */
+/* Glass card (v3.2): tint + border + top highlight, no backdrop-filter (see the
+   --glass-* tokens). The doubled selector wins over each component's own
+   background/border regardless of CSS bundle order. Radius/padding stay with
+   the component. Reads as glass only over the ambient gradient (.ambient). */
 .glass.glass {
-    background-color: var(--glass-bg-solid);
+    background-color: var(--glass-bg);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-card), var(--glass-highlight);
 }
 
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-    .glass.glass {
-        background-color: var(--glass-bg);
-        backdrop-filter: blur(var(--glass-blur));
-        -webkit-backdrop-filter: blur(var(--glass-blur));
+/* Inset tier: a recessed area INSIDE a glass card or sheet (never a card of its own). */
+.glass-inset.glass-inset {
+    background-color: var(--glass-inset-bg);
+}
+
+/* Float tier: surfaces that pop over content (menus, sheets, toasts). Near-opaque
+   so text behind never competes; no blur. */
+.glass-float.glass-float {
+    background-color: var(--glass-float-bg);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-raised), var(--glass-highlight);
+}
+
+/* Vertical stack of cards (meals, exercises, lifts, saved foods). Pair with
+   .stagger for the cascade entrance. */
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Small pill label (macros, durations). Colour variants by macro. */
+.chip {
+    flex: 0 0 auto;
+    padding: 2px var(--space-sm);
+    border-radius: var(--r-pill);
+    background: var(--surface-2); /* opaque: contrast never depends on the backdrop */
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Colour variants: the soft tint is layered over an opaque --surface base. */
+.chip-accent {
+    background: linear-gradient(var(--accent-soft), var(--accent-soft)), var(--surface);
+    color: var(--accent);
+}
+
+.chip-protein {
+    background: linear-gradient(var(--macro-protein-soft), var(--macro-protein-soft)), var(--surface);
+    color: var(--macro-protein);
+}
+
+.chip-carbs {
+    background: linear-gradient(var(--macro-carbs-soft), var(--macro-carbs-soft)), var(--surface);
+    color: var(--macro-carbs);
+}
+
+/* Teal: fat, and calories burned by exercise. */
+.chip-fat,
+.chip-burn {
+    background: linear-gradient(var(--macro-fat-soft), var(--macro-fat-soft)), var(--surface);
+    color: var(--macro-fat);
+}
+
+/* Shared entrance: fade + 6px rise. `backwards` hides an item during its delay
+   and holds nothing afterwards, so the element ends at transform: none (a held
+   transform would capture position: fixed descendants). */
+@keyframes rise-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
     }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.rise-in,
+.stagger > * {
+    animation: rise-in var(--dur-slow) var(--ease-out) backwards;
+}
+
+/* Opacity-only fade (step changes, scrims). */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fade-in var(--dur-base) var(--ease-out) backwards;
+}
+
+/* List cascade: each child starts --stagger after the previous one, capped at
+   the 8th so long lists never trail in (items 9+ share the last delay). */
+.stagger > :nth-child(2) { animation-delay: var(--stagger); }
+.stagger > :nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+.stagger > :nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
+.stagger > :nth-child(5) { animation-delay: calc(var(--stagger) * 4); }
+.stagger > :nth-child(6) { animation-delay: calc(var(--stagger) * 5); }
+.stagger > :nth-child(7) { animation-delay: calc(var(--stagger) * 6); }
+.stagger > :nth-child(8) { animation-delay: calc(var(--stagger) * 7); }
+.stagger > :nth-child(n + 9) { animation-delay: calc(var(--stagger) * 8); }
+
+/* Shared button (v3.2). Every button composes .btn + one variant (+ optional
+   size/width modifier). Component CSS may add LAYOUT (flex, margins) but never
+   re-declares the look — that's how the per-screen copies drifted apart.
+   Only transform is animated (press-compress); colour changes are instant.
+   Hover is gated to real pointers so it never sticks after a tap on touch screens. */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    border: 1px solid transparent;
+    border-radius: var(--r-control);
+    font-family: inherit;
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform var(--dur-press) var(--ease-out);
+}
+
+.btn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.btn:disabled {
+    cursor: default;
+}
+
+/* Filled lime — the one main action on a screen/sheet. */
+.btn-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.btn-primary:active:not(:disabled) {
+    background: var(--accent-press);
+}
+
+/* Muted label (not --on-accent) so "Saving…" stays readable on the dim fill. */
+.btn-primary:disabled {
+    background: var(--accent-disabled);
+    color: var(--muted);
+}
+
+/* Quiet filled chip — secondary actions (Cancel, Edit, Retry, +250 ml). */
+.btn-secondary {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+/* Error-coloured text on the secondary fill — destructive actions (Log out). Opaque
+   on purpose: a transparent fill let the ambient glow drop the red below 4.5:1. */
+.btn-danger {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--error);
+}
+
+.btn-secondary:disabled,
+.btn-danger:disabled {
+    opacity: 0.6;
+}
+
+@media (hover: hover) {
+    .btn-primary:hover:not(:disabled) {
+        background: var(--accent-cta);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+        border-color: var(--error);
+        background: var(--danger-soft);
+    }
+}
+
+/* Modifiers */
+.btn-sm {
+    padding: 5px var(--space-md);
+    font-size: var(--text-sm);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Icon-only round button (e.g. a card's ⋯ menu). Label it with aria-label. */
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+}
+
+/* Toggle / choice buttons: set aria-pressed and the selected look follows. */
+.btn-secondary[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+/* Busy state for a submit that's waiting on the server: a small ring spins
+   (transform only) before the label. Pair with disabled + aria-busy. */
+.btn-loading {
+    cursor: progress;
+}
+
+.btn-loading::before {
+    content: "";
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 700ms linear infinite;
+}
+
+@keyframes btn-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Shared form field (v3.2): label + control + one error style for every form.
+   Focus = accent border + soft ring (instant, no transition). Invalid controls
+   use aria-invalid="true", so the error look and the a11y state can't drift. */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.field-label {
+    font-size: var(--text-sm);
+    color: var(--muted);
+}
+
+.input {
+    width: 100%;
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: var(--r-control);
+    background-color: var(--surface-2);
+    color: var(--text);
+    font-family: inherit;
+    font-size: var(--text-input);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.input-sm {
+    padding: 5px var(--space-md);
+}
+
+.input[aria-invalid="true"] {
+    border-color: var(--error);
+}
+
+.input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px var(--danger-soft);
+}
+
+.form-error {
+    margin: 0;
+    color: var(--error);
+    font-size: var(--text-sm);
 }
 
 /* Subtle light scrollbars */

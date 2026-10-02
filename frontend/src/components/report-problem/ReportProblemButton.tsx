@@ -5,6 +5,7 @@ import {
     reportError,
 } from "../../services/error-reporter";
 import { toastBus } from "../../services/toast-bus";
+import Sheet from "../sheet/Sheet";
 import "./ReportProblemButton.css";
 
 // Persistent corner button (testing build only). Lets a tester describe what they
@@ -52,7 +53,7 @@ function ReportProblemButton(): JSX.Element | null {
             {!open && (
                 <button
                     type="button"
-                    className="rp-fab"
+                    className="btn btn-secondary btn-sm glass-float rp-fab"
                     onClick={() => setOpen(true)}
                     aria-label="Report a problem"
                 >
@@ -65,21 +66,17 @@ function ReportProblemButton(): JSX.Element | null {
                 </button>
             )}
 
+            {/* The typed note lives in state here, so closing (incl. a scrim tap)
+                never loses it — reopening restores the draft. */}
             {open && (
-                <div className="rp-backdrop" role="dialog" aria-modal="true" aria-label="Report a problem">
-                    <form className="rp-panel" onSubmit={submit}>
-                        <div className="rp-head">
-                            <h2 className="rp-title">Report a problem</h2>
-                            <button type="button" className="rp-close" onClick={() => setOpen(false)} aria-label="Close">
-                                ×
-                            </button>
-                        </div>
-                        <label className="rp-label" htmlFor="rp-note">
+                <Sheet title="Report a problem" ariaLabel="Report a problem" onClose={() => setOpen(false)}>
+                    <form onSubmit={submit}>
+                        <label className="field-label rp-label" htmlFor="rp-note">
                             What were you doing?
                         </label>
                         <textarea
                             id="rp-note"
-                            className="rp-textarea"
+                            className="input rp-textarea"
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
                             rows={4}
@@ -88,12 +85,12 @@ function ReportProblemButton(): JSX.Element | null {
                         />
                         <p className="rp-hint">We'll attach the latest technical details automatically.</p>
                         <div className="rp-actions">
-                            <button type="submit" className="rp-submit" disabled={busy}>
+                            <button type="submit" className="btn btn-primary" disabled={busy}>
                                 {busy ? "Sending…" : "Send report"}
                             </button>
                         </div>
                     </form>
-                </div>
+                </Sheet>
             )}
         </>
     );

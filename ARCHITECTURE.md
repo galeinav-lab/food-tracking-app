@@ -29,7 +29,8 @@ row in Settings (§6).
 ## 2. Tech stack
 
 - **Frontend:** Create React App + TypeScript, React 19, react-router v7, **Redux Toolkit (auth only)**,
-  **recharts** (charts/rings), axios. Dark-blue theme via CSS custom properties.
+  **recharts** (charts/rings), axios. Dark green + lime "ambient glass" theme via CSS custom properties
+  (`design-system/nutritrack/MASTER.md`).
 - **Backend:** Node + Express 5 + TypeScript (OOP, class-based), **Mongoose** (MongoDB), JWT auth,
   bcrypt, helmet, express-rate-limit, Joi validation.
 - **External:** **Anthropic API** (Claude) for food parsing + goal calculation.
@@ -55,15 +56,17 @@ food-track-project/
 │       ├── config/       db.ts (Mongo connect)
 │       ├── app.ts        Express app: middleware order + route mounts + error handlers
 │       └── server.ts     connectDB() then app.listen(PORT)
-└── frontend/         CRA app (builds to build/)
-    └── src/
-        ├── components/   One folder per component (Component.tsx + Component.css)
-        ├── services/     API layer (http-client + one *.service.ts per domain) + seams
-        ├── models/       TS interfaces mirroring backend responses
-        ├── store/        Redux Toolkit (auth slice, typed hooks, store, auth-bridge)
-        ├── context/      refresh-context.tsx (selectedDate + refresh signal — NOT Redux)
-        ├── styles/       colors.ts (JS mirror of CSS tokens for recharts/SVG)
-        └── utils/        date.ts (tz-safe dates, mirrors backend date-tz.ts)
+├── frontend/         CRA app (builds to build/)
+│   └── src/
+│       ├── components/   One folder per component (Component.tsx + Component.css)
+│       ├── services/     API layer (http-client + one *.service.ts per domain) + seams
+│       ├── models/       TS interfaces mirroring backend responses
+│       ├── store/        Redux Toolkit (auth slice, typed hooks, store, auth-bridge)
+│       ├── context/      refresh-context.tsx (selectedDate + refresh signal — NOT Redux)
+│       ├── styles/       colors.ts (JS mirror of CSS tokens for recharts/SVG, incl. chart motion)
+│       └── utils/        date.ts (tz-safe dates, mirrors backend date-tz.ts)
+├── design-system/    nutritrack/MASTER.md — tokens, glass tiers, shared UI blocks (source of truth)
+└── tools/ui-check/   Dev-only screenshot tooling (mock API + headless Chrome); not part of any build
 ```
 
 ---
@@ -251,7 +254,14 @@ upserts the summary (deletes it if zero logs). Every food **log/edit/delete** an
 2. **Service fn** — add to the relevant `services/*.service.ts` (uses `http` from `http-client.ts`).
 3. **Component** — `components/x/X.tsx` + `X.css`; `function X(): JSX.Element` (import `type JSX` — React 19).
    Read `selectedDate`/`refreshKey` from `useRefresh()`; fetch on demand with loading/error states; use
-   design tokens (no hardcoded colors); recharts colors come from `styles/colors.ts`.
+   design tokens (no hardcoded colors); recharts colors come from `styles/colors.ts`. Reuse the shared
+   UI blocks rather than restyling your own: `.btn` + variant, `.field`/`.input`/`.form-error`,
+   `.card-list`/`.chip` (index.css), `<Sheet>` for any bottom sheet, `<ActionMenu>` for a card's
+   actions, `<Skeleton>`/`<SkeletonGroup>` for loading (see `design-system/nutritrack/MASTER.md` §3.6).
+4. **Check it visually** — `tools/ui-check/` runs the frontend against a mock API (sample data, no
+   backend, no login) and screenshots routes/states at phone widths in headless Chrome; `audit.mjs`
+   there checks text contrast against the rendered background and counts blurred layers. Dev-only:
+   nothing in the app imports it. Usage and job format in `tools/ui-check/README.md`.
 
 **Gotchas:** use the shared date helpers (never `new Date("YYYY-MM-DD")`); keep deficit math server-side;
 respect Express route order; call the recompute helper on any change to a day's food/exercise.
@@ -260,13 +270,14 @@ respect Express route order; call the recompute helper on any change to a day's 
 
 ## 10. Known gaps / TODOs (intentionally incomplete)
 
-- **No automated tests.** Only CRA's default `App.test.tsx`; no backend tests. Pure functions in
+- **No automated tests.** Only CRA's default `App.test.tsx` (still the template's "learn react" check,
+  so it fails against this app); no backend tests. Pure functions in
   `energy.ts`/`date-tz.ts` are the easiest first targets.
 - **Crash-reporting is a testing-phase feature** behind `REACT_APP_TESTING` + `ADMIN_REPORT_KEY`; turn off
   for real production.
 - **`User.goals` is vestigial** — the `Goal` collection is authoritative; the embedded field could be removed.
-- **Orphaned files:** `components/layout/header/` (the top Header, replaced by the bottom nav) still
-  exists and is imported nowhere; `mysql2` sits in backend deps as an unused template leftover.
+- **Unused dependency:** `mysql2` sits in backend deps as a template leftover. (The orphaned top
+  Header and CRA's `App.css` were deleted on the ui-refresh branch.)
 - **Comments:** most files carry explanatory + concept ("learning") comments; a one-time "strip all comments"
   request did not fully run, so comments remain.
 - **Weekly components** (`WeeklyRing`, `WeeklyCalories`) already migrated to the `/deficit` endpoint (no local

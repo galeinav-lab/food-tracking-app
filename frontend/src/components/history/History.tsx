@@ -5,6 +5,7 @@ import { IDailySummary } from "../../models/daily-summary";
 import { IFoodLog } from "../../models/food-log";
 import { addDaysToDateString, formatDateLabel, todayInTimeZone } from "../../utils/date";
 import MealCard from "../meal-card/MealCard";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./History.css";
 
 const fmt = (n: number): string => Math.round(n).toLocaleString();
@@ -96,12 +97,18 @@ function History(): JSX.Element {
         <div className="history">
             <h1 className="history-title">History</h1>
 
-            {loading && <p className="history-hint">Loading…</p>}
+            {loading && (
+                <SkeletonGroup label="Loading history" className="history-list">
+                    {[0, 1, 2, 3, 4].map((i) => (
+                        <Skeleton key={i} shape="block" height="72px" />
+                    ))}
+                </SkeletonGroup>
+            )}
 
             {!loading && loadError && (
                 <div>
                     <p className="history-hint">Couldn't load your history.</p>
-                    <button type="button" className="btn-mini" onClick={() => void load()}>
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => void load()}>
                         Try again
                     </button>
                 </div>
@@ -111,7 +118,7 @@ function History(): JSX.Element {
                 <p className="history-hint">No logged days yet.</p>
             )}
 
-            <div className="history-list">
+            <div className="history-list stagger">
                 {summaries.map((s) => {
                     const consumed = s.totals?.calories ?? 0;
                     const goal = snapshotNumber(s.goalSnapshot, "calories");
@@ -120,7 +127,7 @@ function History(): JSX.Element {
                     const isExpanded = expanded === s.date;
 
                     return (
-                        <div className="history-day" key={s.date}>
+                        <div className="history-day glass" key={s.date}>
                             <button
                                 type="button"
                                 className="history-row"
@@ -151,23 +158,32 @@ function History(): JSX.Element {
                             </button>
 
                             {isExpanded && (
-                                <div className="history-detail">
-                                    {dayLoading && <p className="history-hint">Loading…</p>}
+                                <div className="history-detail glass-inset">
+                                    {dayLoading && (
+                                        <SkeletonGroup label="Loading meals" className="card-list">
+                                            <Skeleton shape="block" height="96px" />
+                                            <Skeleton shape="block" height="96px" />
+                                        </SkeletonGroup>
+                                    )}
                                     {!dayLoading && dayError && (
                                         <div>
                                             <p className="history-hint">Couldn't load that day.</p>
                                             <button
                                                 type="button"
-                                                className="btn-mini"
+                                                className="btn btn-secondary btn-sm"
                                                 onClick={() => void loadDay(s.date)}
                                             >
                                                 Try again
                                             </button>
                                         </div>
                                     )}
-                                    {!dayLoading &&
-                                        !dayError &&
-                                        dayLogs.map((m) => <MealCard key={m._id} meal={m} readOnly />)}
+                                    {!dayLoading && !dayError && dayLogs.length > 0 && (
+                                        <div className="card-list">
+                                            {dayLogs.map((m) => (
+                                                <MealCard key={m._id} meal={m} readOnly />
+                                            ))}
+                                        </div>
+                                    )}
                                     {!dayLoading && !dayError && (
                                         <div className="history-totals">
                                             <span>Day total</span>

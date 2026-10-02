@@ -1,6 +1,7 @@
 import React, { type JSX, useState } from "react";
 import { foodService } from "../../services/food.service";
 import { ApiError } from "../../services/http-client";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./FoodLog.css";
 
 interface FoodLogProps {
@@ -39,19 +40,39 @@ function FoodLog({ date, onLogged }: FoodLogProps): JSX.Element {
         <div className="food-log">
             <form className="food-form" onSubmit={handleSubmit}>
                 <textarea
-                    className="food-input"
+                    className="input food-input"
                     placeholder="e.g. 2 eggs, toast with butter, orange juice"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
                 />
-                <button className="food-btn" type="submit" disabled={loading || !description.trim()}>
+                <button
+                    className={loading ? "btn btn-primary btn-loading food-btn" : "btn btn-primary food-btn"}
+                    type="submit"
+                    disabled={loading || !description.trim()}
+                    aria-busy={loading}
+                >
                     {loading ? "Analyzing…" : "Log meal"}
                 </button>
             </form>
 
-            {loading && <p className="hint">Analyzing your meal with AI…</p>}
-            {error && <p className="food-error">{error}</p>}
+            {/* While the AI reads the description: a placeholder shaped like the
+                meal card it will become. */}
+            {loading && (
+                <div className="food-analyzing">
+                    <p className="food-hint" aria-hidden="true">
+                        Analyzing your meal with AI…
+                    </p>
+                    <SkeletonGroup label="Analyzing your meal">
+                        <Skeleton shape="block" height="112px" />
+                    </SkeletonGroup>
+                </div>
+            )}
+            {error && (
+                <p className="form-error food-error" role="alert">
+                    {error}
+                </p>
+            )}
         </div>
     );
 }

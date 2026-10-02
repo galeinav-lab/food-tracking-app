@@ -1,0 +1,30 @@
+[
+ {
+  "name": "375-glow-current",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}:root{--ambient-bloom:rgba(163,230,53,0.55);--ambient-bloom-mid:rgba(163,230,53,0.22)}"
+ },
+ {
+  "name": "375-glow-proposed",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ },
+ {
+  "name": "412-glow-current",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}:root{--ambient-bloom:rgba(163,230,53,0.55);--ambient-bloom-mid:rgba(163,230,53,0.22)}"
+ },
+ {
+  "name": "412-glow-proposed",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "css": ".home-ambient-bloom{animation:none!important;opacity:1!important;transform:scale(1.09)!important}"
+ }
+]

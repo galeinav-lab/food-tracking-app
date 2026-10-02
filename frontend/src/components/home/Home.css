@@ -1,25 +1,19 @@
 .home {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: var(--space-lg);
 }
 
-/* ── Ambient radial glow (v3.1) ─────────────────────────────────────────────
-   Fixed full-screen layer behind the dashboard content (negative z-index paints
-   above the body canvas but below all content). Base = static gradient from mid
-   greens to the dark edges; the lime bloom is a SEPARATE layer animated only via
-   opacity + transform (never gradient stops), so the loop stays compositor-cheap. */
+/* ── Breathing lime bloom (dashboard only) ──────────────────────────────────
+   The static base gradient is the shared .ambient layer (Layout.css), rendered
+   earlier in the DOM; this fixed layer sits on top of it at the same z-index.
+   Animated only via opacity + transform (never gradient stops), so the loop
+   stays compositor-cheap. */
 .home-ambient {
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: radial-gradient(
-        ellipse 130% 100% at 50% 32%,
-        var(--ambient-mid) 0%,
-        var(--ambient-deep) 45%,
-        var(--bg) 82%
-    );
 }
 
 .home-ambient-bloom {
@@ -28,11 +22,11 @@
     background: radial-gradient(
         ellipse 75% 50% at 50% 32%,
         var(--ambient-bloom) 0%,
-        rgba(163, 230, 53, 0.22) 45%,
+        var(--ambient-bloom-mid) 45%,
         transparent 78%
     );
     transform-origin: 50% 32%;
-    animation: ambient-breathe 22s ease-in-out infinite alternate;
+    animation: ambient-breathe var(--dur-ambient) var(--ease-in-out) infinite alternate;
     will-change: opacity, transform;
 }
 
@@ -63,26 +57,26 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    padding: 4px 2px 0;
+    padding: var(--space-xs) 2px 0;
 }
 
 .home-hi {
     margin: 0;
     font-family: var(--font-head);
-    font-size: 1.35rem;
+    font-size: var(--text-lg);
     font-weight: 700;
 }
 
 .home-date {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     color: var(--muted);
 }
 
 .home-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: var(--space-md);
 }
 
 @media (max-width: 480px) {

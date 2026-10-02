@@ -58,11 +58,13 @@ function ToastItem({ toast, onDismiss }: ToastItemProps): JSX.Element {
     };
 
     return (
-        <div className={`toast toast-${toast.kind}`} role="alert">
+        <div className={`toast glass-float toast-${toast.kind}`} role="alert">
             <div className="toast-row">
                 <p className="toast-headline">{toast.headline}</p>
                 <button type="button" className="toast-close" onClick={onDismiss} aria-label="Dismiss">
-                    ×
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6L6 18" />
+                    </svg>
                 </button>
             </div>
 
@@ -72,7 +74,7 @@ function ToastItem({ toast, onDismiss }: ToastItemProps): JSX.Element {
                 <details className="toast-details">
                     <summary>Details</summary>
                     <pre className="toast-pre">{toast.details}</pre>
-                    <button type="button" className="toast-copy" onClick={copy}>
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={copy}>
                         {copied ? "Copied" : "Copy"}
                     </button>
                 </details>

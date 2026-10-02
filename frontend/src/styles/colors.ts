@@ -19,10 +19,23 @@ export const colors = {
     grid: "rgba(214,255,170,0.08)",
     success: "#4ADE80",
     warning: "#F59E0B",
+    // Faint white washes for chart interaction/empty states.
+    chartCursor: "rgba(255,255,255,0.05)", // hovered column
+    barTrack: "rgba(255,255,255,0.04)", // empty column behind a bar (day not logged)
 } as const;
+
+// recharts animates in JS, so the CSS reduced-motion kill-switch can't reach it.
+const reduceMotion =
+    typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 // Shared recharts theming so axes/tooltips read on the dark theme.
 export const chartTheme = {
+    // Mirrors --dur-sweep / --ease-out (index.css): charts sweep in like the rings.
+    animation: {
+        isAnimationActive: !reduceMotion,
+        animationDuration: 550,
+        animationEasing: "ease-out",
+    },
     axisTick: { fontSize: 11, fill: colors.muted },
     axisLine: { stroke: colors.border },
     tooltipContentStyle: {

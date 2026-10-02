@@ -5,6 +5,7 @@ import { ApiError } from "../../services/http-client";
 import { IScanLabelResult, ILabelValues } from "../../models/saved-food";
 import { INutrition } from "../../models/nutrition";
 import SavedFoodForm, { SavedFoodFormValues } from "../saved-food-form/SavedFoodForm";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./LabelScanner.css";
 
 interface LabelScannerProps {
@@ -206,9 +207,19 @@ function LabelScanner({ onSaved }: LabelScannerProps): JSX.Element {
     if (stage === "reading") {
         return (
             <div className="ls-reading">
-                <div className="ls-spinner" aria-hidden="true" />
                 <p className="ls-reading-text">Reading the label…</p>
                 <p className="ls-reading-sub">This takes a few seconds.</p>
+                {/* Placeholder shaped like the confirm form that comes next. */}
+                <SkeletonGroup label="Reading the label" className="ls-reading-skel">
+                    <Skeleton width="45%" />
+                    <Skeleton shape="block" height="44px" />
+                    <div className="ls-reading-grid">
+                        <Skeleton shape="block" height="44px" />
+                        <Skeleton shape="block" height="44px" />
+                        <Skeleton shape="block" height="44px" />
+                        <Skeleton shape="block" height="44px" />
+                    </div>
+                </SkeletonGroup>
             </div>
         );
     }
@@ -224,7 +235,7 @@ function LabelScanner({ onSaved }: LabelScannerProps): JSX.Element {
                 </p>
                 <div className="ls-serving-row">
                     <input
-                        className="ls-input"
+                        className="input ls-input"
                         type="number"
                         min="1"
                         step="1"
@@ -236,12 +247,16 @@ function LabelScanner({ onSaved }: LabelScannerProps): JSX.Element {
                     />
                     <span className="ls-serving-unit">{scan.baseUnit}</span>
                 </div>
-                {error && <p className="ls-error">{error}</p>}
+                {error && (
+                    <p className="form-error ls-error" role="alert">
+                        {error}
+                    </p>
+                )}
                 <div className="ls-serving-actions">
-                    <button type="submit" className="ls-primary">
+                    <button type="submit" className="btn btn-primary ls-continue">
                         Continue
                     </button>
-                    <button type="button" className="ls-secondary" onClick={retake}>
+                    <button type="button" className="btn btn-secondary" onClick={retake}>
                         Retake photo
                     </button>
                 </div>
@@ -253,7 +268,7 @@ function LabelScanner({ onSaved }: LabelScannerProps): JSX.Element {
     if (stage === "confirm" && scan) {
         const unread = unreadKeysOf(scan.values);
         return (
-            <div className="ls-confirm">
+            <div className="ls-confirm rise-in">
                 <p className="ls-confirm-banner">
                     Check the values below — the AI read them off the photo.
                     {unread.length > 0 && " Some weren't on the label; add them if you know them."}
@@ -294,12 +309,16 @@ function LabelScanner({ onSaved }: LabelScannerProps): JSX.Element {
                 </>
             )}
 
-            {cameraError && <p className="ls-camera-error">{cameraError}</p>}
-            {error && <p className="ls-error">{error}</p>}
+            {cameraError && <p className="ls-camera-error glass-inset">{cameraError}</p>}
+            {error && (
+                <p className="form-error ls-error" role="alert">
+                    {error}
+                </p>
+            )}
 
             {/* Always available: works as a camera fallback AND for existing photos.
                 `capture="environment"` opens the rear camera directly on phones. */}
-            <label className="ls-upload">
+            <label className="btn btn-secondary ls-upload">
                 <input
                     type="file"
                     accept="image/*"

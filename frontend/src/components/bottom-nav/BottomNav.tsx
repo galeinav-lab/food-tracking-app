@@ -55,7 +55,7 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                     the two thumb-reachable rows [Meal | Saved] then [Workout | Scan],
                     with the lone coming-soon placeholder [Photo] on top. */}
                 <div className={open ? "bn-center bn-open" : "bn-center"}>
-                    <button type="button" className="bn-fan glass bn-fan-meal" onClick={() => pick("meal")} tabIndex={open ? 0 : -1}>
+                    <button type="button" className="bn-fan glass-float bn-fan-meal" onClick={() => pick("meal")} tabIndex={open ? 0 : -1}>
                         <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
                             <path d="M3 3v7a3 3 0 0 0 6 0V3" />
                             <path d="M6 3v18" />
@@ -65,14 +65,14 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                         <span className="bn-fan-label">Meal</span>
                     </button>
 
-                    <button type="button" className="bn-fan glass bn-fan-saved" onClick={() => pick("saved")} tabIndex={open ? 0 : -1}>
+                    <button type="button" className="bn-fan glass-float bn-fan-saved" onClick={() => pick("saved")} tabIndex={open ? 0 : -1}>
                         <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
                             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                         </svg>
                         <span className="bn-fan-label">Saved</span>
                     </button>
 
-                    <button type="button" className="bn-fan glass bn-fan-workout" onClick={() => pick("workout")} tabIndex={open ? 0 : -1}>
+                    <button type="button" className="bn-fan glass-float bn-fan-workout" onClick={() => pick("workout")} tabIndex={open ? 0 : -1}>
                         <svg viewBox="0 0 24 24" className="bn-fan-icon" aria-hidden="true">
                             <path d="M6.5 6.5 17.5 17.5" />
                             <path d="m21 21-1-1" />
@@ -90,7 +90,7 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                         it and the user confirms before it's saved. */}
                     <button
                         type="button"
-                        className="bn-fan glass bn-fan-scan"
+                        className="bn-fan glass-float bn-fan-scan"
                         onClick={() => pick("scan")}
                         tabIndex={open ? 0 : -1}
                         aria-label="Scan a nutrition label"
@@ -111,7 +111,7 @@ function BottomNav({ onAdd }: BottomNavProps): JSX.Element {
                         (camera/gallery -> AI food recognition -> prefill the meal log). */}
                     <button
                         type="button"
-                        className="bn-fan glass bn-fan-photo"
+                        className="bn-fan glass-float bn-fan-photo"
                         onClick={() => comingSoon("Photo logging")}
                         tabIndex={open ? 0 : -1}
                         aria-label="Log by photo (coming soon)"

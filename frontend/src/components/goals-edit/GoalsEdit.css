@@ -1,88 +1,37 @@
 .goals-title {
-    margin: 0 0 18px;
-    font-size: 1.3rem;
+    margin: 0 0 var(--space-lg);
+    font-size: var(--text-lg);
 }
 
 .goals-hint {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
 }
 
+/* One glass card holding the fields (surface from .glass). */
 .goals-form {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    max-width: none;
-}
-
-.goals-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.goals-field label {
-    font-size: 0.85rem;
-    color: var(--muted);
-}
-
-.goals-field input {
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: inherit;
-}
-
-.goals-field input:focus {
-    outline: none;
-    border-color: var(--accent);
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    border-radius: var(--r-card);
 }
 
 .goals-error {
     color: var(--error);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     margin: 0;
 }
 
 .goals-success {
     color: var(--success);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     margin: 0;
 }
 
 .goals-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 6px;
-}
-
-.goals-save {
-    padding: 10px 18px;
-    background: var(--accent);
-    color: var(--on-accent);
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-}
-
-.goals-save:disabled {
-    background: var(--accent-disabled);
-    cursor: default;
-}
-
-.goals-back {
-    padding: 10px 16px;
-    background: var(--surface-2);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-}
-
-.goals-back:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-top: var(--space-sm);
 }

@@ -1,0 +1,260 @@
+[
+ {
+  "name": "375-meals",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": ".meal-list"
+ },
+ {
+  "name": "375-meal-menu-open",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": "keep",
+  "actions": "const l = document.querySelector(\".meal-list\"); window.scrollTo(0, Math.round(l.getBoundingClientRect().top + scrollY - 16)); await sleep(300); click(\".meal-list .amenu .btn\"); await sleep(350);"
+ },
+ {
+  "name": "375-meal-edit",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": "keep",
+  "actions": "const l = document.querySelector(\".meal-list\"); window.scrollTo(0, Math.round(l.getBoundingClientRect().top + scrollY - 16)); await sleep(300); click(\".meal-list .amenu .btn\"); await sleep(350); click(\".amenu-item\", 1);"
+ },
+ {
+  "name": "375-water",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": ".water"
+ },
+ {
+  "name": "375-exercise",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": ".exercise-section"
+ },
+ {
+  "name": "375-history-readonly-meal",
+  "width": 375,
+  "height": 812,
+  "path": "/history",
+  "click": ".history-row"
+ },
+ {
+  "name": "375-strength",
+  "width": 375,
+  "height": 812,
+  "path": "/strength"
+ },
+ {
+  "name": "375-strength-editor",
+  "width": 375,
+  "height": 812,
+  "path": "/strength",
+  "actions": "click(\".st-card .btn-secondary\", 0);",
+  "afterWait": 900
+ },
+ {
+  "name": "375-saved-foods",
+  "width": 375,
+  "height": 812,
+  "path": "/saved-foods"
+ },
+ {
+  "name": "375-saved-foods-form",
+  "width": 375,
+  "height": 812,
+  "path": "/saved-foods",
+  "actions": "click(\".sf-head .btn\");",
+  "afterWait": 900
+ },
+ {
+  "name": "375-picker",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1200);",
+  "afterWait": 600
+ },
+ {
+  "name": "375-picker-amount",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1200);click(\".sfp-item\", 0); await sleep(400); set(\"#sfp-amount\", \"150\");",
+  "afterWait": 700
+ },
+ {
+  "name": "412-meals",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": ".meal-list"
+ },
+ {
+  "name": "412-meal-menu-open",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": "keep",
+  "actions": "const l = document.querySelector(\".meal-list\"); window.scrollTo(0, Math.round(l.getBoundingClientRect().top + scrollY - 16)); await sleep(300); click(\".meal-list .amenu .btn\"); await sleep(350);"
+ },
+ {
+  "name": "412-meal-edit",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": "keep",
+  "actions": "const l = document.querySelector(\".meal-list\"); window.scrollTo(0, Math.round(l.getBoundingClientRect().top + scrollY - 16)); await sleep(300); click(\".meal-list .amenu .btn\"); await sleep(350); click(\".amenu-item\", 1);"
+ },
+ {
+  "name": "412-water",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": ".water"
+ },
+ {
+  "name": "412-exercise",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": ".exercise-section"
+ },
+ {
+  "name": "412-history-readonly-meal",
+  "width": 412,
+  "height": 915,
+  "path": "/history",
+  "click": ".history-row"
+ },
+ {
+  "name": "412-strength",
+  "width": 412,
+  "height": 915,
+  "path": "/strength"
+ },
+ {
+  "name": "412-strength-editor",
+  "width": 412,
+  "height": 915,
+  "path": "/strength",
+  "actions": "click(\".st-card .btn-secondary\", 0);",
+  "afterWait": 900
+ },
+ {
+  "name": "412-saved-foods",
+  "width": 412,
+  "height": 915,
+  "path": "/saved-foods"
+ },
+ {
+  "name": "412-saved-foods-form",
+  "width": 412,
+  "height": 915,
+  "path": "/saved-foods",
+  "actions": "click(\".sf-head .btn\");",
+  "afterWait": 900
+ },
+ {
+  "name": "412-picker",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1200);",
+  "afterWait": 600
+ },
+ {
+  "name": "412-picker-amount",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\"); await sleep(1200);click(\".sfp-item\", 0); await sleep(400); set(\"#sfp-amount\", \"150\");",
+  "afterWait": 700
+ },
+ {
+  "name": "375-meal-menu-flip",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "const t = document.querySelectorAll(\".meal-list .amenu .btn\")[1];\nwindow.scrollTo(0, Math.round(t.getBoundingClientRect().top + scrollY - (innerHeight - 130)));\nawait sleep(300); t.click(); await sleep(400);",
+  "scroll": "keep"
+ },
+ {
+  "name": "412-meal-menu-flip",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "const t = document.querySelectorAll(\".meal-list .amenu .btn\")[1];\nwindow.scrollTo(0, Math.round(t.getBoundingClientRect().top + scrollY - (innerHeight - 130)));\nawait sleep(300); t.click(); await sleep(400);",
+  "scroll": "keep"
+ },
+ {
+  "name": "375-home-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": ".home-row",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "375-strength-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/strength",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "375-saved-foods-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/saved-foods",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "375-picker-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "await slow(8000); click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\");",
+  "afterWait": 900
+ },
+ {
+  "name": "412-home-loading",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": ".home-row",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "412-strength-loading",
+  "width": 412,
+  "height": 915,
+  "path": "/strength",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "412-saved-foods-loading",
+  "width": 412,
+  "height": 915,
+  "path": "/saved-foods",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "412-picker-loading",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "await slow(8000); click(\".bn-add\"); await sleep(450); click(\".bn-fan-saved\");",
+  "afterWait": 900
+ }
+]

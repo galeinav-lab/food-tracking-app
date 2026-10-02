@@ -1,25 +1,31 @@
+/* "This week so far" card on the dashboard. Surface = .glass; the ring itself is
+   a recharts Pie (colours from styles/colors.ts). Shape, layout and type only. */
 .ring {
-    border: 1px solid var(--border);
-    border-radius: var(--r-md);
-    background: var(--card-bg);
-    padding: 16px;
-    box-shadow: var(--shadow-card);
+    border-radius: var(--r-card);
+    padding: var(--space-lg);
 }
 
 .ring-title {
-    margin: 0 0 4px;
+    margin: 0 0 var(--space-xs);
     font-family: var(--font-head);
-    font-size: 1rem;
+    font-size: var(--text-base);
 }
 
 .ring-hint {
     color: var(--muted);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
 }
 
 .ring-error {
     color: var(--error);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
+}
+
+/* Placeholder ring + caption while the week loads. */
+.ring-skel {
+    align-items: center;
+    padding: var(--space-md) 0 var(--space-xs);
+    gap: var(--space-md);
 }
 
 .ring-wrap {
@@ -39,28 +45,28 @@
 
 .ring-num {
     font-family: var(--font-head);
-    font-size: 1.7rem;
+    font-size: var(--text-xl);
     font-weight: 800;
     line-height: 1;
     font-variant-numeric: tabular-nums;
 }
 
 .ring-sub {
-    font-size: 0.74rem;
+    font-size: var(--text-xs);
     color: var(--muted);
     margin-top: 3px;
 }
 
 .ring-kg {
-    font-size: 0.82rem;
+    font-size: var(--text-sm);
     font-weight: 600;
-    margin-top: 6px;
+    margin-top: var(--space-sm);
     color: var(--accent);
 }
 
 .ring-foot {
-    margin: 8px 0 0;
-    font-size: 0.72rem;
+    margin: var(--space-sm) 0 0;
+    font-size: var(--text-xs);
     color: var(--muted);
     text-align: center;
 }

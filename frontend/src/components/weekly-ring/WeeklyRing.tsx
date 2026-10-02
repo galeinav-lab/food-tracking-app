@@ -3,7 +3,8 @@ import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { foodService } from "../../services/food.service";
 import { ApiError } from "../../services/http-client";
 import { IWeeklyDeficit } from "../../models/deficit";
-import { colors } from "../../styles/colors";
+import { chartTheme, colors } from "../../styles/colors";
+import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import "./WeeklyRing.css";
 
 const TARGET = 7700; // kcal deficit ≈ 1 kg/week
@@ -43,7 +44,17 @@ function WeeklyRing({ date, refreshKey }: WeeklyRingProps): JSX.Element {
         };
     }, [date, refreshKey]);
 
-    if (loading) return <div className="ring glass"><h2 className="ring-title">This week</h2><p className="ring-hint">Loading…</p></div>;
+    if (loading) {
+        return (
+            <div className="ring glass">
+                <h2 className="ring-title">This week</h2>
+                <SkeletonGroup label="Loading this week" className="ring-skel">
+                    <Skeleton shape="circle" width="150px" />
+                    <Skeleton width="70%" />
+                </SkeletonGroup>
+            </div>
+        );
+    }
     if (error) return <div className="ring glass"><h2 className="ring-title">This week</h2><p className="ring-error">{error}</p></div>;
     if (!data) return <div className="ring glass"><h2 className="ring-title">This week</h2><p className="ring-hint">No data yet.</p></div>;
 
@@ -76,9 +87,7 @@ function WeeklyRing({ date, refreshKey }: WeeklyRingProps): JSX.Element {
                             startAngle={90}
                             endAngle={-270}
                             stroke="none"
-                            isAnimationActive={true}
-                            animationDuration={550}
-                            animationEasing="ease-out"
+                            {...chartTheme.animation}
                         >
                             {ringData.map((d) => (
                                 <Cell key={d.name} fill={d.color} />

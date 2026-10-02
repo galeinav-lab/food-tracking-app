@@ -1,0 +1,76 @@
+[
+ {
+  "name": "375-home-top",
+  "width": 375,
+  "height": 812,
+  "path": "/"
+ },
+ {
+  "name": "375-home-row",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": ".home-row"
+ },
+ {
+  "name": "375-water-undo-toast",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "scroll": ".home-row",
+  "actions": "click(\".water-add\"); await sleep(700);",
+  "afterWait": 400
+ },
+ {
+  "name": "375-energy-details",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "actions": "click(\".ring-info\"); await sleep(1200);"
+ },
+ {
+  "name": "375-home-loading",
+  "width": 375,
+  "height": 812,
+  "path": "/",
+  "slow": 8000,
+  "wait": 1500
+ },
+ {
+  "name": "412-home-top",
+  "width": 412,
+  "height": 915,
+  "path": "/"
+ },
+ {
+  "name": "412-home-row",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": ".home-row"
+ },
+ {
+  "name": "412-water-undo-toast",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "scroll": ".home-row",
+  "actions": "click(\".water-add\"); await sleep(700);",
+  "afterWait": 400
+ },
+ {
+  "name": "412-energy-details",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "actions": "click(\".ring-info\"); await sleep(1200);"
+ },
+ {
+  "name": "412-home-loading",
+  "width": 412,
+  "height": 915,
+  "path": "/",
+  "slow": 8000,
+  "wait": 1500
+ }
+]

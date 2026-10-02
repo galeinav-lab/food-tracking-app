@@ -49,6 +49,7 @@
     font-weight: 800;
     line-height: 1;
     font-variant-numeric: tabular-nums;
+    letter-spacing: var(--tracking-tight);
 }
 
 .ring-sub {

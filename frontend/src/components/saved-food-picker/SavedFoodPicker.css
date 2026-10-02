@@ -180,10 +180,11 @@
     display: block;
     font-family: var(--font-head);
     font-size: var(--text-xl);
-    font-weight: 700;
+    font-weight: 800;
     color: var(--accent-ink);
     font-variant-numeric: tabular-nums;
     line-height: 1.1;
+    letter-spacing: var(--tracking-tight);
 }
 
 .sfp-preview-macros {

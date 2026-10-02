@@ -1,69 +1,69 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Raleway:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ============================================================
-   NutriTrack design tokens — v3 "Dark Lime"
-   (see design-system/nutritrack/MASTER.md; v1 navy + v2 light olive archived)
+   NutriTrack design tokens — v4 "Light" (light theme v4)
+   (see design-system/nutritrack/MASTER.md; earlier versions archived there)
    Single source of truth. Components reference var(--token) only.
-   Legacy token names (--card-bg, --muted, ...) are kept and re-valued
-   so screens not yet restyled go dark instead of breaking.
+   Light grey canvas, white cards with soft shadows, near-black type and key
+   numbers, lime as the FILL accent (rings, + button, primary buttons, selected
+   states) with dark text on it.
    ============================================================ */
 :root {
-    /* Render native form controls in dark mode. */
-    color-scheme: dark;
+    /* Render native form controls (selects, scrollbars, autofill) light. */
+    color-scheme: light;
 
-    /* Surfaces — deep green-tinted darks (not neutral gray, not pure black) */
-    --bg: #10140D;
-    --surface: #181F13;
-    --card-bg: #181F13; /* legacy alias of --surface */
-    --surface-2: #212B1A;
-    --surface-3: #2B3722;
-    --border: rgba(214, 255, 170, 0.10);
-    --border-strong: rgba(214, 255, 170, 0.20);
+    /* Surfaces — a light grey canvas so white cards lift off it */
+    --bg: #F2F2F5;
+    --surface: #FFFFFF;
+    --card-bg: #FFFFFF; /* legacy alias of --surface */
+    --surface-2: #F2F2F5; /* inputs, chips, secondary buttons */
+    --surface-3: #E5E5EA; /* pressed fills, handles, tracks */
+    --border: rgba(17, 18, 20, 0.08);
+    --border-strong: rgba(17, 18, 20, 0.16);
 
-    /* Text (light on dark; AA/AAA on the surfaces above) */
-    --text: #F2F5EC;
-    --muted: #B4BFA4;
-    --text-muted: #B4BFA4; /* alias */
-    --text-dim: #86937A;
+    /* Text (near-black; all >= 4.5:1 on the canvas and on white) */
+    --text: #111214;
+    --muted: #575B63;
+    --text-muted: #575B63; /* alias */
+    --text-dim: #8B9099; /* placeholders + disabled ONLY — not for real text */
 
-    /* Accent — vivid lime (glows on the dark base). NOTE: lime is bright, so
-       text/icons ON lime fills are DARK (--on-accent), never white. */
+    /* Accent — lime as a FILL. Lime is light, so anything ON a lime fill is dark
+       (--on-accent), and lime is never used as text: text, icons, outlines and
+       borders in the accent role use --accent-ink (deep olive). */
     --accent: #A3E635;
-    --accent-cta: #84CC16;
+    --accent-cta: #84CC16; /* hover */
     --accent-press: #65A30D;
-    --accent-disabled: #3F4A26;
-    --accent-soft: rgba(163, 230, 53, 0.12);
-    --on-accent: #16200A;
-    --on-accent-soft: rgba(22, 32, 10, 0.18); /* badges sitting on a lime fill */
-    /* --accent is a FILL (backgrounds, rings, bars). Text, icons, outlines and
-       borders use --accent-ink, which a light background needs darker. */
-    --accent-ink: var(--accent);
+    --accent-disabled: #E3E8D6;
+    --accent-soft: rgba(132, 204, 22, 0.16); /* lime tints behind ink (chips, selected) */
+    --on-accent: #1A2E05;
+    --on-accent-soft: rgba(26, 46, 5, 0.12); /* badges sitting on a lime fill */
+    --accent-ink: #3F6212;
 
-    /* Macros (distinct from each other + the lime accent) */
-    --macro-protein: #FB7185;
-    --macro-carbs: #FBBF24;
-    --macro-fat: #2DD4BF;
-    --macro-fiber: #C084FC;
-    /* Soft macro tints for chips/thumbs (14% of the macro colour). */
-    --macro-protein-soft: rgba(251, 113, 133, 0.14);
-    --macro-carbs-soft: rgba(251, 191, 36, 0.14);
-    --macro-fat-soft: rgba(45, 212, 191, 0.14);
-    /* Macro hues as TEXT (chips, icons). Rings and bars keep the hues above. */
-    --macro-protein-ink: var(--macro-protein);
-    --macro-carbs-ink: var(--macro-carbs);
-    --macro-fat-ink: var(--macro-fat);
+    /* Macro hues — fills (rings, bars, swatches) */
+    --macro-protein: #F43F5E;
+    --macro-carbs: #F59E0B;
+    --macro-fat: #14B8A6;
+    --macro-fiber: #A855F7;
+    /* Soft macro tints for chips/thumbs */
+    --macro-protein-soft: rgba(244, 63, 94, 0.12);
+    --macro-carbs-soft: rgba(245, 158, 11, 0.14);
+    --macro-fat-soft: rgba(20, 184, 166, 0.13);
+    /* Macro hues as TEXT (chips, icons): deeper shades that read on white */
+    --macro-protein-ink: #BE123C;
+    --macro-carbs-ink: #92400E;
+    --macro-fat-ink: #0F766E;
 
-    /* Functional (success = spring green, deliberately NOT the lime accent) */
-    --success: #4ADE80;
-    --error: #F87171;
-    --danger: #F87171;
-    --warning: #F59E0B;
-    --water: #38BDF8;
-    --ring-track: rgba(214, 255, 170, 0.08);
+    /* Functional (text-safe on white; success is NOT the lime accent) */
+    --success: #15803D;
+    --error: #B91C1C;
+    --danger: #B91C1C;
+    --warning: #B45309;
+    --water: #0EA5E9;
+    --ring-track: rgba(17, 18, 20, 0.07);
 
-    /* Typography */
-    --font-head: 'Lora', Georgia, 'Times New Roman', serif;
-    --font-body: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* Typography — Inter for everything: headings, body and numbers */
+    --font-head: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     /* Layout — the single readable content column. Phones use the full width
        (fluid side padding); tablets get this cap + centering so cards never
@@ -81,63 +81,55 @@
     --space-xl: 24px;
     --space-2xl: 32px;
 
-    /* Radii (organic rounded) */
-    --r-sm: 12px;
-    --r-md: 16px;
-    --r-lg: 20px;
-    --r-xl: 28px;
+    /* Radii — generous */
+    --r-sm: 14px;
+    --r-md: 22px;
+    --r-lg: 28px;
+    --r-xl: 32px;
     --r-pill: 999px;
 
-    /* v3.2 — Semantic radii. Components pick a ROLE, never a raw px value. */
-    --r-control: var(--r-sm); /* inputs, buttons, chips */
+    /* Semantic radii. Components pick a ROLE, never a raw px value. */
+    --r-control: var(--r-sm); /* inputs, chips (buttons are pills) */
     --r-card: var(--r-md); /* standard cards */
     --r-raised: var(--r-lg); /* hero / prominent cards */
     --r-sheet: var(--r-xl); /* bottom sheets */
 
-    /* v3.2 — Type scale (rem). Headings use --font-head, everything else --font-body. */
+    /* Type scale (rem). Headings use --font-head, everything else --font-body. */
     --text-xs: 0.72rem; /* chips, foot notes */
     --text-sm: 0.85rem; /* hints, secondary labels */
     --text-base: 0.95rem; /* body, inputs, buttons */
     --text-md: 1.1rem; /* section / sheet titles */
     --text-lg: 1.3rem; /* page titles */
     --text-xl: 1.75rem; /* secondary big numbers (previews, rings) */
-    --text-display: 2.8rem; /* hero number */
+    --text-display: 3.2rem; /* hero number */
     /* Form controls never go below 16px: iOS Safari zooms the page when a focused
        input/select/textarea is smaller. Separate from the type scale on purpose. */
     --text-input: 1rem;
+    /* Big bold numbers: tight tracking at heavy weights */
+    --tracking-tight: -0.02em;
+    --tracking-display: -0.035em;
 
-    /* Elevation — deep dark shadows + lime glow */
-    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
-    --shadow-raised: 0 10px 28px rgba(0, 0, 0, 0.55);
-    --shadow-nav: 0 -6px 24px rgba(0, 0, 0, 0.5);
-    --shadow-sheet: 0 -10px 40px rgba(0, 0, 0, 0.55);
-    --glow-accent: 0 6px 20px rgba(163, 230, 53, 0.35);
+    /* Elevation — soft, low shadows */
+    --shadow-card: 0 1px 2px rgba(17, 18, 20, 0.04), 0 8px 24px rgba(17, 18, 20, 0.06);
+    --shadow-raised: 0 2px 6px rgba(17, 18, 20, 0.06), 0 16px 40px rgba(17, 18, 20, 0.12);
+    --shadow-nav: 0 -1px 0 rgba(17, 18, 20, 0.05);
+    --shadow-sheet: 0 -8px 32px rgba(17, 18, 20, 0.12);
+    --glow-accent: 0 6px 16px rgba(101, 163, 13, 0.30); /* under lime fills (+ button) */
 
-    /* Scrim behind sheets and the + fan (deep olive-black). */
-    --scrim: rgba(6, 8, 4, 0.55);
-    --danger-soft: rgba(248, 113, 113, 0.1);
+    /* Scrim behind sheets and the + fan. */
+    --scrim: rgba(17, 18, 20, 0.32);
+    --danger-soft: rgba(185, 28, 28, 0.08);
 
-    /* v3.1 — Ambient gradient background (lime bloom center → dark olive edges) */
-    --ambient-mid: #3F5A25; /* mid green around the bloom */
-    --ambient-deep: #202D14; /* between mid and the dark edge (--bg) */
-    /* Bloom strength is capped by contrast: at its brightest frame, grey text on
-       glass cards and directly on the gradient must stay >= 4.5:1 (measured with
-       tools/ui-check/audit.mjs; .55 / .22 dropped it to 3.8:1). */
-    --ambient-bloom: rgba(163, 230, 53, 0.30); /* diffused lime core */
-    --ambient-bloom-mid: rgba(163, 230, 53, 0.12); /* bloom at 45% of its radius */
-
-    /* v3.2 — Glass. The look is the translucent tint + light border + top
-       highlight over the ambient gradient; cards carry NO backdrop blur (over a
-       smooth gradient it's invisible, and the animated bloom forced a re-blur
-       every frame). The bottom nav is the only blurred surface. */
-    --glass-bg: rgba(24, 31, 19, 0.55); /* card tier */
-    --glass-inset-bg: rgba(16, 20, 13, 0.55); /* inset tier: recessed wells inside a card */
-    --glass-bg-solid: rgba(24, 31, 19, 0.94); /* nav fallback without backdrop-filter */
-    --glass-float-bg: rgba(24, 31, 19, 0.98); /* float tier: bright text behind must not ghost through */
-    --glass-nav-bg: rgba(24, 31, 19, 0.72); /* the bottom nav, over its blur */
+    /* Surface tiers. Cards are solid (no backdrop blur); the bottom nav is the
+       only blurred surface, frosted over the content scrolling under it. */
+    --glass-bg: #FFFFFF; /* card tier */
+    --glass-inset-bg: #F7F7F9; /* inset tier: recessed wells inside a card or sheet */
+    --glass-bg-solid: rgba(255, 255, 255, 0.96); /* nav fallback without backdrop-filter */
+    --glass-float-bg: #FFFFFF; /* float tier: menus, sheets, toasts, tooltips */
+    --glass-nav-bg: rgba(255, 255, 255, 0.72); /* the bottom nav, over its blur */
     --glass-blur: 10px; /* nav only */
-    --glass-border: rgba(214, 255, 170, 0.18);
-    --glass-highlight: inset 0 1px 0 rgba(214, 255, 170, 0.12); /* top glass edge */
+    --glass-border: rgba(17, 18, 20, 0.05);
+    --glass-highlight: 0 0 0 0 transparent; /* no edge highlight on light */
 
     /* Motion — entrances ease-out, exits ease-in, springs for playful pops */
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -150,7 +142,6 @@
     --dur-press: 50ms;
     --dur-sweep: 550ms;
     --dur-pulse: 1100ms; /* skeleton loop (one direction) */
-    --dur-ambient: 22s; /* Home glow 'breathing' loop (one direction) */
     --stagger: 40ms;
 }
 
@@ -158,10 +149,7 @@
     box-sizing: border-box;
 }
 
-/* CANVAS RULE (do not merge these): the dark canvas lives on <html> ONLY, and
-   <body> stays TRANSPARENT. If body gets an opaque background it paints OVER
-   negative-z-index layers (the dashboard's fixed ambient glow) and hides them —
-   that exact bug shipped once. */
+/* The canvas colour lives on <html>; <body> stays transparent. */
 html {
     background: var(--bg);
 }
@@ -178,6 +166,7 @@ body {
 
 h1, h2, h3, h4 {
     font-family: var(--font-head);
+    letter-spacing: var(--tracking-tight);
 }
 
 button,
@@ -231,10 +220,10 @@ code {
     box-shadow: var(--shadow-card);
 }
 
-/* Glass card (v3.2): tint + border + top highlight, no backdrop-filter (see the
-   --glass-* tokens). The doubled selector wins over each component's own
+/* Card tier: solid white, hairline border, soft shadow, no backdrop-filter (see
+   the --glass-* tokens). The doubled selector wins over each component's own
    background/border regardless of CSS bundle order. Radius/padding stay with
-   the component. Reads as glass only over the ambient gradient (.ambient). */
+   the component. */
 .glass.glass {
     background-color: var(--glass-bg);
     border: 1px solid var(--glass-border);
@@ -353,7 +342,7 @@ code {
     gap: var(--space-sm);
     padding: var(--space-md) var(--space-lg);
     border: 1px solid transparent;
-    border-radius: var(--r-control);
+    border-radius: var(--r-pill); /* buttons are pills; inputs keep --r-control */
     font-family: inherit;
     font-size: var(--text-base);
     font-weight: 600;
@@ -400,8 +389,7 @@ code {
     color: var(--text);
 }
 
-/* Error-coloured text on the secondary fill — destructive actions (Log out). Opaque
-   on purpose: a transparent fill let the ambient glow drop the red below 4.5:1. */
+/* Error-coloured text on the secondary fill — destructive actions (Log out). */
 .btn-danger {
     background: var(--surface-2);
     border-color: var(--border);

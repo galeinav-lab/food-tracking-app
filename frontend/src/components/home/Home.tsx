@@ -1,4 +1,4 @@
-import { type JSX, useEffect, useState } from "react";
+import { type JSX, useEffect } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { useRefresh } from "../../context/refresh-context";
 import DailyDashboard from "../daily-dashboard/DailyDashboard";
@@ -27,24 +27,8 @@ function Home(): JSX.Element {
         setSelectedDate(todayInTimeZone(timeZone));
     }, [timeZone, setSelectedDate]);
 
-    // Pause the ambient "breathing" glow while the tab is hidden (no wasted GPU).
-    const [ambientPaused, setAmbientPaused] = useState(false);
-    useEffect(() => {
-        const onVisibility = (): void => setAmbientPaused(document.hidden);
-        document.addEventListener("visibilitychange", onVisibility);
-        return () => document.removeEventListener("visibilitychange", onVisibility);
-    }, []);
-
     return (
         <div className="home">
-            {/* Breathing lime bloom over the shared ambient gradient (fixed, decorative only). */}
-            <div
-                className={ambientPaused ? "home-ambient home-ambient-paused" : "home-ambient"}
-                aria-hidden="true"
-            >
-                <div className="home-ambient-bloom" />
-            </div>
-
             {/* Week strip at the very top of the dashboard, above the main content. */}
             <DateStrip timeZone={timeZone} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
 

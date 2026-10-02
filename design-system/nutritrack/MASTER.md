@@ -1,223 +1,168 @@
-# NutriTrack Design System — v3.2 "Dark Lime — Ambient Glass" (MASTER)
+# NutriTrack Design System — v4 "Light" (MASTER)
 
-> Source of truth for all UI styling. v3.1 was a palette-only revision of v2 (archived as
-> `MASTER-v2-light-olive.md`; v1 dark navy as `MASTER-v1-dark-navy.md`).
-> **v3.2 (the ui-refresh branch)** keeps the palette and adds the system on top: semantic
-> radius/type/spacing tokens, glass tiers with blur on the nav only, shared building blocks
-> (`.btn`, `.field`/`.input`, `<Sheet>`, `<Skeleton>`, `<ActionMenu>`, `.chip`, `.card-list`), the
-> motion rules and a measured contrast floor. **§3.5 and §3.6 supersede earlier sections where
-> they differ.** Typography (Lora + Raleway) and the base motion system are inherited from v2.
-> Style base: ui-ux-pro-max **"Dark Mode (OLED)"** — dark surfaces, vibrant neon accent,
-> minimal glow, high contrast, `color-scheme: dark`. All pairs below AA-checked.
+> Source of truth for all UI styling. **v4 is the light theme** and replaces the dark theme
+> entirely (no dark mode). Earlier versions are archived: `MASTER-v3-dark-lime.md` (v3.2 dark lime,
+> where the shared building blocks, motion rules and contrast floor below were introduced),
+> `MASTER-v2-light-olive.md`, `MASTER-v1-dark-navy.md`.
+> **Style:** clean and minimal on a light grey canvas, white cards with soft shadows, near-black type
+> and big bold numbers, generous roundness, lime as the fill accent with dark text on it.
+> Tokens live in `frontend/src/index.css`; `frontend/src/styles/colors.ts` mirrors the ones charts need.
 
 ---
 
-## 1. Palette — deep green darks + vivid lime
+## 1. Palette
 
-### Surfaces (green-tinted darks — not neutral gray, not pure black)
-| Token | Hex | Use |
+### Surfaces
+| Token | Value | Use |
 |---|---|---|
-| `--bg` | `#10140D` | Canvas — near-black charcoal with green undertone |
-| `--surface` / `--card-bg` | `#181F13` | Cards — lifted dark green (elevation via lightness) |
-| `--surface-2` | `#212B1A` | Inputs, chips, secondary fills |
-| `--surface-3` | `#2B3722` | Pressed states, handles, deep fills |
-| `--border` | `rgba(214, 255, 170, 0.10)` | Faint lime-tinted hairlines (kept subtle — lightness does the elevation) |
-| `--border-strong` | `rgba(214, 255, 170, 0.20)` | Hover/focus borders |
+| `--bg` | `#F2F2F5` | Canvas — light grey, a step darker than white so cards lift off it |
+| `--surface` / `--card-bg` | `#FFFFFF` | Cards, sheets, menus, fields placed directly on the canvas |
+| `--surface-2` | `#F2F2F5` | Inputs, chips, secondary buttons (inside white containers) |
+| `--surface-3` | `#E5E5EA` | Pressed fills, handles, stepper buttons |
+| `--border` | `rgba(17, 18, 20, 0.08)` | Hairlines |
+| `--border-strong` | `rgba(17, 18, 20, 0.16)` | Hover borders, float-tier edges, skeleton lines |
 
-### Text (light on dark; AA/AAA)
-| Token | Hex | Contrast on card | Use |
-|---|---|---|---|
-| `--text` | `#F2F5EC` | ≈15:1 | Primary — warm green-tinted off-white |
-| `--muted` / `--text-muted` | `#B4BFA4` | ≈7.8:1 | Secondary |
-| `--text-dim` | `#86937A` | ≈4.6:1 | Placeholders, faint labels |
-
-### Accent — vivid lime (the energy; glows on the dark base)
-| Token | Hex | Note |
+### Text
+| Token | Value | Use |
 |---|---|---|
-| `--accent` | `#A3E635` | Lime — CTAs, ring fills, active nav, selected states. ≈11:1 on cards |
-| `--accent-cta` | `#84CC16` | Hover / secondary emphasis |
-| `--accent-press` | `#65A30D` | Pressed |
-| `--accent-disabled` | `#3F4A26` | Disabled fills |
-| `--accent-soft` | `rgba(163, 230, 53, 0.12)` | Lime sheen tints (hero, chips, selected) |
-| `--on-accent` | **`#16200A`** | ⚠️ **DARK text on lime** — white-on-lime fails (~1.5:1); dark-on-lime ≈12:1 ✓ |
-| `--glow-accent` | `0 6px 20px rgba(163, 230, 53, 0.35)` | + button / key highlights |
+| `--text` | `#111214` | Primary text and key numbers (near-black) |
+| `--muted` | `#575B63` | Secondary text, labels, idle nav (≥ 6.5:1 on white) |
+| `--text-dim` | `#8B9099` | **Placeholders and disabled states only** — never real text (≈3:1) |
 
-### Macro trio (distinct from each other AND from lime; ≥4.5:1 on cards)
-| Token | Hex | |
+### Accent — lime as a FILL, olive as INK
+| Token | Value | Use |
 |---|---|---|
-| `--macro-protein` | `#FB7185` | Rose |
-| `--macro-carbs` | `#FBBF24` | Amber |
-| `--macro-fat` | `#2DD4BF` | Teal |
-| `--macro-fiber` | `#C084FC` | Violet |
-| `--water` | `#38BDF8` | Sky |
-| `--ring-track` | `rgba(214, 255, 170, 0.08)` | Empty ring/bar track |
+| `--accent` | `#A3E635` | **Fill only:** + button, primary buttons, selected day, active tab, progress fills, toast strip, camera frame |
+| `--accent-cta` / `--accent-press` | `#84CC16` / `#65A30D` | Primary hover / pressed fills |
+| `--accent-disabled` | `#E3E8D6` | Disabled primary fill (label turns `--muted`) |
+| `--accent-soft` | `rgba(132, 204, 22, 0.16)` | Lime tint behind ink (selected toggles, accent chip, meal thumb, focus ring) |
+| `--on-accent` | `#1A2E05` | Text/icons **on** a lime fill (≈11:1). Never white on lime. |
+| `--on-accent-soft` | `rgba(26, 46, 5, 0.12)` | Badges sitting on a lime fill |
+| `--accent-ink` | `#3F6212` | Every accent **text, icon, outline and border** (active nav, links, "Show macros", focus rings) — 7.6:1 on white |
+| `--shadow-accent` | `0 6px 16px rgba(101, 163, 13, 0.30)` | Soft lime shadow under lime fills (+ button, shutter) |
 
-### State colors (deficit green ≠ lime accent — deliberately separated)
-| Token | Hex | Note |
+Rule: `background` uses `--accent`; `color`, `stroke`, `outline` and `border` use `--accent-ink`
+(exception: a border that matches its own lime fill).
+
+### Macros
+| Role | Protein | Carbs | Fat | Fiber |
+|---|---|---|---|---|
+| Hue (rings, swatches) `--macro-*` | `#F43F5E` | `#F59E0B` | `#14B8A6` | `#A855F7` |
+| Ink (chip text, icons) `--macro-*-ink` | `#BE123C` | `#92400E` | `#0F766E` | — |
+| Tint (chip/thumb bg) `--macro-*-soft` | rose 12% | amber 14% | teal 13% | — |
+
+Chips layer their tint over an opaque `--surface`, so their contrast never depends on what's behind.
+
+### States & data
+| Token | Value | Note |
 |---|---|---|
-| `--success` | `#4ADE80` | Spring green (hue ~142°) — clearly "green" where lime (~80°) reads "yellow-green"; ≈9.5:1 |
-| `--warning` | `#F59E0B` | Surplus / over-goal |
-| `--error` / `--danger` | `#F87171` | Errors, destructive (≈5.9:1) |
+| `--success` | `#15803D` | Text-safe green (≠ lime accent) |
+| `--warning` | `#B45309` | Surplus / over goal |
+| `--error` | `#B91C1C` | Errors, destructive |
+| `--danger-soft` | `rgba(185, 28, 28, 0.08)` | Destructive hover tint |
+| `--water` | `#0EA5E9` | Water fill |
+| `--ring-track` | `rgba(17, 18, 20, 0.07)` | Empty ring/bar track |
+| `--scrim` | `rgba(17, 18, 20, 0.32)` | Behind sheets and the + menu |
 
-> Success vs lime: different hue family + different contexts (bars/labels vs CTAs/rings), and
-> values are always labeled — never color-only.
-
-### Charts (mirror in `frontend/src/styles/colors.ts`)
-grid/track `rgba(214,255,170,0.08)` · axis text `#B4BFA4` · tooltip bg `#212B1A`, border
-`rgba(214,255,170,0.10)`, text `#F2F5EC` · bars: success/warning above · lines/rings: lime + macro trio.
+### Charts (`styles/colors.ts`)
+recharts and SVG need literal colours, so `colors.ts` mirrors the tokens:
+- Ring arcs (hero, weekly ring): `accent` `#84CC16` — one step deeper than the fill so the stroke
+  holds up on white. Macro rings: the macro hues.
+- Weight trend line: `accentLine` `#4D7C0F` (data line ≥ 3:1 on white); target dashed `muted`.
+- Weekly bars: `barDeficit` `#16A34A` / `barSurplus` `#D97706` (graphics ≥ 3:1).
+- Axis text `muted`, grid/track `rgba(17,18,20,0.07)`, hover cursor and empty-day column
+  `rgba(17,18,20,0.04)`, tooltip white with `0 8px 24px rgba(17,18,20,0.12)`.
 
 ---
 
-## 2. Everything inherited from v2 (unchanged)
-- **Typography:** Lora (headings/big numbers) + Raleway (body/labels). Same scale, `tabular-nums`.
-- **Radii:** 12 / 16 / 20 / 28 / pill.
-- **Motion system:** `--ease-out cubic-bezier(0.22,1,0.36,1)`, `--ease-in`, `--ease-spring`,
-  durations fast 150 / base 200 / slow 250 / press 50 / sweep 550, stagger 40ms; press-compress
-  on every tappable; ring/bar sweeps; spring fan-out with quick ease-in close; reduced-motion collapse.
-- **Structure rules:** tokens only (index.css + colors.ts mirror), transform/opacity-only animation
-  (one documented exception: the Ring sweep, §3.6).
+## 2. Typography, shape, elevation
 
-### Dark-theme deltas (shadows & chrome)
-| Token | Value |
-|---|---|
-| `--shadow-card` | `0 8px 24px rgba(0, 0, 0, 0.45)` |
-| `--shadow-raised` | `0 10px 28px rgba(0, 0, 0, 0.55)` |
-| `--shadow-nav` | `0 -6px 24px rgba(0, 0, 0, 0.5)` |
-| Bottom nav | `--glass-nav-bg` (.72) + blur(10px) — see §3.5 |
-| Scrims (sheet/fan backdrop) | `--scrim` = `rgba(6, 8, 4, 0.55)` |
-| `color-scheme` | `dark` (native controls, autofill, scrollbars re-dark) |
+- **Font:** Inter (Google Fonts, weights 400–800) for headings, body and numbers
+  (`--font-head` = `--font-body`).
+- **Big bold numbers:** hero number `--text-display` 3.2rem at weight 800 with
+  `--tracking-display` (-0.035em); ring/macro/preview numbers weight 800 with `--tracking-tight`
+  (-0.02em); headings use `--tracking-tight`. `tabular-nums` for figures.
+- **Type scale:** `--text-xs .72` · `--text-sm .85` · `--text-base .95` · `--text-md 1.1` ·
+  `--text-lg 1.3` · `--text-xl 1.75` · `--text-display 3.2` (rem). Form controls `--text-input`
+  1rem (never below 16px: iOS zooms on focus).
+- **Radii (generous):** `--r-control` 14 (inputs, chips) · `--r-card` 22 · `--r-raised` 28 (hero) ·
+  `--r-sheet` 32 · `--r-pill`. **Buttons are pills**; icon buttons are circles.
+- **Elevation (soft, low):** `--shadow-card` `0 1px 2px rgba(17,18,20,.04), 0 8px 24px rgba(17,18,20,.06)` ·
+  `--shadow-raised` `0 2px 6px …/.06, 0 16px 40px …/.12` · `--shadow-sheet` `0 -8px 32px …/.12` ·
+  `--shadow-nav` a 1px hairline.
+- **Spacing:** `--space-*` 4/8/12/16/24/32 for padding/margin/gap. Allowed literals: optical
+  micro-spacing ≤ 5px inside chips/steppers/badges, negative optical offsets, fluid `clamp()` gutters.
+- `color-scheme: light`; browser chrome (`theme-color`, manifest colours) = `--bg`.
 
 ---
 
-## 3. Contrast rules (the dark-theme traps)
-1. **No dark-on-dark:** all text on surfaces uses the text tokens above (≥4.5:1). Inputs =
-   `--surface-2` bg + `--text` + visible `--border`; placeholders `--text-dim`.
-2. **Lime is a FILL color:** lime fills carry **dark** `--on-accent` text; lime as text only on
-   dark surfaces; never lime text on lime tints.
-3. Sheens (`--accent-soft`) stay ≤12% opacity — glow, not neon-everywhere.
-4. AA minimum everywhere; key text aims 7:1+ (OLED style guidance).
-
-## 3.5 — Ambient backdrop + glass (v3.1, revised in v3.2)
-
-### Ambient background
-Two fixed, full-screen decorative layers (`z-index: -1`, `pointer-events: none`, `aria-hidden`):
-- **Base (static, every screen):** `.ambient` in Layout.css, rendered once by `Layout`. `radial-gradient(ellipse at 50% 32%, --ambient-mid → --ambient-deep → --bg)`.
-  Never animated. The glass cards read as glass only because this shows through their tint.
-- **Bloom (animated, dashboard only):** `.home-ambient` / `.home-ambient-bloom` in Home.css, on top
-  of the base. A lime radial that "breathes" (22s alternate loop, **only `opacity` + `transform:
-  scale`**). Paused via `visibilitychange`, static under `prefers-reduced-motion`.
-
-| Token | Value |
-|---|---|
-| `--ambient-mid` | `#3F5A25` |
-| `--ambient-deep` | `#202D14` |
-| `--ambient-bloom` | `rgba(163, 230, 53, 0.30)` — bloom core |
-| `--ambient-bloom-mid` | `rgba(163, 230, 53, 0.12)` — bloom at 45% of its radius |
-
-**Bloom strength is capped by contrast.** At the bloom's brightest frame (opacity 1, scale 1.09),
-grey text on glass cards and directly on the gradient must stay ≥ 4.5:1. Measured with
-`tools/ui-check/audit.mjs`: .55/.22 → 3.82:1 (30 failures on Home), .42 → 4.23, .36 → 4.42,
-**.30/.12 → 4.61:1, 0 failures**. Don't raise it without re-running the audit.
-
-### Glass tiers (index.css)
-Cards carry **no `backdrop-filter`**: over the smooth ambient gradient a blur is visually a no-op
-(measured on Home at 375/412px: mean per-pixel change ≈0.3/255), and the animated bloom made every
-blurred card re-blur each frame. The glass look = translucent tint + light border + top highlight.
+## 3. Surface tiers
 
 | Tier | Class / surface | Treatment |
 |---|---|---|
-| Card | `.glass` | `--glass-bg` tint + `--glass-border` + `--shadow-card, --glass-highlight`. No blur. |
-| Inset | `.glass-inset` | `--glass-inset-bg` — a recessed well *inside* a card (e.g. History's day detail). No blur. |
-| Float | `.glass-float` | `--glass-float-bg` (.98 — at .94 bright text behind ghosted through) + `--border-strong` + raised shadow, no blur. `<ActionMenu>`, the + menu, `<Sheet>` (upward `--shadow-sheet`, no bottom border), toasts, chart tooltips. |
-| Nav | `.bottomnav` | **The only blurred surface:** `--glass-nav-bg` (.72) + `blur(var(--glass-blur))` (10px); `--glass-bg-solid` when `backdrop-filter` is unsupported. |
+| Card | `.glass` | `--glass-bg` white + `--glass-border` hairline + `--shadow-card`. Solid, **no blur**. |
+| Inset | `.glass-inset` | `--glass-inset-bg` `#F7F7F9` — a recessed well *inside* a card or sheet (History day detail, picker items, preview). |
+| Float | `.glass-float` | `--glass-float-bg` white + `--border-strong` + `--shadow-raised`, no blur. `<ActionMenu>`, the + menu, `<Sheet>` (upward `--shadow-sheet`, no bottom border), toasts, chart tooltips. |
+| Nav | `.bottomnav` | **The only blurred surface:** `--glass-nav-bg` (white 72%) + `blur(var(--glass-blur))` 10px; `--glass-bg-solid` (white 96%) without `backdrop-filter`. |
 
-| Token | Value |
-|---|---|
-| `--glass-bg` | `rgba(24, 31, 19, 0.55)` |
-| `--glass-inset-bg` | `rgba(16, 20, 13, 0.55)` |
-| `--glass-nav-bg` | `rgba(24, 31, 19, 0.72)` (nav, over its blur) |
-| `--glass-bg-solid` | `rgba(24, 31, 19, 0.94)` (nav fallback) |
-| `--glass-float-bg` | `rgba(24, 31, 19, 0.98)` (float tier) |
-| `--glass-blur` | `10px` (nav only) |
-| `--glass-border` | `rgba(214, 255, 170, 0.18)` |
-| `--glass-highlight` | `inset 0 1px 0 rgba(214, 255, 170, 0.12)` |
+Doubled selectors (`.glass.glass` …) beat component backgrounds regardless of bundle order;
+radius/padding stay with the component. The canvas is flat: no gradient, no glow layers.
 
-Rules: doubled selectors (`.glass.glass`) so they beat component backgrounds regardless of bundle
-order; radius/padding stay with the component.
+Context rules:
+- Fields and secondary/destructive buttons that sit **directly on the canvas** (Saved foods search,
+  today's weight, Log out) use a white fill — the grey control fill would match the canvas.
+- Skeleton blocks are white card shapes on the canvas and grey (`--surface-2`) inside white
+  containers (`.glass`, `.sheet`).
 
-**Verified** (`audit.mjs`, 42 screen states at 375 and 412px — every route, the + menu, all four
-logging sheets, a toast): blurred layers = **1 (the nav)** on every in-app screen, 0 on auth; text
-contrast ≥ 4.5:1 everywhere (lowest 4.61, at the bloom's peak). Rules that keep it that way:
-- Chips layer their tint over an opaque `--surface`; `.btn-danger` has an opaque fill — nothing
-  translucent sits between coloured text and the glow.
-- `--text-dim` is for placeholders and disabled states only; real text (meta, nav labels,
-  counts) uses `--muted`.
+---
 
-## 3.6 — v3.2 additions: semantic tokens + shared building blocks
+## 4. Shared building blocks — use these, never a per-screen copy
 
-Values above are unchanged; v3.2 adds names for ROLES so components stop picking raw numbers.
+- **Buttons** — `.btn` + `.btn-primary` (lime fill, dark text) / `.btn-secondary` / `.btn-danger`,
+  optional `.btn-sm` / `.btn-block` / `.btn-icon`. Press-compress, focus ring in `--accent-ink`,
+  hover gated to `(hover: hover)`. Toggles: `.btn-secondary` + `aria-pressed="true"`. Waiting on the
+  server: `.btn-loading` + `disabled` + `aria-busy` (transform-only spinner). Only `transform` is
+  transitioned.
+- **Form fields** — `.field` > `.field-label` + `.input` (`.input-sm` next to `.btn-sm`), errors as
+  `<p class="form-error" role="alert">`. Focus = ink border + soft lime ring; `aria-invalid="true"`
+  gives the error border.
+- **Bottom sheet** — `<Sheet title ariaLabel onClose>` (`components/sheet/`).
+- **Loading** — `<Skeleton shape="line|block|circle">` in `<SkeletonGroup label>`; opacity-only pulse.
+- **Lists & chips** — `.card-list` + `.stagger`; `.chip` + `.chip-accent` / `-protein` / `-carbs` /
+  `-fat` / `-burn`.
+- **Card actions** — `<ActionMenu label items busy>`: "⋯" trigger, float-tier menu, WAI-ARIA menu
+  keyboard pattern, focus returns to the trigger, opens upward near the nav.
+- **Entrances** — `.rise-in`, `.stagger` (cascade capped at the 8th child), `.fade-in` (opacity only).
 
-| Group | Tokens |
-|---|---|
-| Radius roles | `--r-control` (=r-sm, inputs/buttons/chips) · `--r-card` (=r-md) · `--r-raised` (=r-lg, hero) · `--r-sheet` (=r-xl) |
-| Type scale | `--text-xs .72` · `--text-sm .85` · `--text-base .95` · `--text-md 1.1` · `--text-lg 1.3` · `--text-xl 1.75` · `--text-display 2.8` (rem). Pick by role: hints/errors sm, meta xs, values base, glyph buttons lg |
-| Layout | `--nav-clearance 96px` — screen bottom the fixed nav covers (content padding, popover flip) |
-| Form controls | `--text-input 1rem` — every input/select/textarea is ≥16px (iOS Safari zooms on focus below that); outside the type scale on purpose |
-| Elevation / chrome | `--shadow-sheet` · `--scrim` · `--danger-soft` |
-| Tints | `--macro-protein-soft` · `--macro-carbs-soft` · `--macro-fat-soft` (14% chips/thumbs) · `--on-accent-soft` (badges on lime) |
-| Motion | `--ease-in-out` · `--dur-pulse` (skeleton loop) · `--dur-ambient` (22s glow loop) |
+---
 
-**Shared building blocks — use these, never a per-screen copy:**
-- **Buttons** — `.btn` + one variant `.btn-primary` / `.btn-secondary` / `.btn-danger`, optional
-  `.btn-sm` / `.btn-block` (index.css). Includes press-compress, focus ring, hover gated to
-  `(hover: hover)`. Component CSS may add layout only. Choice/toggle buttons use `.btn-secondary` +
-  `aria-pressed="true"` for the selected look. A submit waiting on the server adds `.btn-loading`
-  (+ `disabled`, `aria-busy`): a small transform-only spinner before the label. Only `transform`
-  is transitioned; colour changes are instant.
-- **Form fields** — `.field` > `.field-label` + `.input`, errors as `<p class="form-error"
-  role="alert">` (index.css). Focus = accent border + soft ring; `aria-invalid="true"` gives the
-  error border. Login, Register and Onboarding use these; older screens migrate in later phases.
-- **Bottom sheet** — `<Sheet title ariaLabel onClose>` (`components/sheet/`): scrim, slide-up panel,
-  handle, header + close. Every sheet/panel renders it; content styles stay with the feature.
-- **Loading** — `<Skeleton shape="line|block|circle">` inside `<SkeletonGroup label>`
-  (`components/skeleton/`) instead of "Loading…" text. Opacity-only pulse. A `block` is drawn as
-  the glass card it stands in for.
-- **Lists & cards** — `.card-list` (vertical stack, `--space-md` gap) + `.stagger`; macro/duration
-  labels are `.chip` + `.chip-accent` / `-protein` / `-carbs` / `-fat` / `-burn`.
-- **Card actions** — `<ActionMenu label items busy>` (`components/action-menu/`): a `.btn-icon` "⋯"
-  trigger opening a float-tier menu; closes on outside tap / Escape / pick, spinner while busy;
-  opens upward when it would otherwise land within `--nav-clearance` of the bottom.
-  Use it when inline buttons would squeeze a card's title. `.input-sm` pairs inputs with `.btn-sm`.
-- **Entrances** — `.rise-in` (one element) and `.stagger` (on a list: children cascade by
-  `--stagger`, capped at the 8th child) using the shared `rise-in` keyframe (index.css). `.fade-in` is the opacity-only
-  variant (step changes, scrims).
+## 5. Motion
 
-Spacing: padding/margin/gap use the `--space-*` scale (4/8/12/16/24/32) everywhere. Snapped once,
-app-wide: 6→8, 10/11→12, 14/18→16, 20→24, 28→32. Allowed literals: optical micro-spacing ≤ 5px
-inside chips/steppers/badges, negative optical offsets, and the fluid `clamp()` page gutters.
+- Tokens: `--ease-out` / `--ease-in` / `--ease-spring` / `--ease-in-out`; `--dur-fast` 150,
+  `--dur-base` 200, `--dur-slow` 250, `--dur-press` 50, `--dur-sweep` 550, `--dur-pulse` 1100,
+  `--stagger` 40ms.
+- **Transform/opacity only.** Entrance keyframes never use `animation-fill-mode: forwards/both` — a
+  held `transform` on an ancestor captures `position: fixed` children.
+- Page transition: `Main` keys a wrapper by pathname with `.fade-in`.
+- **Allowed exception:** the shared `Ring` sweeps by transitioning `stroke-dashoffset`
+  (`--dur-sweep`, `--ease-out`) — a small SVG arc, once per value change.
+- Charts: recharts animates in JS; `chartTheme.animation` mirrors `--dur-sweep` / `--ease-out` and
+  turns animation off under `prefers-reduced-motion` (the CSS kill-switch can't reach it).
 
-Literals policy: no hex/rgb or ms literals outside `index.css` (`styles/colors.ts` is the JS mirror
-for recharts). Literal px remain only for dimensions (icon/thumb/button sizes), 1px borders, 2px
-focus outlines, the + menu's fan coordinates, and the micro/optical cases above.
+---
 
-Page transition: `Main` keys a wrapper by pathname with `.fade-in` (opacity only, no held
-fill-mode, so the page's fixed layers — Home's glow, the strength editor sheet — are never captured
-by a transformed ancestor).
+## 6. Contrast & verification
 
-Motion rule: entrance keyframes never use `animation-fill-mode: forwards/both` — a held
-`transform` on an ancestor turns it into the containing block for `position: fixed` children.
+- Text ≥ 4.5:1 everywhere (3:1 for large text); data graphics ≥ 3:1.
+- Lime is never text: text/icons on lime use `--on-accent`; accent text uses `--accent-ink`.
+- `--text-dim` is for placeholders/disabled only.
+- **Verified** with `tools/ui-check/audit.mjs` (46 screen states at 375 and 412px — every route, the
+  + menu, all logging sheets, a toast, the report panel, the crash screen): **0 texts below
+  threshold, lowest 4.52:1**; blurred layers = 1 (the nav) on every in-app screen, 0 on auth,
+  onboarding and the crash screen. Re-run it after any colour change.
 
-**Allowed exception:** the shared `Ring` fills by transitioning `stroke-dashoffset`
-(`--dur-sweep`, `--ease-out`) — paint, not transform/opacity. Kept on purpose: a small SVG arc that
-animates once per value change; a transform-based rewrite isn't worth it. Nothing else animates a
-paint or layout property.
-
-Charts: recharts animates in JS, outside CSS. `chartTheme.animation` (styles/colors.ts) mirrors
-`--dur-sweep` / `--ease-out` for every series (Weight lines, Weekly bars, the weekly ring) and turns
-animation off under `prefers-reduced-motion`, which the CSS kill-switch can't reach.
-
-## 4. Anti-patterns (do not)
-- Pure black `#000` canvas or neutral-gray darks (the green undertone is the identity).
-- White text on lime fills; lime-on-lime; heavy borders instead of lightness elevation.
-- Leftover v1 navy blues or v2 light-olive values anywhere (incl. recharts + var() fallbacks).
-- Hardcoded per-component colors; layout-property animation; ignoring reduced-motion.
+## 7. Anti-patterns (do not)
+- Lime as text or icon colour (use `--accent-ink`); white text on lime.
+- Grey controls directly on the grey canvas; white skeletons inside white cards.
+- Blur on anything but the nav; heavy dark shadows; gradients or glows behind content.
+- Hex/rgb/ms literals outside `index.css` and the `colors.ts` mirror; layout-property animation.

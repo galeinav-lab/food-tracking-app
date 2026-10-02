@@ -1,7 +1,7 @@
 # NutriTrack — Design System (MASTER)
 
 > Single source of truth for the redesign. Generated with **ui-ux-pro-max** (palette,
-> typography, UX rules from its database), tuned to the brief: **Cal-AI-style layout, dark
+> typography, UX rules from its database), tuned to the brief: **card-based layout, dark
 > blue theme, mobile-first**. When building a screen, follow this file.
 
 **Project:** NutriTrack · **Category:** Calorie / habit tracker (mobile) · **Theme:** Dark blue

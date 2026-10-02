@@ -40,9 +40,9 @@ function ToastItem({ toast, onDismiss }: ToastItemProps): JSX.Element {
     // and copy the details.
     useEffect(() => {
         if (toast.kind === "error") return;
-        const timer = window.setTimeout(onDismiss, AUTO_DISMISS_MS);
+        const timer = window.setTimeout(onDismiss, toast.durationMs ?? AUTO_DISMISS_MS);
         return () => window.clearTimeout(timer);
-    }, [toast.kind, onDismiss]);
+    }, [toast.kind, toast.durationMs, onDismiss]);
 
     const copy = async (): Promise<void> => {
         const text = [toast.errorId ? `#${toast.errorId}` : "", toast.details ?? ""]
@@ -61,6 +61,18 @@ function ToastItem({ toast, onDismiss }: ToastItemProps): JSX.Element {
         <div className={`toast glass-float toast-${toast.kind}`} role="alert">
             <div className="toast-row">
                 <p className="toast-headline">{toast.headline}</p>
+                {toast.action && (
+                    <button
+                        type="button"
+                        className="btn btn-secondary btn-sm toast-action"
+                        onClick={() => {
+                            toast.action?.onAction();
+                            onDismiss();
+                        }}
+                    >
+                        {toast.action.label}
+                    </button>
+                )}
                 <button type="button" className="toast-close" onClick={onDismiss} aria-label="Dismiss">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                         <path d="M6 6l12 12M18 6L6 18" />

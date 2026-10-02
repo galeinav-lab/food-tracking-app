@@ -4,55 +4,6 @@
     gap: var(--space-lg);
 }
 
-/* ── Breathing lime bloom (dashboard only) ──────────────────────────────────
-   The static base gradient is the shared .ambient layer (Layout.css), rendered
-   earlier in the DOM; this fixed layer sits on top of it at the same z-index.
-   Animated only via opacity + transform (never gradient stops), so the loop
-   stays compositor-cheap. */
-.home-ambient {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-}
-
-.home-ambient-bloom {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-        ellipse 75% 50% at 50% 32%,
-        var(--ambient-bloom) 0%,
-        var(--ambient-bloom-mid) 45%,
-        transparent 78%
-    );
-    transform-origin: 50% 32%;
-    animation: ambient-breathe var(--dur-ambient) var(--ease-in-out) infinite alternate;
-    will-change: opacity, transform;
-}
-
-@keyframes ambient-breathe {
-    from {
-        opacity: 0.6;
-        transform: scale(1);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1.09);
-    }
-}
-
-/* Paused while the tab is hidden (visibilitychange in Home.tsx). */
-.home-ambient-paused .home-ambient-bloom {
-    animation-play-state: paused;
-}
-
-/* Reduced motion: static gradient, no pulse (global kill-switch also applies). */
-@media (prefers-reduced-motion: reduce) {
-    .home-ambient-bloom {
-        animation: none;
-    }
-}
-
 .home-greet {
     display: flex;
     align-items: baseline;
@@ -64,7 +15,8 @@
     margin: 0;
     font-family: var(--font-head);
     font-size: var(--text-lg);
-    font-weight: 700;
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
 }
 
 .home-date {
@@ -73,14 +25,13 @@
     color: var(--muted);
 }
 
+/* Water + this week, side by side at every width (both cards are compact). */
 .home-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
 }
 
-@media (max-width: 480px) {
-    .home-row {
-        grid-template-columns: 1fr;
-    }
+.home-row > * {
+    min-width: 0;
 }

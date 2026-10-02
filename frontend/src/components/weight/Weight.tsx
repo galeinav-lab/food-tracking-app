@@ -20,7 +20,7 @@ import Skeleton, { SkeletonGroup } from "../skeleton/Skeleton";
 import { colors, chartTheme } from "../../styles/colors";
 import "./Weight.css";
 
-const ACTUAL_COLOR = colors.accent;
+const ACTUAL_COLOR = colors.accentLine;
 const TARGET_COLOR = colors.muted;
 
 function Weight(): JSX.Element {

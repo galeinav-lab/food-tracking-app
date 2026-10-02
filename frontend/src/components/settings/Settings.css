@@ -76,7 +76,7 @@
 }
 
 .settings-row:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: -2px;
 }
 
@@ -93,11 +93,12 @@
 
 @media (hover: hover) {
     .settings-row:hover .settings-chev {
-        stroke: var(--accent);
+        stroke: var(--accent-ink);
     }
 }
 
 /* Look comes from .btn .btn-danger; layout only. */
 .settings-logout {
     margin-top: var(--space-sm);
+    background: var(--surface); /* on the canvas: the grey fill would vanish into it */
 }

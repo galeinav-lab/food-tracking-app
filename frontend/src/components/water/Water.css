@@ -1,14 +1,12 @@
-/* Surface = .glass; buttons/inputs = .btn-sm / .input-sm. */
+/* Compact water card (half of the Home row): title, big number, bar, one
+   +500 ml button pinned to the bottom so it lines up with the weekly card.
+   Surface = .glass; button = .btn .btn-sm. */
 .water {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
     border-radius: var(--r-card);
     padding: var(--space-lg);
-}
-
-.water-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: var(--space-md);
 }
 
 .water-title {
@@ -17,17 +15,27 @@
 }
 
 .water-amount {
-    font-size: var(--text-sm);
-    color: var(--muted);
+    margin: 0;
+    line-height: 1.1;
     font-variant-numeric: tabular-nums;
 }
 
+.water-num {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
+}
+
+.water-of {
+    font-size: var(--text-sm);
+    color: var(--muted);
+}
+
 .water-bar {
-    height: 10px;
+    height: 8px;
     background: var(--ring-track);
     border-radius: var(--r-pill);
     overflow: hidden; /* rounds the fill's ends */
-    margin-bottom: var(--space-md);
 }
 
 /* Full width, scaled from the left edge (transform-only animation). */
@@ -38,23 +46,14 @@
     transition: transform var(--dur-sweep) var(--ease-out);
 }
 
-.water-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    align-items: center;
+.water-add {
+    margin-top: auto;
 }
 
-.water-custom {
-    display: flex;
-    gap: var(--space-sm);
-    margin-left: auto;
-}
-
-.water-input {
-    width: 84px;
+.water-skel {
+    flex: 1;
 }
 
 .water-error {
-    margin-top: var(--space-md);
+    margin: 0;
 }

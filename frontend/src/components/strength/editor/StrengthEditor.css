@@ -31,7 +31,7 @@
     text-align: center;
     font-size: var(--text-md);
     font-weight: 700;
-    color: var(--accent);
+    color: var(--accent-ink);
     background: transparent;
     border: none;
     font-variant-numeric: tabular-nums;
@@ -42,7 +42,7 @@
 }
 
 .ste-weight-input:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: 2px;
     border-radius: var(--r-control);
 }

@@ -64,7 +64,7 @@
 }
 
 .sfp-item:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: 2px;
 }
 
@@ -95,13 +95,13 @@
 }
 
 .sfp-item-unit {
-    color: var(--text-dim);
+    color: var(--muted);
 }
 
 .sfp-item-go {
     flex-shrink: 0;
     font-size: var(--text-lg);
-    color: var(--accent);
+    color: var(--accent-ink);
     line-height: 1;
 }
 
@@ -117,7 +117,7 @@
     margin-bottom: var(--space-sm);
     background: none;
     border: none;
-    color: var(--accent);
+    color: var(--accent-ink);
     font-family: inherit;
     font-size: var(--text-sm);
     font-weight: 600;
@@ -180,10 +180,11 @@
     display: block;
     font-family: var(--font-head);
     font-size: var(--text-xl);
-    font-weight: 700;
-    color: var(--accent);
+    font-weight: 800;
+    color: var(--accent-ink);
     font-variant-numeric: tabular-nums;
     line-height: 1.1;
+    letter-spacing: var(--tracking-tight);
 }
 
 .sfp-preview-macros {

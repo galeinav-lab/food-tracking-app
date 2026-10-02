@@ -19,9 +19,6 @@ function Layout(): JSX.Element {
     return (
         <RefreshProvider>
             <div className="layout">
-                {/* Shared static backdrop behind every screen, auth + onboarding
-                    included (decorative only). */}
-                <div className="ambient" aria-hidden="true" />
                 <Main />
                 {showShell && <BottomNav onAdd={(mode) => setSheet({ open: true, mode })} />}
                 {showShell && (

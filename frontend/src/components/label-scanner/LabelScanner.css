@@ -62,7 +62,7 @@
 }
 
 .ls-shutter:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: 4px;
     border-radius: var(--r-control);
 }
@@ -73,13 +73,13 @@
     border-radius: 50%;
     background: var(--accent);
     border: 4px solid var(--surface);
-    box-shadow: var(--glow-accent);
+    box-shadow: var(--shadow-accent);
 }
 
 .ls-shutter-label {
     font-size: var(--text-sm);
     font-weight: 700;
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .ls-upload {

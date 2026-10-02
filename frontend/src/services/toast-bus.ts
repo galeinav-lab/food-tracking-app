@@ -16,6 +16,10 @@ export interface ToastMessage {
     details?: string;
     // Short error id from the backend, shown as "#ABC123".
     errorId?: string;
+    // Optional one-tap action (e.g. "Undo"); tapping it runs onAction and dismisses.
+    action?: { label: string; onAction: () => void };
+    // Auto-dismiss delay; defaults to the host's (errors never auto-dismiss).
+    durationMs?: number;
 }
 
 export type ToastInput = Omit<ToastMessage, "id">;

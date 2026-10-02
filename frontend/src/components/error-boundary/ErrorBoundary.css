@@ -1,5 +1,5 @@
-/* Crash fallback. Layout has unmounted, so this screen renders its own .ambient
-   backdrop; the card is .glass, buttons are .btn. Shape, layout and type only. */
+/* Crash fallback: a .glass card on the canvas, buttons are .btn. Shape, layout
+   and type only. */
 .eb {
     min-height: 100vh;
     display: flex;
@@ -44,7 +44,7 @@
 .eb-id span {
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .eb-actions {

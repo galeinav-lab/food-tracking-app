@@ -1,8 +1,8 @@
 /* Loading placeholders. Opacity-only pulse (compositor-cheap, no shimmer
    gradient); the global reduced-motion rule in index.css freezes it at the base
    opacity below. */
-/* Lime-white tint: lightens whatever is behind it, so a line stays visible on a
-   glass card as well as on the gradient (a dark fill would vanish into either). */
+/* A neutral tint over whatever is behind it, so a line shows on a card and on
+   the canvas alike. */
 .skel {
     display: block;
     width: 100%;
@@ -26,13 +26,20 @@
     border-radius: var(--r-pill);
 }
 
-/* A card-sized or chart-sized area: drawn as the glass card it stands in for
-   (a flat --surface-3 fill disappears into the ambient gradient). */
+/* A card-sized or chart-sized area: on the canvas it's drawn as the white card
+   it stands in for. */
 .skel-block {
     height: 64px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: var(--r-card);
+}
+
+/* Inside a white container (card, sheet) a white block would vanish: grey fill. */
+.glass .skel-block,
+.sheet .skel-block {
+    background: var(--surface-2);
+    border-color: transparent;
 }
 
 /* Avatars, thumbnails, rings — size via `width`. */

@@ -64,7 +64,7 @@
 }
 
 .bn-active {
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 /* Center slot: anchors the raised + button and the fan-out items. */
@@ -86,7 +86,7 @@
     border: 4px solid var(--bg);
     background: var(--accent);
     color: var(--on-accent);
-    box-shadow: var(--glow-accent);
+    box-shadow: var(--shadow-accent);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -158,7 +158,7 @@
     width: 22px;
     height: 22px;
     fill: none;
-    stroke: var(--accent);
+    stroke: var(--accent-ink);
     stroke-width: 1.9;
     stroke-linecap: round;
     stroke-linejoin: round;

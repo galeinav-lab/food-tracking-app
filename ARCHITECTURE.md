@@ -29,8 +29,8 @@ row in Settings (§6).
 ## 2. Tech stack
 
 - **Frontend:** Create React App + TypeScript, React 19, react-router v7, **Redux Toolkit (auth only)**,
-  **recharts** (charts/rings), axios. Dark green + lime "ambient glass" theme via CSS custom properties
-  (`design-system/nutritrack/MASTER.md`).
+  **recharts** (charts/rings), axios. Light theme v4 (light grey canvas, white cards, Inter, lime
+  fill accent) via CSS custom properties (`design-system/nutritrack/MASTER.md`).
 - **Backend:** Node + Express 5 + TypeScript (OOP, class-based), **Mongoose** (MongoDB), JWT auth,
   bcrypt, helmet, express-rate-limit, Joi validation.
 - **External:** **Anthropic API** (Claude) for food parsing + goal calculation.
@@ -65,7 +65,7 @@ food-track-project/
 │       ├── context/      refresh-context.tsx (selectedDate + refresh signal — NOT Redux)
 │       ├── styles/       colors.ts (JS mirror of CSS tokens for recharts/SVG, incl. chart motion)
 │       └── utils/        date.ts (tz-safe dates, mirrors backend date-tz.ts)
-├── design-system/    nutritrack/MASTER.md — tokens, glass tiers, shared UI blocks (source of truth)
+├── design-system/    nutritrack/MASTER.md — tokens, surface tiers, shared UI blocks (source of truth)
 └── tools/ui-check/   Dev-only screenshot tooling (mock API + headless Chrome); not part of any build
 ```
 
@@ -179,6 +179,9 @@ upserts the summary (deletes it if zero logs). Every food **log/edit/delete** an
   (un-logged and exercise-only days are excluded, not treated as zero-intake). `projectedKg = weeklyDeficit/7700`.
   Week bounds via `getWeekRange` (`utils/date-tz.ts`). Maintenance source: persisted `user.maintenanceCalories`,
   else recomputed from profile via `energy.ts`.
+- **BMR / TDEE on Home** — the compact weekly card's info sheet (`components/energy-details/`) shows
+  BMR from `GET /api/auth/me` (the stored `user.bmr`) and TDEE as the deficit response's `maintenance`.
+  Both come from `energy.ts` on the backend; the frontend only displays them.
 
 ---
 
@@ -257,7 +260,8 @@ upserts the summary (deletes it if zero logs). Every food **log/edit/delete** an
    design tokens (no hardcoded colors); recharts colors come from `styles/colors.ts`. Reuse the shared
    UI blocks rather than restyling your own: `.btn` + variant, `.field`/`.input`/`.form-error`,
    `.card-list`/`.chip` (index.css), `<Sheet>` for any bottom sheet, `<ActionMenu>` for a card's
-   actions, `<Skeleton>`/`<SkeletonGroup>` for loading (see `design-system/nutritrack/MASTER.md` §3.6).
+   actions, `<Skeleton>`/`<SkeletonGroup>` for loading (see `design-system/nutritrack/MASTER.md` §4).
+   Accent rule: `--accent` is a fill; accent text/icons/borders use `--accent-ink`.
 4. **Check it visually** — `tools/ui-check/` runs the frontend against a mock API (sample data, no
    backend, no login) and screenshots routes/states at phone widths in headless Chrome; `audit.mjs`
    there checks text contrast against the rendered background and counts blurred layers. Dev-only:

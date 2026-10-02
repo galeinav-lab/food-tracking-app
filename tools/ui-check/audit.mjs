@@ -57,9 +57,10 @@ const COLLECT = `(() => {
 })()`;
 
 const HIDE_TEXT = `(() => { const s = document.createElement("style"); s.id = "audit-hide";
-  s.textContent = "*,*::before,*::after{color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important;caret-color:transparent!important}"
-    + "::placeholder{color:transparent!important}"
-    + "svg text,svg tspan{fill:transparent!important;stroke:transparent!important}";
+  // :root-prefixed so these beat any !important page or job CSS on specificity.
+  s.textContent = ":root body *,:root body *::before,:root body *::after{color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important;caret-color:transparent!important}"
+    + ":root body ::placeholder{color:transparent!important}"
+    + ":root body svg text,:root body svg tspan{fill:transparent!important;stroke:transparent!important}";
   document.head.appendChild(s); return true; })()`;
 
 const MEASURE = (png, texts) => `(async () => {

@@ -14,7 +14,7 @@ They are **not** imported by the app and not part of any build. Node 22+ (built-
 | `runner.mjs` | The job runner shared by `shoot.mjs` and `audit.mjs` (session, viewport, route, actions, CSS, scroll). |
 | `check-action-menu.mjs` | Drives `<ActionMenu>` with real mouse/keyboard events (open, ↑/↓/Home/End, Escape, outside tap, Tab, Enter) and prints the ARIA + focus state after each step. |
 | `cdp.mjs` | Shared Chrome DevTools Protocol client: reuses Chrome on `:9333` or starts a headless one. |
-| `jobs/*.json` | `audit.json` (every route + menu/sheet/toast states, glow frozen at its peak), `pages.json`, `forms.json`, `dashboard-secondary.json`, `dashboard-core.json`, `blur-compare.json`, `glow-compare.json`. |
+| `jobs/*.json` | `audit.json` (every route + menu/sheet/toast/report/crash states, for `audit.mjs`), `light-final.json` (every screen + key states at 375/412px, the current contact sheets), `sweep.json`, `pages.json`, `forms.json`, `dashboard-secondary.json`, `dashboard-core.json`. `blur-compare.json` / `glow-compare.json` are from the earlier dark theme. |
 
 ## Run
 

@@ -1,0 +1,78 @@
+/* BMR / TDEE details sheet (shell = <Sheet>). Rows sit in an inset well. */
+.ed-list {
+    margin: 0;
+    padding: var(--space-xs) var(--space-lg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    background: var(--glass-inset-bg);
+}
+
+.ed-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+}
+
+.ed-row + .ed-row {
+    border-top: 1px solid var(--border);
+}
+
+.ed-row dt {
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.ed-row dd {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--muted);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.ed-abbr {
+    margin-left: var(--space-xs);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text);
+}
+
+.ed-num {
+    font-size: var(--text-md);
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
+    color: var(--text);
+}
+
+/* TDEE is what the deficit is measured against: the emphasised row. */
+.ed-row-key .ed-num {
+    font-size: var(--text-xl);
+}
+
+.ed-na {
+    color: var(--muted);
+}
+
+.ed-skel {
+    align-items: flex-end;
+}
+
+.ed-retry {
+    margin-top: var(--space-md);
+}
+
+.ed-note {
+    margin: var(--space-lg) 0 var(--space-sm);
+    font-size: var(--text-sm);
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.ed-week {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text);
+}

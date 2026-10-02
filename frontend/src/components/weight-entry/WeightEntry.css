@@ -11,6 +11,7 @@
 .weight-input {
     flex: 1;
     min-width: 0;
+    background-color: var(--surface); /* on the canvas, not in a card */
 }
 
 .weight-error {

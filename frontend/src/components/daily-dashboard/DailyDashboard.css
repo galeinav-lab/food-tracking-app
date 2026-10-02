@@ -34,14 +34,12 @@
     text-align: center;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    /* Faint lime sheen from the top — glow, not neon. Layered over .glass's tint. */
-    background-image: radial-gradient(120% 80% at 50% 0%, var(--accent-soft), transparent 60%);
     /* Press feedback — the "feels alive" compress. */
     transition: transform var(--dur-press) var(--ease-out);
 }
 
 .dash-hero:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: 2px;
 }
 
@@ -58,7 +56,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .hero-chev {
@@ -81,6 +79,7 @@
     font-weight: 800;
     line-height: 1;
     font-variant-numeric: tabular-nums;
+    letter-spacing: var(--tracking-display);
 }
 
 .hero-cap {
@@ -118,8 +117,9 @@
 .macro-g {
     font-family: var(--font-head);
     font-size: var(--text-md);
-    font-weight: 700;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
+    letter-spacing: var(--tracking-tight);
 }
 
 .macro-label {
